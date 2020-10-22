@@ -1,0 +1,45 @@
+<!--
+ * @Description: html模板
+ * @Version: 1.0.0
+ * @Autor: lax
+ * @Date: 2020-04-07 14:34:37
+ * @LastEditors: lax
+ * @LastEditTime: 2020-07-06 23:06:15
+ -->
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <!-- 声明文档使用的字符编码 -->
+    <meta charset="utf-8">
+    <!-- 有限使用IE最新版本和chrome -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 禁止浏览器从缓存访问页面内容 -->
+    <meta http-equiv="Cache-Control" name="no-store" />
+    <!-- 描述 -->
+    <meta name="description" content=""/>
+    <!-- 关键词 -->
+    <meta name="keywords" content=""/>
+    <!-- 作者 -->
+    <meta name="fm93" content="lax, lax263@zrtg.com"/>
+    <!-- 搜索引擎抓取 -->
+    <meta name="robots" content="index,follow"/>
+    <!-- 启动极速模式-webkit -->
+    <meta name="renderer" content="webkit">
+    <!-- 禁止将数字识别成电话号码 -->
+    <meta name="format-detection" content="telephone=no" />
+    <!-- 保持与屏幕1:1，禁止缩放 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" /> 
+    <!-- auto https -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work propersly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

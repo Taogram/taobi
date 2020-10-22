@@ -1,0 +1,14 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# 标识为最顶层的配置文件
+root = true
+
+# 始终在文件末尾插入一个新行
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# Set default charset  对于所有的js,py文件，设置文件字符集为utf-8
+[*.{js,vue}]
+charset = utf-8
+indent_style = tab
