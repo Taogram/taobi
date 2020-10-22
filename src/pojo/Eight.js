@@ -4,33 +4,39 @@
  * @Autor: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2020-10-22 17:21:32
+ * @LastEditTime: 2020-10-22 23:18:03
  */
-const tg = require("./TianGan.js");
-const dz = require("./DiZhi.js");
+const gz = require("./GanZhi");
 class Eight {
-	constructor() {
-		this.date = this.time();
+	constructor(p = {}) {
+		this.date = p.date || this.time();
 		this.year = this.getYear();
 		this.mouth = this.getMonth();
-		console.log(this.year);
+		console.log(this.mouth);
 	}
 	getYear() {
-		const yearString = this.date.getFullYear() + "";
-		const single = ~~yearString.slice(yearString.length - 1) + 6 + "";
+		// 年份+6的个位数即对应天干
+		const year_value = this.date.getFullYear();
+		const single = year_value + 6 + "";
 		const tg_index = ~~single.slice(single.length - 1);
-		const remainder = (~~yearString % 12) + 6 + "";
+		// 年份的12余数+6对应地支
+		const remainder = (year_value % 12) + 6 + "";
 		const dz_index = ~~remainder.slice(remainder.length - 1);
-		return { x: new tg({ index: tg_index }), y: new dz({ index: dz_index }) };
+		return new gz(tg_index, dz_index);
 	}
 	getMonth() {
-		const year_gan = this.year.index * 2 + "";
-		let single = ~~year_gan.slice(year_gan.length - 1) + 6;
-		const index = ~~single.slice(single.length - 1);
-		const dz_index = this.date.getMonth() + 1;
-		return { x: new tg({ index }), y: new dz({ index: dz_index }) };
+		const mouth_index = this.date.getMonth();
+		// 月份对应地支 12月对应0
+		const dz_index = mouth_index == 12 ? 0 : mouth_index + 1;
+		// 年干*2+月地支的个位数为月天干
+		const year_gan = this.year.getXIndex() * 2 + dz_index + "";
+		const tg_index = ~~year_gan.slice(year_gan.length - 1);
+		return new gz(tg_index, dz_index);
 	}
-	day() {}
+	day() {
+		// const index = this.year.index + this.mouth.index + this.date.getDays();
+		// console.log(index);
+	}
 	hour() {}
 	time() {
 		return new Date();
