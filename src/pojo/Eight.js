@@ -1,11 +1,11 @@
 /*
- * @Description:
- * 公式：https://baike.baidu.com/item/%E6%97%A5%E6%9F%B1%E5%85%AC%E5%BC%8F/18780172?fr=aladdin
+ * @Description: 干支历
+ * 公式：https://zhuanlan.zhihu.com/p/93508430
  * @Version: 1.0.0
  * @Autor: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2020-10-26 00:36:02
+ * @LastEditTime: 2020-10-26 00:45:22
  */
 const gz = require("./GanZhi");
 class Eight {
@@ -62,6 +62,7 @@ class Eight {
 		index == 0 ? 60 : index;
 		return new gz(index);
 	}
+	// 获取世纪数
 	getCenturyCount(year) {
 		return Math.floor(year / 100) + 1;
 	}
@@ -91,6 +92,7 @@ class Eight {
 	time() {
 		return new Date();
 	}
+	// 获取倒数X位数
 	__RightFigure(num, index = 1) {
 		const _num = num + "";
 		return ~~_num.slice(_num.length - index);
