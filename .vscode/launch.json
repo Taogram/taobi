@@ -10,6 +10,13 @@
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "test",
+            "cwd": "${workspaceFolder}",
+            "program": "${workspaceRoot}/src/pojo/Eight.js"
         }
     ]
 }
