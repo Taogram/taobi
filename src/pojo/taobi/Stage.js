@@ -4,11 +4,14 @@
  * @Autor: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2020-10-27 17:42:01
+ * @LastEditTime: 2020-10-27 22:27:38
  */
 const P = require("./Palace");
-const six = ["戊", "己", "庚", "辛", "壬", "癸"];
-const three = ["乙", "丙", "丁"];
+// const _ = require("./../../tools/index");
+// 六仪
+const ceremony = ["戊", "己", "庚", "辛", "壬", "癸"];
+// 三奇
+const surprise = ["乙", "丙", "丁"];
 class Stage {
 	constructor(calendar, round) {
 		this.calendar = calendar;
@@ -35,10 +38,14 @@ class Stage {
 		this.__byRound();
 	}
 	__byRound() {
-		this.six.map((x, i) => {
-			this._l[i + this.round - 1] = x;
+		ceremony.map((x, i) => {
+			const abs = i + Math.abs(this.round) + (this.round < 0 ? 1 : -1);
+			this._l[this.round < 0 ? 8 - (abs % 9) : abs % 9].setHS(x);
+
+			console.log(surprise);
 		});
 	}
 }
 
 module.exports = Stage;
+console.log(new Stage(null, -4).list);
