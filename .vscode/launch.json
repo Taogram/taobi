@@ -16,7 +16,7 @@
             "request": "launch",
             "name": "test",
             "cwd": "${workspaceFolder}",
-            "program": "${workspaceRoot}/src/pojo/Eight.js"
+            "program": "${workspaceRoot}/test/index.js"
         }
     ]
 }

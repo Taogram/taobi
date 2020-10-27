@@ -4,9 +4,9 @@
  * @Autor: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2020-10-26 09:56:03
+ * @LastEditTime: 2020-10-27 10:38:27
  */
-// const _ = require("./../tools/index");
+const _ = require("./../tools/index");
 class HSTB {
 	constructor(x = 0, y = 0, type = 0) {
 		// 代表传入的是干支对应数字
@@ -22,30 +22,26 @@ class HSTB {
 		this.type = type;
 	}
 	// 天干序列 Heavenly Stems
-	hs() {
-		return this.x + 1;
+	hs(is) {
+		return is ? this._hs[this.x] : _.rightFigure(this.index);
 	}
 	// 地支序列 Terrestrial Branch
-	tb() {
-		return (this.x < this.y ? this.x - this.y + 12 : this.x - this.y) / 2;
-	}
-	getHS() {
-		return this._hs[this.x];
-	}
-	getTB() {
-		return this._tb[this.y];
+	tb(is) {
+		return is ? this._tb[this.y] : Math.floor(this.index / 10);
 	}
 	// 天干地支对应的序列
 	_getIndex() {
-		const hs = this.hs();
-		const tb = this.tb();
-		return tb * 10 + hs;
+		return (
+			((this.x < this.y ? this.x - this.y + 12 : this.x - this.y) / 2) * 10 +
+			this.x +
+			1
+		);
 	}
 	_getByIndex(xy) {
-		const str = xy + "";
+		const str = xy - 1 + "";
 		const _x = ~~str.slice(str.length - 1);
 		const _y = ~~str.slice(0, str.length - 1);
-		const x = _x - 1;
+		const x = _x;
 		const y = x - _y * 2 < 0 ? x - _y * 2 + 12 : x - _y * 2;
 		return { x, y };
 	}
