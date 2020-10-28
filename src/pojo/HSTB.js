@@ -4,7 +4,7 @@
  * @Autor: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2020-10-27 10:38:27
+ * @LastEditTime: 2020-10-28 16:27:11
  */
 const _ = require("./../tools/index");
 class HSTB {
@@ -28,6 +28,9 @@ class HSTB {
 	// 地支序列 Terrestrial Branch
 	tb(is) {
 		return is ? this._tb[this.y] : Math.floor(this.index / 10);
+	}
+	getLead() {
+		return new HSTB(Math.floor(this.index - 1 / 10) * 10 + 1);
 	}
 	// 天干地支对应的序列
 	_getIndex() {
