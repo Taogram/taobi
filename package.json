@@ -13,6 +13,7 @@
   "dependencies": {
     "animate.css": "^4.1.1",
     "axios": "^0.19.2",
+    "consola": "^2.15.0",
     "core-js": "^3.6.4",
     "fm93-vue-template": "^3.1.0",
     "register-service-worker": "^1.7.1",

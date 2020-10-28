@@ -5,17 +5,17 @@
  * @Autor: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2020-10-28 16:03:09
+ * @LastEditTime: 2020-10-28 20:40:26
  */
-const gz = require("./HSTB");
-const _ = require("../tools/index");
+const HSTB = require("./HeavenlyStemsAndTerrestrialBranch");
+const _ = require("../../tools/index");
 class Calendar {
 	constructor(obj) {
 		if (obj instanceof Array) {
-			this.year = new gz(obj[0][0], obj[0][1]);
-			this.mouth = new gz(obj[1][0], obj[1][1]);
-			this.day = new gz(obj[2][0], obj[2][1]);
-			this.hour = new gz(obj[3][0], obj[3][1]);
+			this.year = new HSTB(obj[0][0], obj[0][1]);
+			this.mouth = new HSTB(obj[1][0], obj[1][1]);
+			this.day = new HSTB(obj[2][0], obj[2][1]);
+			this.hour = new HSTB(obj[3][0], obj[3][1]);
 		} else {
 			this.date = obj || new Date();
 
@@ -30,14 +30,20 @@ class Calendar {
 			this.hour = getByHour(year, mouth, day, hour);
 		}
 	}
+	/**
+	 * @description 获取干支历四柱
+	 * @param {boolean} is 是否显示汉字
+	 * @param {number} level 获取四柱级别 0-3 年->月->日->时
+	 * @param {boolean} focus 是否只显示指定的级别
+	 */
 	hstb(is = false, level = 3, focus = false) {
 		return [this.year, this.mouth, this.day, this.hour]
-			.filter((gz, i) => {
+			.filter((hstb, i) => {
 				if (!focus && i <= level) return true;
 				if (focus && i == level) return true;
 			})
-			.map(gz => {
-				return [gz.hs(is), gz.tb(is)];
+			.map(hstb => {
+				return [hstb.hs(is), hstb.tb(is)];
 			});
 	}
 }
@@ -48,7 +54,7 @@ function getByYear(year) {
 	// 年份的12余数=>地支 补8顺位
 	const remainder = (year % 12) + 8;
 	const dz_index = remainder % 12;
-	return new gz(tg_index, dz_index);
+	return new HSTB(tg_index, dz_index);
 }
 function getByMouth(year, mouth) {
 	// 月份=>地支 12月对应0
@@ -56,7 +62,7 @@ function getByMouth(year, mouth) {
 	// 年干*2+月地支的个位数=>月天干
 	const hs = getByYear(year).x * 2 + dz_index;
 	const tg_index = _.rightFigure(hs);
-	return new gz(tg_index, dz_index);
+	return new HSTB(tg_index, dz_index);
 }
 function getByDay(_year, _mouth, day) {
 	// 月份为13、14月
@@ -80,7 +86,7 @@ function getByDay(_year, _mouth, day) {
 			day) %
 		60;
 	index = index == 0 ? 60 : index;
-	return new gz(index);
+	return new HSTB(index);
 }
 
 // 获取世纪数
@@ -97,7 +103,7 @@ function getByHour(year, mouth, day, hour) {
 	// 再推算实际时天干
 	const _x = _.rightFigure(single) + y;
 	const x = _.rightFigure(_x);
-	return new gz(x, y);
+	return new HSTB(x, y);
 }
 
 Calendar.getByYear = getByYear;
