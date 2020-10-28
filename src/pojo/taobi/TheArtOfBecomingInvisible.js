@@ -4,23 +4,23 @@
  * @Autor: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2020-10-29 00:30:59
+ * @LastEditTime: 2020-10-29 01:01:21
  */
 const Palace = require("./Palace");
-// const Calendar = require("../hstb/Calendar");
+const Calendar = require("../hstb/Calendar");
 const _ = require("./../../tools/index");
 const { ceremony, surprise, star, starOrder } = require("../Tao");
 // const HSTB = require("../hstb/HeavenlyStemsAndTerrestrialBranch");
 class TheArtOfBecomingInvisible {
-	constructor(p = {}) {
+	constructor(round, calendar = new Calendar()) {
 		// 干支历
-		this.calendar = p.calendar;
+		this.calendar = calendar;
 
 		/**
 		 * 用局：
 		 * -9~9对应阴遁九局、阳遁九局
 		 */
-		this.round = p.round || this.getRound();
+		this.round = round || this.getRound();
 
 		// 内置九宫对象，按后天卦序排列
 		this._acquired = [
@@ -51,45 +51,52 @@ class TheArtOfBecomingInvisible {
 			[this._acquired[2], this._acquired[4], this._acquired[6]],
 			[this._acquired[7], this._acquired[0], this._acquired[5]]
 		];
-		this.__init(p);
+		this.__init();
 	}
-	__init(p) {
-		this.__setSCByRound();
-		this.__setStar();
-		this.__concat(p);
+	__init() {
+		this.__getSurpriseAndCeremonyByRound();
+		this.__getStarByHourAndRound();
 	}
 
 	/**
-	 * @description 合并
-	 * @param {*} p
+	 * @private
+	 * @description 安用局排三奇六仪
 	 */
-	__concat(p) {
-		this.__each((palace, i, j) => {
-			if (p.roundMap) palace.setHS(p.roundMap[i][j]);
-			if (p.starMap) palace.setStar(p.starMap[i][j]);
+	__getSurpriseAndCeremonyByRound() {
+		// 用局
+		const round = this.round;
+
+		// 为奇门之三奇六仪固定顺序
+		const order = ceremony.concat(surprise);
+		// 阴逆序
+		const negative = [8, 7, 6, 5, 4, 3, 2, 1, 0];
+		// 定位打头
+		const num = _.arrayUp(negative, 9 - (Math.abs(round) % 9));
+
+		order.map((x, i) => {
+			this._acquired[round < 0 ? num[i] : (round - 1 + i) % 9].setHS(x);
 		});
 	}
 
 	/**
 	 * @private
-	 * @description 安用局布三奇六仪
+	 * @description 安时及用局获取星序
 	 */
-	__setSCByRound() {
-		const self = this;
-		this.__each((name, i, j) => {
-			self.ont[i][j].setHS(name);
-		}, getSurpriseAndCeremonyByRound(this.round, false));
-	}
-
-	/**
-	 * @private
-	 * @description 按用局布天盘星数
-	 */
-	__setStar() {
-		const self = this;
-		this.__each((name, i, j) => {
-			self.ont[i][j].setStar(name);
-		}, getStarByHourAndRound(this.round, false));
+	__getStarByHourAndRound() {
+		// 时
+		const hour = this.calendar.hour;
+		// 时之旬首对应宫
+		const palace = this.getPalaceByHour(hour.getLead());
+		// 时天干之对应宫
+		const _palace = this.getPalaceByHour(hour);
+		// 设置值符
+		_palace.setSymbol(true);
+		// 布天盘之星数
+		this._circle.map((p, i) => {
+			p.setStar(
+				starOrder[(8 - Math.abs(_palace.rIndex - palace.rIndex) + i) % 8]
+			);
+		});
 	}
 
 	/**
@@ -148,57 +155,5 @@ class TheArtOfBecomingInvisible {
 		});
 	}
 }
-
-/**
- * @description 根据用局排三奇六仪
- * @param {number} round
- * @param {boolean} is 输出结果是否为对象
- */
-function getSurpriseAndCeremonyByRound(round, is = true) {
-	const _list = [];
-	// 为奇门之三奇六仪固定顺序
-	const order = ceremony.concat(surprise);
-	// 阴逆序
-	const negative = [8, 7, 6, 5, 4, 3, 2, 1, 0];
-	// 定位打头
-	const num = _.arrayUp(negative, 9 - (Math.abs(round) % 9));
-
-	order.map((x, i) => {
-		_list[round < 0 ? num[i] : (round - 1 + i) % 9] = x;
-	});
-	const map = [
-		[_list[3], _list[8], _list[1]],
-		[_list[2], _list[4], _list[6]],
-		[_list[7], _list[0], _list[5]]
-	];
-	const result = is ? new TheArtOfBecomingInvisible({ roundMap: map }) : map;
-	return result;
-}
-
-/**
- * @description 安时及用局获取星序
- * @param {HeavenlyStemsAndTerrestrialBranch} hour 时干支
- * @param {number} round 所用局
- * @param {boolean} is 输出结果是否为对象
- */
-function getStarByHourAndRound(hour, round, is = true) {
-	const list = getSurpriseAndCeremonyByRound(round);
-	// 时之旬首对应宫
-	const palace = list.getPalaceByHour(hour.getLead());
-	// 时天干之对应宫
-	const _palace = list.getPalaceByHour(hour);
-	// 设置值符
-	_palace.setSymbol(true);
-	// 布天盘之星数
-	list._circle.map((p, i) => {
-		p.setStar(
-			starOrder[(8 - Math.abs(_palace.rIndex - palace.rIndex) + i) % 8]
-		);
-	});
-	return is ? list : list.toStar();
-}
-
-TheArtOfBecomingInvisible.getSCByRound = getSurpriseAndCeremonyByRound;
-TheArtOfBecomingInvisible.getStarByHourAndRound = getStarByHourAndRound;
 
 module.exports = TheArtOfBecomingInvisible;

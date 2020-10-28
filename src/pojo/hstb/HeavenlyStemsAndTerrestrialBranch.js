@@ -4,7 +4,7 @@
  * @Autor: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2020-10-28 20:37:04
+ * @LastEditTime: 2020-10-29 00:57:20
  */
 const { heavenlyStems, terrestrialBranch } = require("./../Tao");
 const _ = require("../../tools/index");
@@ -31,9 +31,8 @@ class HeavenlyStemsAndTerrestrialBranch {
 	}
 	// 获得时之旬首
 	getLead() {
-		return new HeavenlyStemsAndTerrestrialBranch(
-			Math.floor(this.index - 1 / 10) * 10 + 1
-		);
+		const index = Math.floor((this.index - 1) / 10) * 10 + 1;
+		return new HeavenlyStemsAndTerrestrialBranch(index);
 	}
 	// 天干地支对应的序列
 	__getIndex() {
