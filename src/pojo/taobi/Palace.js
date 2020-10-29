@@ -4,22 +4,32 @@
  * @Autor: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2020-10-28 23:28:13
+ * @LastEditTime: 2020-10-29 15:23:35
  */
 class Palace {
-	constructor(hs, index, star, door) {
+	constructor(index, hs, name) {
+		// 宫位
+		this.index = index.index;
+		// 卦
+		this.trigrams = null;
+		// 天干（三奇六仪）
 		this.hs = hs;
-		this.pIndex = index.pIndex;
+		// 值
+		this.name = name;
+		// 周序位 顺时序位
 		this.rIndex = index.rIndex;
-		this.star = star;
-		this.door = door;
+
+		// 值符
 		this.jobSymbol = false;
 	}
 	setHS(hs) {
 		this.hs = hs;
 	}
-	setStar(star) {
-		this.star = star;
+	setName(name) {
+		this.name = name;
+	}
+	setTrigrams(trigrams) {
+		this.trigrams = trigrams;
 	}
 	setSymbol(is) {
 		this.jobSymbol = is;

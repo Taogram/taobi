@@ -4,7 +4,7 @@
  * @Autor: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2020-10-29 00:57:20
+ * @LastEditTime: 2020-10-29 10:49:40
  */
 const { heavenlyStems, terrestrialBranch } = require("./../Tao");
 const _ = require("../../tools/index");
@@ -16,8 +16,8 @@ class HeavenlyStemsAndTerrestrialBranch {
 			this.x = xy.x;
 			this.y = xy.y;
 		} else {
-			this.x = x;
-			this.y = y;
+			this.x = typeof x === "string" ? heavenlyStems.indexOf(x) : x;
+			this.y = typeof y === "string" ? terrestrialBranch.indexOf(y) : y;
 		}
 		this.index = this.__getIndex();
 	}

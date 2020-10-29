@@ -4,12 +4,14 @@
  * @Autor: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2020-10-29 01:01:21
+ * @LastEditTime: 2020-10-29 16:45:58
  */
 const Palace = require("./Palace");
 const Calendar = require("../hstb/Calendar");
-const _ = require("./../../tools/index");
-const { ceremony, surprise, star, starOrder } = require("../Tao");
+// const _ = require("./../../tools/index");
+const Earth = require("./Earth");
+const Heaven = require("./Heaven");
+const { star, acquired } = require("../Tao");
 // const HSTB = require("../hstb/HeavenlyStemsAndTerrestrialBranch");
 class TheArtOfBecomingInvisible {
 	constructor(round, calendar = new Calendar()) {
@@ -21,6 +23,10 @@ class TheArtOfBecomingInvisible {
 		 * -9~9对应阴遁九局、阳遁九局
 		 */
 		this.round = round || this.getRound();
+
+		this.earth = new Earth(round);
+
+		this.heaven = new Heaven(this.earth, this.calendar.hour);
 
 		// 内置九宫对象，按后天卦序排列
 		this._acquired = [
@@ -54,62 +60,15 @@ class TheArtOfBecomingInvisible {
 		this.__init();
 	}
 	__init() {
-		this.__getSurpriseAndCeremonyByRound();
-		this.__getStarByHourAndRound();
+		this.__setSurpriseAndCeremonyByRound();
+		this.__setStarByHourAndRound();
+		this.__setTrigrams();
 	}
 
-	/**
-	 * @private
-	 * @description 安用局排三奇六仪
-	 */
-	__getSurpriseAndCeremonyByRound() {
-		// 用局
-		const round = this.round;
-
-		// 为奇门之三奇六仪固定顺序
-		const order = ceremony.concat(surprise);
-		// 阴逆序
-		const negative = [8, 7, 6, 5, 4, 3, 2, 1, 0];
-		// 定位打头
-		const num = _.arrayUp(negative, 9 - (Math.abs(round) % 9));
-
-		order.map((x, i) => {
-			this._acquired[round < 0 ? num[i] : (round - 1 + i) % 9].setHS(x);
+	__setTrigrams() {
+		this._acquired.map((p, i) => {
+			p.setTrigrams(acquired[i]);
 		});
-	}
-
-	/**
-	 * @private
-	 * @description 安时及用局获取星序
-	 */
-	__getStarByHourAndRound() {
-		// 时
-		const hour = this.calendar.hour;
-		// 时之旬首对应宫
-		const palace = this.getPalaceByHour(hour.getLead());
-		// 时天干之对应宫
-		const _palace = this.getPalaceByHour(hour);
-		// 设置值符
-		_palace.setSymbol(true);
-		// 布天盘之星数
-		this._circle.map((p, i) => {
-			p.setStar(
-				starOrder[(8 - Math.abs(_palace.rIndex - palace.rIndex) + i) % 8]
-			);
-		});
-	}
-
-	/**
-	 * @description 按时推宫
-	 * @param {HeavenlyStemsAndTerrestrialBranch} hour
-	 */
-	getPalaceByHour(hour) {
-		// 天干为甲，则取其将隐之仪
-		const _ceremony =
-			hour.hs(true) == "甲" ? ceremony[hour.tb()] : hour.hs(true);
-		return this._acquired.filter(p => {
-			if (p.hs == _ceremony) return true;
-		})[0];
 	}
 
 	getRound() {}
