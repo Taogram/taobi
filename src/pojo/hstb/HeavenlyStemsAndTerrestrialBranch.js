@@ -1,10 +1,10 @@
 /*
  * @Description: 天干地支对象
  * @Version: 1.0.0
- * @Autor: lax
+ * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2020-10-29 00:57:20
+ * @LastEditTime: 2020-12-06 17:22:21
  */
 const { heavenlyStems, terrestrialBranch } = require("./../Tao");
 const _ = require("../../tools/index");
@@ -12,7 +12,7 @@ class HeavenlyStemsAndTerrestrialBranch {
 	constructor(x = 0, y = 0) {
 		// 代表传入的是干支对应数字
 		if (arguments.length == 1) {
-			const xy = this.__getByIndex(x);
+			const xy = this.__getByUseIndex(x);
 			this.x = xy.x;
 			this.y = xy.y;
 		} else {
@@ -44,14 +44,16 @@ class HeavenlyStemsAndTerrestrialBranch {
 		return double * 10 + single + 1;
 	}
 	// 根据序列获取对应x、y
-	__getByIndex(index) {
-		const str = index - 1 + "";
-		const single = ~~str.slice(str.length - 1);
-		const double = ~~str.slice(0, str.length - 1);
-		const x = single;
-		const y = x - double * 2 < 0 ? x - double * 2 + 12 : x - double * 2;
+	__getByUseIndex(index) {
+		const x = (index - 1) % 10;
+		const y = (index - 1) % 12;
 		return { x, y };
 	}
 }
 
 module.exports = HeavenlyStemsAndTerrestrialBranch;
+
+for (let i = 1; i <= 60; i++) {
+	const hstb = new HeavenlyStemsAndTerrestrialBranch(i);
+	console.log(hstb.hs(true) + hstb.tb(true));
+}

@@ -2,10 +2,10 @@
  * @Description: 干支历
  * 公式：https://zhuanlan.zhihu.com/p/93508430
  * @Version: 1.0.0
- * @Autor: lax
+ * @Author: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2020-10-28 20:40:26
+ * @LastEditTime: 2020-12-03 20:52:54
  */
 const HSTB = require("./HeavenlyStemsAndTerrestrialBranch");
 const _ = require("../../tools/index");
