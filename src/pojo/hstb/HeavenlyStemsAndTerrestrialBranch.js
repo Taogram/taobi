@@ -4,7 +4,11 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
+<<<<<<< HEAD
  * @LastEditTime: 2020-12-06 17:22:21
+=======
+ * @LastEditTime: 2020-10-29 10:49:40
+>>>>>>> 28e8a2ab606d59d4f479edf40dcfce74aa8b9ca5
  */
 const { heavenlyStems, terrestrialBranch } = require("./../Tao");
 const _ = require("../../tools/index");
@@ -16,8 +20,8 @@ class HeavenlyStemsAndTerrestrialBranch {
 			this.x = xy.x;
 			this.y = xy.y;
 		} else {
-			this.x = x;
-			this.y = y;
+			this.x = typeof x === "string" ? heavenlyStems.indexOf(x) : x;
+			this.y = typeof y === "string" ? terrestrialBranch.indexOf(y) : y;
 		}
 		this.index = this.__getIndex();
 	}
