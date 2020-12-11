@@ -1,7 +1,7 @@
 /*
  * @Description: 人盘
  * @Version: 1.0.0
- * @Autor: lax
+ * @Author: lax
  * @Date: 2020-10-29 16:50:10
  * @LastEditors: lax
  * @LastEditTime: 2020-10-29 17:24:48

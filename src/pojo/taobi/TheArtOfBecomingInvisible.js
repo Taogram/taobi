@@ -1,10 +1,10 @@
 /*
  * @Description: 奇门遁甲对象
  * @Version: 1.0.0
- * @Autor: lax
+ * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2020-10-29 16:45:58
+ * @LastEditTime: 2020-12-11 08:55:52
  */
 const Palace = require("./Palace");
 const Calendar = require("../hstb/Calendar");

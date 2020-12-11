@@ -1,10 +1,10 @@
 /*
  * @Description: 天盘对象
  * @Version: 1.0.0
- * @Autor: lax
+ * @Author: lax
  * @Date: 2020-10-29 09:53:31
  * @LastEditors: lax
- * @LastEditTime: 2020-10-29 16:48:59
+ * @LastEditTime: 2020-12-11 08:55:35
  */
 // const Palace = require("./Palace");
 const Inning = require("./Inning");

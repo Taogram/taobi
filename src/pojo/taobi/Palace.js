@@ -1,10 +1,10 @@
 /*
  * @Description: 宫格对象
  * @Version: 1.0.0
- * @Autor: lax
+ * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2020-10-29 15:23:35
+ * @LastEditTime: 2020-12-11 08:55:43
  */
 class Palace {
 	constructor(index, hs, name) {
