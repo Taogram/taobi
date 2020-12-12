@@ -4,10 +4,11 @@
  * @Author: lax
  * @Date: 2020-12-11 00:57:08
  * @LastEditors: lax
- * @LastEditTime: 2020-12-11 01:08:47
+ * @LastEditTime: 2020-12-12 22:59:48
  * @FilePath: \taobi\test\hstb.js
  */
 const HSTB = require("./../src/pojo/hstb/HeavenlyStemsAndTerrestrialBranch.js");
+const Calendar = require("./../src/pojo/hstb/Calendar.js");
 
 let result = "";
 for (let i = 1; i <= 60; i++) {
@@ -20,5 +21,14 @@ for (let i = 1; i <= 60; i++) {
 	if (i % 10 == 0) {
 		console.log(result);
 		result = "";
+	}
+}
+for (let i = 1; i <= 10; i++) {
+	for (let j = 0; j <= 23; j++) {
+		console.log("#######################");
+		console.log("日干支:" + Calendar.getByDay(2020, 12, i).hstb(true));
+		console.log(
+			i + "/" + j + ":" + Calendar.getByHour(2020, 12, i, j).hstb(true)
+		);
 	}
 }

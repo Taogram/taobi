@@ -5,7 +5,7 @@
  * @Author: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2020-12-03 20:52:54
+ * @LastEditTime: 2020-12-12 23:10:49
  */
 const HSTB = require("./HeavenlyStemsAndTerrestrialBranch");
 const _ = require("../../tools/index");
@@ -50,20 +50,26 @@ class Calendar {
 function getByYear(year) {
 	// 年份个位数=>天干 补6顺位
 	const single = year + 6;
-	const tg_index = _.rightFigure(single);
+	let tg_index = _.rightFigure(single);
 	// 年份的12余数=>地支 补8顺位
 	const remainder = (year % 12) + 8;
-	const dz_index = remainder % 12;
-	return new HSTB(tg_index, dz_index);
+	let dz_index = remainder % 12;
+	return new HSTB(++tg_index, ++dz_index);
 }
 function getByMouth(year, mouth) {
 	// 月份=>地支 12月对应0
-	const dz_index = mouth - 1;
+	const dz_index = mouth;
 	// 年干*2+月地支的个位数=>月天干
 	const hs = getByYear(year).x * 2 + dz_index;
 	const tg_index = _.rightFigure(hs);
 	return new HSTB(tg_index, dz_index);
 }
+/**
+ *
+ * @param {*} _year
+ * @param {*} _mouth 1-12
+ * @param {*} day
+ */
 function getByDay(_year, _mouth, day) {
 	// 月份为13、14月
 	const mouth = 3 > _mouth > 0 ? _mouth + 12 : _mouth;
@@ -94,16 +100,32 @@ function getCenturyCount(year) {
 	return Math.floor(year / 100) + 1;
 }
 
+/**
+ * 甲己还加甲,乙庚丙作初;
+ * 丙辛从戊起,丁壬庚子居;
+ * 戊癸何方法,壬子是真途;
+ *
+ * 0 1 2 3 4 -> 0 2 4 6 8
+ * 5 6 7 8 9 -> 10 12 14 16 18
+ * result: 0 2 4 6 8
+ * @param {*} year
+ * @param {*} mouth
+ * @param {*} day
+ * @param {*} hour (0-23)
+ */
 function getByHour(year, mouth, day, hour) {
 	// 十二时辰=>十二地支
+	// 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12
 	const _y = Math.ceil(hour / 2);
-	const y = _y == 12 ? 0 : _y;
+	// 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 0
+	let y = _y % 12;
 	// 日天干=>子时时天干
-	const single = getByDay(year, mouth, day).x * 2;
-	// 再推算实际时天干
-	const _x = _.rightFigure(single) + y;
-	const x = _.rightFigure(_x);
-	return new HSTB(x, y);
+	// 0 2 4 6 8
+	const single = (getByDay(year, mouth, day).x * 2) % 10;
+	// 推算实际时天干
+	const _x = single + _y;
+	let x = _x % 10;
+	return new HSTB(++x, ++y);
 }
 
 Calendar.getByYear = getByYear;
