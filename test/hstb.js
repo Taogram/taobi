@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-12-11 00:57:08
  * @LastEditors: lax
- * @LastEditTime: 2020-12-12 22:59:48
+ * @LastEditTime: 2020-12-12 23:29:29
  * @FilePath: \taobi\test\hstb.js
  */
 const HSTB = require("./../src/pojo/hstb/HeavenlyStemsAndTerrestrialBranch.js");
@@ -31,4 +31,9 @@ for (let i = 1; i <= 10; i++) {
 			i + "/" + j + ":" + Calendar.getByHour(2020, 12, i, j).hstb(true)
 		);
 	}
+}
+
+for (let i = 3; i <= 14; i++) {
+	let m = (30 * (Math.pow(-1, i) + 1)) / 2 + Math.floor((3 * i - 7) / 5);
+	console.log(m);
 }
