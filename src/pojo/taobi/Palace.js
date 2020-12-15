@@ -4,22 +4,29 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2020-12-11 08:55:43
+ * @LastEditTime: 2020-12-15 22:25:23
  */
 class Palace {
-	constructor(index, hs, name) {
+	constructor(index, value, isTop, father, children) {
+		// 是否顶层
+		this.isTop = isTop == undefined ? false : isTop;
+
+		if (this.isTop) {
+			this.children = children;
+		}
 		// 宫位
 		this.index = index.index;
-		// 卦
-		this.trigrams = null;
-		// 天干（三奇六仪）
-		this.hs = hs;
-		// 值
-		this.name = name;
 		// 周序位 顺时序位
 		this.rIndex = index.rIndex;
-
-		// 值符
+		// value
+		value = value || {};
+		// 天干
+		this.hs = value.hs || null;
+		// 值
+		this.name = value.name || this.hs;
+		// 卦
+		this.trigrams = value.trigrams || this.name;
+		this.father = father;
 		this.jobSymbol = false;
 	}
 	setHS(hs) {
@@ -27,6 +34,12 @@ class Palace {
 	}
 	setName(name) {
 		this.name = name;
+	}
+	getHS() {
+		return this.hs;
+	}
+	getName() {
+		return this.name || this.getHS();
 	}
 	setTrigrams(trigrams) {
 		this.trigrams = trigrams;

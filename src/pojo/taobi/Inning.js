@@ -1,3 +1,12 @@
+/*
+ * @Description: 九宫盘
+ * @Version: 1.0.0
+ * @Author: lax
+ * @Date: 2020-12-10 23:14:51
+ * @LastEditors: lax
+ * @LastEditTime: 2020-12-15 22:15:12
+ * @FilePath: \taobi\src\pojo\taobi\Inning.js
+ */
 const Palace = require("./Palace");
 const { ceremony } = require("../Tao");
 class Inning {
@@ -51,7 +60,7 @@ class Inning {
 	__to(method) {
 		return this.ont.map(row => {
 			return row.map(p => {
-				return p[method];
+				return p[method]();
 			});
 		});
 	}
@@ -60,14 +69,14 @@ class Inning {
 	 * @description 输出用局之三奇六仪
 	 */
 	toRound() {
-		return this.__to("hs");
+		return this.__to("getHS");
 	}
 
 	/**
 	 * @description 输出该盘
 	 */
 	toName() {
-		return this.__to("name");
+		return this.__to("getName");
 	}
 }
 module.exports = Inning;

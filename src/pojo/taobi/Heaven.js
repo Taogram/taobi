@@ -1,10 +1,10 @@
 /*
- * @Description: 天盘对象
+ * @Description: 天盘
  * @Version: 1.0.0
  * @Author: lax
  * @Date: 2020-10-29 09:53:31
  * @LastEditors: lax
- * @LastEditTime: 2020-12-11 08:55:35
+ * @LastEditTime: 2020-12-15 22:28:01
  */
 // const Palace = require("./Palace");
 const Inning = require("./Inning");
@@ -22,9 +22,9 @@ class Heaven extends Inning {
 	 * @description 安时及用局获取星序
 	 */
 	__setStarByHourAndRound() {
-		// 中宫同地盘
+		// 中宫同地盘中宫
 		this._acquired[4].setName(star[4]);
-		this._acquired[4].setHS(this.earth._acquired[4].hs);
+		this._acquired[4].setHS(this.earth._acquired[4].getHS());
 		// 时
 		const hour = this.hour;
 		// 时之旬首对应宫
@@ -42,7 +42,7 @@ class Heaven extends Inning {
 		if (!_palace.rIndex) moveOrder = 4;
 		// 地盘周序
 		const earthOrder = this.earth._circle.map(p => {
-			return p.hs;
+			return p.getHS();
 		});
 		// 天盘周序
 		const heavenOrder = _.arrayUp(earthOrder, moveOrder);

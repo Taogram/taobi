@@ -4,11 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-28 19:51:37
  * @LastEditors: lax
-<<<<<<< HEAD
  * @LastEditTime: 2020-12-03 20:58:18
-=======
- * @LastEditTime: 2020-10-29 17:04:49
->>>>>>> 28e8a2ab606d59d4f479edf40dcfce74aa8b9ca5
  */
 module.exports = {
 	/**
