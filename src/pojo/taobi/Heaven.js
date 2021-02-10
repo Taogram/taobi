@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-29 09:53:31
  * @LastEditors: lax
- * @LastEditTime: 2020-12-15 22:28:01
+ * @LastEditTime: 2020-12-27 11:48:54
  */
 // const Palace = require("./Palace");
 const Inning = require("./Inning");
@@ -28,9 +28,9 @@ class Heaven extends Inning {
 		// 时
 		const hour = this.hour;
 		// 时之旬首对应宫
-		const palace = this.earth.getPalaceByHour(hour.getLead());
+		const palace = this.earth.getPalaceByHeavenlyStems(hour.getLead());
 		// 时天干之对应宫
-		const _palace = this.earth.getPalaceByHour(hour);
+		const _palace = this.earth.getPalaceByHeavenlyStems(hour);
 		// 设置值符
 		_palace.setSymbol(true);
 		// 星数位移序数

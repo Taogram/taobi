@@ -1,26 +1,29 @@
+/*
+ * @Description:
+ * @Version: 1.0.0
+ * @Author: lax
+ * @Date: 2020-10-22 18:58:04
+ * @LastEditors: lax
+ * @LastEditTime: 2021-02-10 22:31:09
+ * @FilePath: \taobi\.eslintrc.js
+ */
 module.exports = {
-	root: true,
 	env: {
 		node: true,
+		es2020: true,
 	},
-	extends: ["plugin:vue/essential", "eslint:recommended", "@vue/prettier"],
+	extends: [
+		"airbnb-base",
+		"plugin:prettier/recommended",
+		"plugin:jest/recommended",
+	],
 	parserOptions: {
-		parser: "babel-eslint",
+		ecmaVersion: 11,
 		sourceType: "module",
 	},
 	rules: {
-		"no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-		"no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+		"no-bitwise": 0,
+		"no-plusplus": 0,
+		"no-underscore-dangle":0
 	},
-	overrides: [
-		{
-			files: [
-				"**/__tests__/*.{j,t}s?(x)",
-				"**/tests/unit/**/*.spec.{j,t}s?(x)",
-			],
-			env: {
-				jest: true,
-			},
-		},
-	],
 };

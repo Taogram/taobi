@@ -5,10 +5,12 @@
  * @Author: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2020-12-15 22:31:16
+ * @LastEditTime: 2021-02-10 22:43:07
  */
 const HSTB = require("./HeavenlyStemsAndTerrestrialBranch");
+
 const _ = require("../../tools/index");
+
 class Calendar {
 	constructor(obj) {
 		if (obj instanceof Array) {
@@ -30,6 +32,7 @@ class Calendar {
 			this.hour = getByHour(year, mouth, day, hour);
 		}
 	}
+
 	/**
 	 * @description 获取干支历四柱
 	 * @param {boolean} is 是否显示汉字
@@ -42,7 +45,7 @@ class Calendar {
 				if (!focus && i <= level) return true;
 				if (focus && i == level) return true;
 			})
-			.map(hstb => {
+			.map((hstb) => {
 				return [hstb.hs(is), hstb.tb(is)];
 			});
 	}
@@ -72,8 +75,8 @@ function getByMouth(year, mouth) {
  */
 function getByDay(_year, _mouth, day) {
 	// 月份为13、14月
-	const mouth = 3 > _mouth > 0 ? _mouth + 12 : _mouth;
-	const year = 3 > _mouth > 0 ? _year - 1 : _year;
+	const mouth = _mouth < 3 > 0 ? _mouth + 12 : _mouth;
+	const year = _mouth < 3 > 0 ? _year - 1 : _year;
 	// 世纪数
 	const century = getCenturyCount(year);
 	// 年数 = 此纪年2月末的日干支序数
@@ -83,7 +86,7 @@ function getByDay(_year, _mouth, day) {
 		(30 * (Math.pow(-1, mouth) + 1)) / 2 + Math.floor((3 * mouth - 7) / 5);
 	// figure
 	const figure = Math.floor(_.rightFigure(year, 2) / 4);
-	//日干支序数 = 年数+月数+日期 （和大于60，则减60。1月、2月用上一年的年数）
+	// 日干支序数 = 年数+月数+日期 （和大于60，则减60。1月、2月用上一年的年数）
 	let index =
 		(figure * 6 +
 			5 * (figure * 3 + (_.rightFigure(year, 2) % 4)) +

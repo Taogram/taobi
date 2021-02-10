@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-12-10 23:14:51
  * @LastEditors: lax
- * @LastEditTime: 2020-12-15 22:15:12
+ * @LastEditTime: 2020-12-27 11:48:46
  * @FilePath: \taobi\src\pojo\taobi\Inning.js
  */
 const Palace = require("./Palace");
@@ -41,13 +41,13 @@ class Inning {
 		];
 	}
 	/**
-	 * @description 按时推宫
+	 * @description 按天干地支推宫
 	 * @param {HeavenlyStemsAndTerrestrialBranch} hour
 	 */
-	getPalaceByHour(hour) {
+	getPalaceByHeavenlyStems(hstb) {
 		// 天干为甲，则取其将隐之仪
 		const _ceremony =
-			hour.hs(true) == "甲" ? ceremony[hour.tb()] : hour.hs(true);
+			hstb.hs(true) == "甲" ? ceremony[hstb.tb()] : hstb.hs(true);
 		return this._acquired.filter(p => {
 			if (p.hs == _ceremony) return true;
 		})[0];
