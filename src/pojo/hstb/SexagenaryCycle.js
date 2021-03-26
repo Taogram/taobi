@@ -4,32 +4,32 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2021-02-10 22:41:53
+ * @LastEditTime: 2021-03-26 17:30:03
  */
-const { heavenlyStems, terrestrialBranch } = require("../Tao");
+const { celestialStems, terrestrialBranches } = require("../Tao");
 
-class HeavenlyStemsAndTerrestrialBranch {
+class SexagenaryCycle {
 	constructor(x = 0, y = 0) {
 		// 代表传入的是干支对应数字
 
 		if (arguments.length === 1) {
-			this.getByOneArg(x);
+			this.getStemsBranchesByOne(x);
 		} else {
 			// TODO 当传入两个参数时判断是否存在对应干支
-			this.x = ~~(x + 1) === 0 ? heavenlyStems.indexOf(x) : x;
-			this.y = ~~(y + 1) === 0 ? terrestrialBranch.indexOf(y) : y;
+			this.x = ~~(x + 1) === 0 ? celestialStems.indexOf(x) : x;
+			this.y = ~~(y + 1) === 0 ? terrestrialBranches.indexOf(y) : y;
 			this.index = this.getIndex();
 		}
 	}
 
 	// 天干序列 Heavenly Stems->0-9
 	hs(is) {
-		return is ? heavenlyStems[this.x] : this.x;
+		return is ? celestialStems[this.x] : this.x;
 	}
 
 	// 地支序列 Terrestrial Branch->0-11
 	tb(is) {
-		return is ? terrestrialBranch[this.y] : this.y;
+		return is ? terrestrialBranches[this.y] : this.y;
 	}
 
 	// 天干地支序列 0-59
@@ -40,7 +40,7 @@ class HeavenlyStemsAndTerrestrialBranch {
 	// 获得旬首
 	getLead() {
 		const index = ~~(this.index / 10) * 10 + 1;
-		return new HeavenlyStemsAndTerrestrialBranch(index);
+		return new SexagenaryCycle(index);
 	}
 
 	// 天干地支对应的序列
@@ -66,24 +66,24 @@ class HeavenlyStemsAndTerrestrialBranch {
 	 * @description 根据一个参数获取干支
 	 * @param {*} arg
 	 */
-	getByOneArg(arg) {
+	getStemsBranchesByOne(arg) {
 		// 参数为数 取值范围0-59
 		const result = ~~(arg + 1);
 		if (result !== 0) {
 			const _arg = result - 1;
-			// result-> 0-9 -> heavenlyStems.index
+			// result-> 0-9 -> celestialStems.index
 			this.x = _arg % 10;
-			// result-> 0-11 -> terrestrialBranch.index
+			// result-> 0-11 -> terrestrialBranches.index
 			this.y = _arg % 12;
 			// result-> 0-59
 			this.xy = result - 1;
 		} else {
 			// 参数为字
-			this.x = heavenlyStems.indexOf(arg[0]);
-			this.y = terrestrialBranch.indexOf(arg[1]);
+			this.x = celestialStems.indexOf(arg[0]);
+			this.y = terrestrialBranches.indexOf(arg[1]);
 			this.index = this.getIndex();
 		}
 	}
 }
 
-module.exports = HeavenlyStemsAndTerrestrialBranch;
+module.exports = SexagenaryCycle;

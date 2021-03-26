@@ -4,20 +4,21 @@
  * @Author: lax
  * @Date: 2020-10-28 19:51:37
  * @LastEditors: lax
- * @LastEditTime: 2021-02-10 22:02:43
+ * @LastEditTime: 2021-03-26 17:27:14
  */
 module.exports = {
 	/**
 	 * 天干：
 	 * 十天干，按标准顺序排列。
 	 */
-	heavenlyStems: ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"],
+	 celestialStems: ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"],
 
 	/**
 	 * 地支：
 	 * 十二地支，按标准顺序排列。
 	 */
-	terrestrialBranch: [
+	terrestrialBranches: [
+		
 		"子",
 		"丑",
 		"寅",
@@ -35,7 +36,7 @@ module.exports = {
 	/**
 	 * 六十天干地支
 	 */
-	heavenlyStemsAndTerrestrialBranch: [
+	 sexagenaryCycle: [
 		"甲子",
 		"乙丑",
 		"丙寅",
