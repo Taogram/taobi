@@ -4,10 +4,10 @@
  * @Author: lax
  * @Date: 2020-12-11 00:57:08
  * @LastEditors: lax
- * @LastEditTime: 2021-07-21 22:58:48
+ * @LastEditTime: 2021-07-21 23:04:40
  * @FilePath: \taobi\test\hstb.spec.js
  */
-const HSTB = require("../src/pojo/hstb/SexagenaryCycle");
+const CSTB = require("../src/pojo/cstb/SexagenaryCycle");
 const {
 	celestialStems,
 	terrestrialBranches,
@@ -25,7 +25,7 @@ describe("天干地支对象：sexagenaryCycle", () => {
 			y: t,
 		};
 		it(`arg:1,type:object,value：{${obj.x},${obj.y}}=>result：${name}`, () => {
-			expect(new HSTB(obj).hstb(true)).toBe(name);
+			expect(new CSTB(obj).cstb(true)).toBe(name);
 		});
 	}
 
@@ -37,7 +37,7 @@ describe("天干地支对象：sexagenaryCycle", () => {
 			y: arr[1],
 		};
 		it(`arg:1,type:object,value：{${obj.x},${obj.y}}=>result：${name}`, () => {
-			expect(new HSTB(obj).hstb(true)).toBe(name);
+			expect(new CSTB(obj).cstb(true)).toBe(name);
 		});
 	}
 
@@ -48,7 +48,7 @@ describe("天干地支对象：sexagenaryCycle", () => {
 		const t = terrestrialBranches.indexOf(arr[1]);
 		const list = [h, t];
 		it(`arg:1,type:array,value：[${list[0]},${list[1]}]=>result：${name}`, () => {
-			expect(new HSTB(list).hstb(true)).toBe(name);
+			expect(new CSTB(list).cstb(true)).toBe(name);
 		});
 	}
 
@@ -56,55 +56,55 @@ describe("天干地支对象：sexagenaryCycle", () => {
 		const name = sexagenaryCycle[i];
 		const arr = Array.from(name);
 		it(`arg:1,type:object,value：[${arr[0]},${arr[1]}]=>result：${name}`, () => {
-			expect(new HSTB(arr).hstb(true)).toBe(name);
+			expect(new CSTB(arr).cstb(true)).toBe(name);
 		});
 	}
 
 	for (let i = 0; i < 60; i++) {
 		const name = sexagenaryCycle[i];
 		it(`arg:1,type:number,value：${i}=>result：${name}`, () => {
-			expect(new HSTB(i).hstb(true)).toBe(name);
+			expect(new CSTB(i).cstb(true)).toBe(name);
 		});
 	}
 	for (let i = 0; i < 60; i++) {
 		const name = sexagenaryCycle[i];
 		it(`arg:1,type:string,value："${i}"=>result：${name}`, () => {
-			expect(new HSTB(`${i}`).hstb(true)).toBe(name);
+			expect(new CSTB(`${i}`).cstb(true)).toBe(name);
 		});
 	}
 	for (let i = 0; i < 60; i++) {
 		const name = sexagenaryCycle[i];
 		it(`arg:1,type:string,value：${name}=>result：${name}`, () => {
-			expect(new HSTB(name).hstb(true)).toBe(name);
+			expect(new CSTB(name).cstb(true)).toBe(name);
 		});
 	}
 
 	for (let i = 0; i < 10; i++) {
 		for (let j = 0; j < 12; j++) {
-			const hs = celestialStems[i];
+			const cs = celestialStems[i];
 			const tb = terrestrialBranches[j];
-			it(`arg:2,type:string,value：${hs}/${tb}=>result：${hs + tb}`, () => {
-				expect(new HSTB(hs, tb).hstb(true)).toBe(hs + tb);
+			it(`arg:2,type:string,value：${cs}/${tb}=>result：${cs + tb}`, () => {
+				expect(new CSTB(cs, tb).cstb(true)).toBe(cs + tb);
 			});
 		}
 	}
 
 	for (let i = 0; i < 10; i++) {
 		for (let j = 0; j < 12; j++) {
-			const hs = celestialStems[i];
+			const cs = celestialStems[i];
 			const tb = terrestrialBranches[j];
-			it(`arg:2,type:number,value：${i}/${j}=>result：${hs + tb}`, () => {
-				expect(new HSTB(i, j).hstb(true)).toBe(hs + tb);
+			it(`arg:2,type:number,value：${i}/${j}=>result：${cs + tb}`, () => {
+				expect(new CSTB(i, j).cstb(true)).toBe(cs + tb);
 			});
 		}
 	}
 
 	for (let i = 0; i < 10; i++) {
 		for (let j = 0; j < 12; j++) {
-			const hs = celestialStems[i];
+			const cs = celestialStems[i];
 			const tb = terrestrialBranches[j];
-			it(`arg:2,type:string,value："${i}"/"${j}"=>result：${hs + tb}`, () => {
-				expect(new HSTB(`${i}`, `${j}`).hstb(true)).toBe(hs + tb);
+			it(`arg:2,type:string,value："${i}"/"${j}"=>result：${cs + tb}`, () => {
+				expect(new CSTB(`${i}`, `${j}`).cstb(true)).toBe(cs + tb);
 			});
 		}
 	}

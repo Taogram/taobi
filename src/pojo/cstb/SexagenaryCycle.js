@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2021-07-21 22:56:07
+ * @LastEditTime: 2021-07-21 23:05:02
  */
 const { celestialStems, terrestrialBranches } = require("../Tao");
 
@@ -19,19 +19,19 @@ class SexagenaryCycle {
 		this.__getByTwoArg(this.x, this.y);
 	}
 
-	// 天干序列 Heavenly Stems->0-9
-	hs(is) {
+	// 天干序列 Celestial Stems->0-9
+	cs(is) {
 		return is ? celestialStems[this.x] : this.x;
 	}
 
-	// 地支序列 Terrestrial Branch->0-11
+	// 地支序列 Terrestrial Branches->0-11
 	tb(is) {
 		return is ? terrestrialBranches[this.y] : this.y;
 	}
 
 	// 天干地支序列 0-59
-	hstb(is) {
-		return is ? this.hs(is) + this.tb(is) : this.index;
+	cstb(is) {
+		return is ? this.cs(is) + this.tb(is) : this.index;
 	}
 
 	// 获得旬首
@@ -66,9 +66,9 @@ class SexagenaryCycle {
 	__getByIndex(arg) {
 		// 参数为数 取值范围0-59
 		if (arg < 0 || arg > 59) throw new Error("the number must between 0-59");
-		// result-> 0-9 -> heavenlyStems.index
+		// result-> 0-9 -> celestialStems.index
 		this.x = arg % 10;
-		// result-> 0-11 -> terrestrialBranch.index
+		// result-> 0-11 -> terrestrialBranches.index
 		this.y = arg % 12;
 		// result-> 0-59
 		this.index = arg;
