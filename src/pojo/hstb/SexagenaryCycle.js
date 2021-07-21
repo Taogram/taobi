@@ -4,11 +4,11 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2021-07-21 22:28:41
+ * @LastEditTime: 2021-07-21 22:56:07
  */
-const { heavenlyStems, terrestrialBranch } = require("../Tao");
+const { celestialStems, terrestrialBranches } = require("../Tao");
 
-class HeavenlyStemsAndTerrestrialBranch {
+class SexagenaryCycle {
 	constructor(x = 0, y = 0) {
 		this.x = x;
 		this.y = y;
@@ -21,12 +21,12 @@ class HeavenlyStemsAndTerrestrialBranch {
 
 	// 天干序列 Heavenly Stems->0-9
 	hs(is) {
-		return is ? heavenlyStems[this.x] : this.x;
+		return is ? celestialStems[this.x] : this.x;
 	}
 
 	// 地支序列 Terrestrial Branch->0-11
 	tb(is) {
-		return is ? terrestrialBranch[this.y] : this.y;
+		return is ? terrestrialBranches[this.y] : this.y;
 	}
 
 	// 天干地支序列 0-59
@@ -37,7 +37,7 @@ class HeavenlyStemsAndTerrestrialBranch {
 	// 获得旬首
 	getLead() {
 		const index = ~~(this.index / 10) * 10 + 1;
-		return new HeavenlyStemsAndTerrestrialBranch(index);
+		return new SexagenaryCycle(index);
 	}
 
 	// 天干地支对应的序列
@@ -101,17 +101,17 @@ class HeavenlyStemsAndTerrestrialBranch {
 		// TODO 当传入两个参数时判断是否存在对应干支
 		this.x =
 			~~(arg1 + 1) === 0
-				? heavenlyStems.indexOf(arg1) === -1
+				? celestialStems.indexOf(arg1) === -1
 					? undefined
-					: heavenlyStems.indexOf(arg1)
+					: celestialStems.indexOf(arg1)
 				: ~~arg1 >= 0 < 10
 				? ~~arg1
 				: undefined;
 		this.y =
 			~~(arg2 + 1) === 0
-				? terrestrialBranch.indexOf(arg2) === -1
+				? terrestrialBranches.indexOf(arg2) === -1
 					? undefined
-					: terrestrialBranch.indexOf(arg2)
+					: terrestrialBranches.indexOf(arg2)
 				: ~~arg2 >= 0 < 12
 				? ~~arg2
 				: undefined;
@@ -119,4 +119,4 @@ class HeavenlyStemsAndTerrestrialBranch {
 	}
 }
 
-module.exports = HeavenlyStemsAndTerrestrialBranch;
+module.exports = SexagenaryCycle;
