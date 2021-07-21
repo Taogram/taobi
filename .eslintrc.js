@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-22 18:58:04
  * @LastEditors: lax
- * @LastEditTime: 2021-02-10 22:31:09
+ * @LastEditTime: 2021-07-21 22:05:02
  * @FilePath: \taobi\.eslintrc.js
  */
 module.exports = {
@@ -24,6 +24,9 @@ module.exports = {
 	rules: {
 		"no-bitwise": 0,
 		"no-plusplus": 0,
-		"no-underscore-dangle":0
+		"no-underscore-dangle": 0,
+		"prefer-destructuring": 0,
+		"no-unused-expressions": 0,
+		"no-nested-ternary": 0,
 	},
 };

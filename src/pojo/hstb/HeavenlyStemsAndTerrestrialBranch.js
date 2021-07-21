@@ -4,22 +4,19 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2021-02-10 22:41:53
+ * @LastEditTime: 2021-07-21 22:28:41
  */
 const { heavenlyStems, terrestrialBranch } = require("../Tao");
 
 class HeavenlyStemsAndTerrestrialBranch {
 	constructor(x = 0, y = 0) {
-		// 代表传入的是干支对应数字
-
+		this.x = x;
+		this.y = y;
+		this.index;
 		if (arguments.length === 1) {
-			this.getByOneArg(x);
-		} else {
-			// TODO 当传入两个参数时判断是否存在对应干支
-			this.x = ~~(x + 1) === 0 ? heavenlyStems.indexOf(x) : x;
-			this.y = ~~(y + 1) === 0 ? terrestrialBranch.indexOf(y) : y;
-			this.index = this.getIndex();
+			this.__getByOneArg(x);
 		}
+		this.__getByTwoArg(this.x, this.y);
 	}
 
 	// 天干序列 Heavenly Stems->0-9
@@ -53,7 +50,7 @@ class HeavenlyStemsAndTerrestrialBranch {
 		4 04/04		05/04	06/04	07/04	08/04	09/04	10/04	11/04	00/-8	01/-8
 		5 02/02		03/02	04/02	05/02	06/02	07/02	08/02	09/02	10/02	11/02
 	*/
-	getIndex() {
+	__getIndex() {
 		// 干支相差之数（负按12转正）/2 = 6-干支十位数值
 		const difference = this.y - this.x;
 		const index = (difference < 0 ? difference + 12 : difference) / 2;
@@ -63,26 +60,62 @@ class HeavenlyStemsAndTerrestrialBranch {
 
 	/**
 	 * @method
-	 * @description 根据一个参数获取干支
+	 * @description 根据一个序列获取干支
 	 * @param {*} arg
 	 */
-	getByOneArg(arg) {
+	__getByIndex(arg) {
 		// 参数为数 取值范围0-59
-		const result = ~~(arg + 1);
-		if (result !== 0) {
-			const _arg = result - 1;
-			// result-> 0-9 -> heavenlyStems.index
-			this.x = _arg % 10;
-			// result-> 0-11 -> terrestrialBranch.index
-			this.y = _arg % 12;
-			// result-> 0-59
-			this.xy = result - 1;
-		} else {
-			// 参数为字
-			this.x = heavenlyStems.indexOf(arg[0]);
-			this.y = terrestrialBranch.indexOf(arg[1]);
-			this.index = this.getIndex();
+		if (arg < 0 || arg > 59) throw new Error("the number must between 0-59");
+		// result-> 0-9 -> heavenlyStems.index
+		this.x = arg % 10;
+		// result-> 0-11 -> terrestrialBranch.index
+		this.y = arg % 12;
+		// result-> 0-59
+		this.index = arg;
+	}
+
+	__getByOneArg(arg) {
+		if (typeof arg === "object") {
+			this.x = arg.x;
+			this.y = arg.y;
 		}
+		if (arg instanceof Array) {
+			this.x = arg[0];
+			this.y = arg[1];
+		}
+		if (typeof arg === "string") {
+			if (~~(arg + 1)) {
+				this.__getByIndex(~~arg);
+			} else if (arg.length === 2) {
+				const arr = Array.from(arg);
+				this.x = arr[0];
+				this.y = arr[1];
+			}
+		}
+		if (typeof arg === "number") {
+			this.__getByIndex(arg);
+		}
+	}
+
+	__getByTwoArg(arg1, arg2) {
+		// TODO 当传入两个参数时判断是否存在对应干支
+		this.x =
+			~~(arg1 + 1) === 0
+				? heavenlyStems.indexOf(arg1) === -1
+					? undefined
+					: heavenlyStems.indexOf(arg1)
+				: ~~arg1 >= 0 < 10
+				? ~~arg1
+				: undefined;
+		this.y =
+			~~(arg2 + 1) === 0
+				? terrestrialBranch.indexOf(arg2) === -1
+					? undefined
+					: terrestrialBranch.indexOf(arg2)
+				: ~~arg2 >= 0 < 12
+				? ~~arg2
+				: undefined;
+		this.index = this.__getIndex();
 	}
 }
 
