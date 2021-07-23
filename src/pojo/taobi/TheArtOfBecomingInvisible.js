@@ -4,10 +4,10 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2020-12-11 08:55:52
+ * @LastEditTime: 2021-07-23 23:36:34
  */
 const Palace = require("./Palace");
-const Calendar = require("../hstb/Calendar");
+const Calendar = require("../cstb/Calendar");
 // const _ = require("./../../tools/index");
 const Earth = require("./Earth");
 const Heaven = require("./Heaven");
@@ -38,7 +38,7 @@ class TheArtOfBecomingInvisible {
 			new Palace(null, { pIndex: 6, rIndex: 7 }),
 			new Palace(null, { pIndex: 7, rIndex: 6 }),
 			new Palace(null, { pIndex: 8, rIndex: 1 }),
-			new Palace(null, { pIndex: 9, rIndex: 4 })
+			new Palace(null, { pIndex: 9, rIndex: 4 }),
 		];
 		// 内置八宫对象，按天盘星序排列
 		this._circle = [
@@ -49,16 +49,17 @@ class TheArtOfBecomingInvisible {
 			this._acquired[8],
 			this._acquired[1],
 			this._acquired[6],
-			this._acquired[5]
+			this._acquired[5],
 		];
 		// 九宫对象
 		this.ont = [
 			[this._acquired[3], this._acquired[8], this._acquired[1]],
 			[this._acquired[2], this._acquired[4], this._acquired[6]],
-			[this._acquired[7], this._acquired[0], this._acquired[5]]
+			[this._acquired[7], this._acquired[0], this._acquired[5]],
 		];
 		this.__init();
 	}
+
 	__init() {
 		this.__setSurpriseAndCeremonyByRound();
 		this.__setStarByHourAndRound();
@@ -94,12 +95,13 @@ class TheArtOfBecomingInvisible {
 	 * @param {string} method 属性名称
 	 */
 	__to(method) {
-		return this.ont.map(row => {
-			return row.map(p => {
+		return this.ont.map((row) => {
+			return row.map((p) => {
 				return p[method];
 			});
 		});
 	}
+
 	/**
 	 * @private
 	 * @description 内部函数，每一个宫的回调函数

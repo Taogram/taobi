@@ -5,9 +5,9 @@
  * @Author: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2021-02-11 12:46:34
+ * @LastEditTime: 2021-07-23 23:36:18
  */
-const HSTB = require("./HeavenlyStemsAndTerrestrialBranch");
+const CSTB = require("./SexagenaryCycle");
 
 const _ = require("../../tools/index");
 
@@ -31,10 +31,10 @@ class Calendar {
 			dayY = _obj[5];
 			hourX = _obj[6];
 			hourY = _obj[7];
-			this.year = new HSTB(yearX, yearY);
-			this.mouth = new HSTB(mouthX, mouthY);
-			this.day = new HSTB(dayX, dayY);
-			this.hour = new HSTB(hourX, hourY);
+			this.year = new CSTB(yearX, yearY);
+			this.mouth = new CSTB(mouthX, mouthY);
+			this.day = new CSTB(dayX, dayY);
+			this.hour = new CSTB(hourX, hourY);
 		}
 		if (obj instanceof Date) {
 			this.date = obj;
@@ -94,7 +94,7 @@ class Calendar {
 
 	static getByYear(year) {
 		const { x, y } = this.algorithm.yearAlgorithm(year);
-		return new HSTB(x, y);
+		return new CSTB(x, y);
 	}
 
 	static getByMouth(year, mouth) {
@@ -103,7 +103,7 @@ class Calendar {
 		// 年干*2+月地支的个位数=>月天干
 		const hs = this.getByYear(year).x * 2 + y;
 		const x = _.rightFigure(hs);
-		return new HSTB(x, y);
+		return new CSTB(x, y);
 	}
 
 	/**
@@ -133,7 +133,7 @@ class Calendar {
 				day) %
 			60;
 		index = index === 0 ? 60 : index;
-		return new HSTB(index);
+		return new CSTB(index);
 	}
 
 	// 获取世纪数
@@ -166,7 +166,7 @@ class Calendar {
 		// 推算实际时天干
 		const _x = single + _y;
 		const x = _x % 10;
-		return new HSTB(x, y);
+		return new CSTB(x, y);
 	}
 }
 
