@@ -4,19 +4,17 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-02-27 23:32:26
+ * @LastEditTime: 2022-02-27 23:56:15
  */
 class Palace {
-	constructor(index, value) {
-		// 宫位
+	constructor(index) {
+		// 后天八卦宫位序号
 		this.index = index;
 		// 周序位 顺时序位
 		this.rIndex = null;
-		// value
-		this.value = value || {};
-		// 天干
+		// 天盘天干
 		this.hs = [];
-
+		// 地盘天干
 		this._hs = [];
 		// 值
 		// this.name = value.name || this.hs;
