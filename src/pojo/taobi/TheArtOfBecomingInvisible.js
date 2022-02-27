@@ -4,13 +4,13 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-02-27 23:39:42
+ * @LastEditTime: 2022-02-27 23:49:34
  */
 const Calendar = require("./../cstb/Calendar");
 const { ceremony, surprise, star, people } = require("./../Tao");
 const Palace = require("./Palace");
 const Arr = require("./../../tools/index");
-const moment = require("moment");
+// const moment = require("moment");
 class TheArtOfBecomingInvisible {
 	constructor(questionTime, round) {
 		/**
@@ -54,10 +54,14 @@ class TheArtOfBecomingInvisible {
 		this.generateCirclePalace();
 	}
 
+	/**
+	 * 布地盘三奇六仪
+	 */
 	overEarth() {
 		const surpriseCeremony = ceremony.concat(surprise);
 		let acquired = this.acquired;
 		let index = Math.abs(this.round) - 1;
+		// 阳顺阴逆
 		if (this.round < 0) {
 			acquired = Array.from(acquired).reverse();
 			index = 9 - Math.abs(this.round);
@@ -68,12 +72,15 @@ class TheArtOfBecomingInvisible {
 		this.generateEarth();
 	}
 
+	// TODO
 	overHeaven() {
 		// 时干
 		const hourCS = this.calendar.hour.cs(true);
 		// 时干所在外环的序号
 		const hIndex = this.earth.get(hourCS).rIndex;
-		const eIndex = 
+		const eIndex = this.earth.get(ceremony[this.hideIndex].rIndex);
+		console.log(hIndex);
+		console.log(eIndex);
 
 		const stars = this.circle
 			.map((palace) => {
@@ -83,6 +90,7 @@ class TheArtOfBecomingInvisible {
 		Arr.arrayUp(stars);
 	}
 
+	// TODO
 	getMandateAndSymbol() {
 		// 时干支旬首所隐旗序号
 		const hideIndex = this.calendar.hour.getLead().getHide();
@@ -146,6 +154,7 @@ class TheArtOfBecomingInvisible {
 		});
 	}
 
+	// TODO
 	generateEarth() {
 		this.earth = new Map(
 			this.acquired.map((palace) => {
@@ -154,6 +163,7 @@ class TheArtOfBecomingInvisible {
 		);
 	}
 
+	// TODO
 	getRound() {}
 }
 
