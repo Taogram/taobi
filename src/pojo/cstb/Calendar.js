@@ -5,66 +5,51 @@
  * @Author: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2021-07-23 23:36:18
+ * @LastEditTime: 2021-10-16 00:38:48
  */
-const CSTB = require("./SexagenaryCycle");
-
-const _ = require("../../tools/index");
+const moment = require("moment");
+const CSTB = require("@/pojo/cstb/SexagenaryCycle");
+const Algorithm = require("@/pojo/algorithm/");
 
 class Calendar {
-	constructor(obj = new Date()) {
-		let yearX;
-		let yearY;
-		let mouthX;
-		let mouthY;
-		let dayX;
-		let dayY;
-		let hourX;
-		let hourY;
+	constructor(_obj = moment()) {
+		let obj = _obj;
+
 		if (typeof obj === "string") {
-			const _obj = obj.trim();
-			yearX = _obj[0];
-			yearY = _obj[1];
-			mouthX = _obj[2];
-			mouthY = _obj[3];
-			dayX = _obj[4];
-			dayY = _obj[5];
-			hourX = _obj[6];
-			hourY = _obj[7];
-			this.year = new CSTB(yearX, yearY);
-			this.mouth = new CSTB(mouthX, mouthY);
-			this.day = new CSTB(dayX, dayY);
-			this.hour = new CSTB(hourX, hourY);
+			obj = Array.from(obj.trim());
+		}
+		if (obj instanceof Array) {
+			if (obj.length >= 8) {
+				this.year = new CSTB(obj[0], obj[1]);
+				this.mouth = new CSTB(obj[2], obj[3]);
+				this.date = new CSTB(obj[4], obj[5]);
+				this.hour = new CSTB(obj[6], obj[7]);
+			} else if (obj.length === 4) {
+				this.year = new CSTB(obj[0]);
+				this.mouth = new CSTB(obj[1]);
+				this.date = new CSTB(obj[2]);
+				this.hour = new CSTB(obj[3]);
+			}
 		}
 		if (obj instanceof Date) {
-			this.date = obj;
-
-			const year = obj.getFullYear();
-			const mouth = obj.getMonth() + 1;
-			const day = obj.getDate();
-			const hour = obj.getHours();
-
-			this.year = this.getByYear(year);
-			this.mouth = this.getByMouth(year, mouth);
-			this.day = this.getByDay(year, mouth, day);
-			this.hour = this.getByHour(year, mouth, day, hour);
+			this.time = moment(obj);
 		}
-
-		// 设置初始算法
-		this.algorithm = {
-			yearAlgorithm: (year) => {
-				// 年份个位数=>天干 补6顺位
-				const single = year + 6;
-				const x = _.rightFigure(single);
-				// 年份的12余数=>地支 补8顺位
-				const remainder = (year % 12) + 8;
-				const y = remainder % 12;
-				return { x, y };
-			},
-			mouthAlgorithm: () => {},
-			dayAlgorithm: () => {},
-			hourAlgorithm: () => {},
-		};
+		if (moment.isDate(obj)) {
+			this.time = obj;
+			this._year = this.time.year();
+			this._mouth = this.time.mouth();
+			this._date = this.time.date();
+			this._hour = this.time.hour();
+			this.year = Calendar.getByYear(this._year);
+			this.mouth = Calendar.getByMouth(this._year, this._mouth);
+			this.date = Calendar.getByDate(this._year, this._mouth, this._date);
+			this.hour = Calendar.getByHour(
+				this._year,
+				this._mouth,
+				this._date,
+				this._hour
+			);
+		}
 	}
 
 	/**
@@ -73,19 +58,25 @@ class Calendar {
 	 * @param {number} level 获取四柱级别 0-3 年->月->日->时
 	 * @param {boolean} focus 是否只显示指定的级别
 	 */
-	hstb(is = false, level = 3, focus = false) {
-		return [this.year, this.mouth, this.day, this.hour]
-			.filter((hstb, i) => {
-				if (!focus && i <= level) return true;
-				if (focus && i === level) return true;
+	sc(is = false, level = 3, focus = false) {
+		return [this.year, this.mouth, this.date, this.hour]
+			.filter((cstb, i) => {
+				if (focus) {
+					if (i === level) return true;
+				} else if (i <= level) return true;
 				return false;
 			})
-			.map((hstb) => {
-				return hstb.hstb(is);
+			.map((cstb) => {
+				return cstb.cstb(is);
 			});
 	}
 
-	static algorithm(year, mouth, day, hour) {
+	static setAlgorithm(
+		year = Algorithm.year,
+		mouth = Algorithm.mouth,
+		day = Algorithm.day,
+		hour = Algorithm.hour
+	) {
 		this.algorithm.year = year;
 		this.algorithm.mouth = mouth;
 		this.algorithm.day = day;
@@ -93,81 +84,31 @@ class Calendar {
 	}
 
 	static getByYear(year) {
-		const { x, y } = this.algorithm.yearAlgorithm(year);
-		return new CSTB(x, y);
+		const data = this.algorithm.year(year);
+		return new CSTB(data);
 	}
 
 	static getByMouth(year, mouth) {
-		// 月份=>地支 12月对应0
-		const y = mouth;
-		// 年干*2+月地支的个位数=>月天干
-		const hs = this.getByYear(year).x * 2 + y;
-		const x = _.rightFigure(hs);
-		return new CSTB(x, y);
+		const data = this.algorithm.mouth(year, mouth);
+		return new CSTB(data);
 	}
 
-	/**
-	 *
-	 * @param {*} _year
-	 * @param {*} _mouth 1-12
-	 * @param {*} day
-	 */
-	static getByDay(_year, _mouth, day) {
-		// 月份为13、14月
-		const mouth = _mouth < 3 > 0 ? _mouth + 12 : _mouth;
-		const year = _mouth < 3 > 0 ? _year - 1 : _year;
-		// 世纪数
-		const century = this.getCenturyCount(year);
-		// 年数 = 此纪年2月末的日干支序数
-		const x = (44 * (century - 1) + Math.floor((century - 1) / 4) + 9) % 60;
-		// 月数
-		const m = (30 * (-1) ** mouth + 1) / 2 + Math.floor((3 * mouth - 7) / 5);
-		// figure
-		const figure = Math.floor(_.rightFigure(year, 2) / 4);
-		// 日干支序数 = 年数+月数+日期 （和大于60，则减60。1月、2月用上一年的年数）
-		let index =
-			(figure * 6 +
-				5 * (figure * 3 + (_.rightFigure(year, 2) % 4)) +
-				x +
-				m +
-				day) %
-			60;
-		index = index === 0 ? 60 : index;
-		return new CSTB(index);
+	static getByDate(year, mouth, date) {
+		const data = this.algorithm.date(year, mouth, date);
+		return new CSTB(data);
+	}
+
+	static getByHour(year, mouth, day, hour) {
+		const data = this.algorithm.hour(year, mouth, day, hour);
+		return new CSTB(data);
 	}
 
 	// 获取世纪数
 	static getCenturyCount(year) {
 		return Math.floor(year / 100) + 1;
 	}
-
-	/**
-	 * 甲己还加甲,乙庚丙作初;
-	 * 丙辛从戊起,丁壬庚子居;
-	 * 戊癸何方法,壬子是真途;
-	 *
-	 * 0 1 2 3 4 -> 0 2 4 6 8
-	 * 5 6 7 8 9 -> 10 12 14 16 18
-	 * result: 0 2 4 6 8
-	 * @param {*} year
-	 * @param {*} mouth
-	 * @param {*} day
-	 * @param {*} hour (0-23)
-	 */
-	static getByHour(year, mouth, day, hour) {
-		// 十二时辰=>十二地支
-		// 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12
-		const _y = Math.ceil(hour / 2);
-		// 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 0
-		const y = _y % 12;
-		// 日天干=>子时时天干
-		// 0 2 4 6 8
-		const single = (this.getByDay(year, mouth, day).x * 2) % 10;
-		// 推算实际时天干
-		const _x = single + _y;
-		const x = _x % 10;
-		return new CSTB(x, y);
-	}
 }
 
+// 设置初始算法
+Calendar.algorithm = {};
 module.exports = Calendar;

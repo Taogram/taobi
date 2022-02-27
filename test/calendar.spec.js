@@ -4,16 +4,27 @@
  * @Author: lax
  * @Date: 2021-02-11 12:08:22
  * @LastEditors: lax
- * @LastEditTime: 2021-02-11 12:11:45
+ * @LastEditTime: 2021-10-16 00:45:59
  * @FilePath: \taobi\test\calendar.spec.js
  */
-const Calendar = require("../src/pojo/hstb/Calendar");
+const { sexagenaryCycle } = require("@/pojo/Tao.js");
+const SC = sexagenaryCycle;
+const Calendar = require("@/pojo/cstb/Calendar");
 
 describe("干支历对象：Calendar", () => {
-	const result = ["庚子"];
-	for (let i = 0; i < 60; i++) {
-		it(`函数getByHour：${i}/对应值应为：${name}`, () => {
-			expect(Calendar.getByYear(i)).toBe(name);
-		});
+	for (let a = 0; a < 60; a++) {
+		for (let b = 0; b < 60; b++) {
+			for (let c = 0; c < 60; c++) {
+				for (let d = 0; d < 60; d++) {
+					const sc = new Calendar([a, b, c, d]).sc(true).reduce((acc, next) => {
+						return acc + next;
+					}, "");
+					const name = `${SC[a]}${SC[b]}${SC[c]}${SC[d]}`;
+					it(`${name},对应值应为：${sc}`, () => {
+						expect(sc).toBe(name);
+					});
+				}
+			}
+		}
 	}
 });

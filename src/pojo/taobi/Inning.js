@@ -4,11 +4,12 @@
  * @Author: lax
  * @Date: 2020-12-10 23:14:51
  * @LastEditors: lax
- * @LastEditTime: 2020-12-27 11:48:46
+ * @LastEditTime: 2021-08-05 19:59:18
  * @FilePath: \taobi\src\pojo\taobi\Inning.js
  */
 const Palace = require("./Palace");
 const { ceremony } = require("../Tao");
+
 class Inning {
 	constructor(round) {
 		this.round = round;
@@ -21,7 +22,7 @@ class Inning {
 			new Palace({ index: 6, rIndex: 7 }),
 			new Palace({ index: 7, rIndex: 6 }),
 			new Palace({ index: 8, rIndex: 1 }),
-			new Palace({ index: 9, rIndex: 4 })
+			new Palace({ index: 9, rIndex: 4 }),
 		];
 		// 内置八宫对象，按天盘星序排列
 		this._circle = [
@@ -32,14 +33,15 @@ class Inning {
 			this._acquired[8],
 			this._acquired[1],
 			this._acquired[6],
-			this._acquired[5]
+			this._acquired[5],
 		];
 		this.ont = [
 			[this._acquired[3], this._acquired[8], this._acquired[1]],
 			[this._acquired[2], this._acquired[4], this._acquired[6]],
-			[this._acquired[7], this._acquired[0], this._acquired[5]]
+			[this._acquired[7], this._acquired[0], this._acquired[5]],
 		];
 	}
+
 	/**
 	 * @description 按天干地支推宫
 	 * @param {HeavenlyStemsAndTerrestrialBranch} hour
@@ -47,19 +49,20 @@ class Inning {
 	getPalaceByHeavenlyStems(hstb) {
 		// 天干为甲，则取其将隐之仪
 		const _ceremony =
-			hstb.hs(true) == "甲" ? ceremony[hstb.tb()] : hstb.hs(true);
-		return this._acquired.filter(p => {
-			if (p.hs == _ceremony) return true;
+			hstb.hs(true) === "甲" ? ceremony[hstb.tb()] : hstb.hs(true);
+		return this._acquired.filter((p) => {
+			if (p.hs === _ceremony) return true;
 		})[0];
 	}
+
 	/**
 	 * @private
 	 * @description 内部函数，输出指定属性的序列
 	 * @param {string} method 属性名称
 	 */
 	__to(method) {
-		return this.ont.map(row => {
-			return row.map(p => {
+		return this.ont.map((row) => {
+			return row.map((p) => {
 				return p[method]();
 			});
 		});

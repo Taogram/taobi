@@ -4,9 +4,9 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2021-07-21 23:05:02
+ * @LastEditTime: 2022-02-27 18:47:39
  */
-const { celestialStems, terrestrialBranches } = require("../Tao");
+const { celestialStems, terrestrialBranches } = require("@/pojo/Tao.js");
 
 class SexagenaryCycle {
 	constructor(x = 0, y = 0) {
@@ -14,6 +14,7 @@ class SexagenaryCycle {
 		this.y = y;
 		this.index;
 		if (arguments.length === 1) {
+			if (x instanceof SexagenaryCycle) return x;
 			this.__getByOneArg(x);
 		}
 		this.__getByTwoArg(this.x, this.y);
@@ -36,11 +37,17 @@ class SexagenaryCycle {
 
 	// 获得旬首
 	getLead() {
-		const index = ~~(this.index / 10) * 10 + 1;
+		const index = ~~(this.index / 10) * 10;
 		return new SexagenaryCycle(index);
 	}
 
+	// 获取隐旗
+	getHide() {
+		const row = ~~(this.getLead().index / 10);
+		return row;
+	}
 	// 天干地支对应的序列
+
 	/*
 		  x:0		x:1		x:2		x:3 	x:4 	x:5 	x:6 	x:7 	x:8 	x:9
 		0 00/00		01/00	02/00	03/00	04/00	05/00	06/00	07/00	08/00	09/00	
@@ -51,6 +58,8 @@ class SexagenaryCycle {
 		5 02/02		03/02	04/02	05/02	06/02	07/02	08/02	09/02	10/02	11/02
 	*/
 	__getIndex() {
+		if (this.x === -1 || this.y === -1)
+			throw new Error(`can\`t use this arg by x:${this.x} y:${this.y}`);
 		// 干支相差之数（负按12转正）/2 = 6-干支十位数值
 		const difference = this.y - this.x;
 		const index = (difference < 0 ? difference + 12 : difference) / 2;
@@ -63,58 +72,47 @@ class SexagenaryCycle {
 	 * @description 根据一个序列获取干支
 	 * @param {*} arg
 	 */
-	__getByIndex(arg) {
+	__getByIndex(_arg) {
 		// 参数为数 取值范围0-59
-		if (arg < 0 || arg > 59) throw new Error("the number must between 0-59");
+		const arg = Math.abs(_arg % 60);
 		// result-> 0-9 -> celestialStems.index
-		this.x = arg % 10;
+		const x = arg % 10;
 		// result-> 0-11 -> terrestrialBranches.index
-		this.y = arg % 12;
+		const y = arg % 12;
 		// result-> 0-59
+		this.x = x;
+		this.y = y;
 		this.index = arg;
+		return { x, y, index: arg };
 	}
 
-	__getByOneArg(arg) {
-		if (typeof arg === "object") {
-			this.x = arg.x;
-			this.y = arg.y;
+	__getByOneArg(_arg) {
+		let arg = _arg;
+		if (typeof _arg === "string") {
+			if (~~(_arg + 1)) {
+				arg = ~~_arg;
+			} else if (_arg.length === 2) {
+				arg = Array.from(_arg);
+			}
 		}
 		if (arg instanceof Array) {
 			this.x = arg[0];
 			this.y = arg[1];
-		}
-		if (typeof arg === "string") {
-			if (~~(arg + 1)) {
-				this.__getByIndex(~~arg);
-			} else if (arg.length === 2) {
-				const arr = Array.from(arg);
-				this.x = arr[0];
-				this.y = arr[1];
-			}
-		}
-		if (typeof arg === "number") {
+		} else if (typeof arg === "object") {
+			this.x = arg.x;
+			this.y = arg.y;
+		} else if (typeof arg === "number") {
 			this.__getByIndex(arg);
+		} else {
+			throw new Error("this arg can't to use");
 		}
 	}
 
 	__getByTwoArg(arg1, arg2) {
 		// TODO 当传入两个参数时判断是否存在对应干支
-		this.x =
-			~~(arg1 + 1) === 0
-				? celestialStems.indexOf(arg1) === -1
-					? undefined
-					: celestialStems.indexOf(arg1)
-				: ~~arg1 >= 0 < 10
-				? ~~arg1
-				: undefined;
+		this.x = ~~(arg1 + 1) === 0 ? celestialStems.indexOf(arg1) : ~~arg1 % 10;
 		this.y =
-			~~(arg2 + 1) === 0
-				? terrestrialBranches.indexOf(arg2) === -1
-					? undefined
-					: terrestrialBranches.indexOf(arg2)
-				: ~~arg2 >= 0 < 12
-				? ~~arg2
-				: undefined;
+			~~(arg2 + 1) === 0 ? terrestrialBranches.indexOf(arg2) : ~~arg2 % 12;
 		this.index = this.__getIndex();
 	}
 }

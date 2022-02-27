@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-26 09:50:06
  * @LastEditors: lax
- * @LastEditTime: 2020-10-29 10:48:55
+ * @LastEditTime: 2022-02-27 17:27:50
  */
 const handler = {
 	// 获取倒数X位数
@@ -18,6 +18,11 @@ const handler = {
 	arrayUp(list, index) {
 		const result = this.arraySplit(list, index);
 		return result[1].concat(result[0]);
-	}
+	},
+	arrayDown(list, index) {
+		const _index = list.length - index;
+		const result = this.arraySplit(list, _index);
+		return result[1].concat(result[0]);
+	},
 };
 module.exports = handler;

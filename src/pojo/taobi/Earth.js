@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-29 09:53:31
  * @LastEditors: lax
- * @LastEditTime: 2020-12-15 22:08:13
+ * @LastEditTime: 2021-12-18 14:35:15
  */
 const Inning = require("./Inning");
 const _ = require("../../tools/index");
@@ -15,6 +15,7 @@ class Earth extends Inning {
 		super(round);
 		this.__setSurpriseAndCeremonyByRound();
 	}
+
 	/**
 	 * @private
 	 * @description 安用局排三奇六仪

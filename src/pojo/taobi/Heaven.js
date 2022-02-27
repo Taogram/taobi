@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-29 09:53:31
  * @LastEditors: lax
- * @LastEditTime: 2020-12-27 11:48:54
+ * @LastEditTime: 2021-12-18 14:35:08
  */
 // const Palace = require("./Palace");
 const Inning = require("./Inning");
@@ -17,6 +17,7 @@ class Heaven extends Inning {
 		this.earth = earth;
 		this.__setStarByHourAndRound();
 	}
+
 	/**
 	 * @private
 	 * @description 安时及用局获取星序
@@ -41,7 +42,7 @@ class Heaven extends Inning {
 		// 时干入中宫
 		if (!_palace.rIndex) moveOrder = 4;
 		// 地盘周序
-		const earthOrder = this.earth._circle.map(p => {
+		const earthOrder = this.earth._circle.map((p) => {
 			return p.getHS();
 		});
 		// 天盘周序
@@ -52,9 +53,9 @@ class Heaven extends Inning {
 			p.setHS(heavenOrder[i]);
 		});
 		// 布天盘之星数
-		this._acquired.map(p => {
+		this._acquired.map((p) => {
 			// 星序
-			const index = this.earth._acquired.findIndex(_p => {
+			const index = this.earth._acquired.findIndex((_p) => {
 				return p.hs == _p.hs;
 			});
 			p.setName(star[index]);

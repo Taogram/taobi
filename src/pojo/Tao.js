@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-28 19:51:37
  * @LastEditors: lax
- * @LastEditTime: 2021-03-26 17:27:14
+ * @LastEditTime: 2022-02-27 23:02:37
  */
 module.exports = {
 	/**
@@ -131,6 +131,8 @@ module.exports = {
 		"天任星",
 		"天英星",
 	],
+
+	star_: ["天蓬"],
 
 	/**
 	 * 人盘：
