@@ -4,19 +4,22 @@
  * @Author: lax
  * @Date: 2020-10-22 18:58:04
  * @LastEditors: lax
- * @LastEditTime: 2021-07-21 22:05:02
+ * @LastEditTime: 2022-02-27 18:10:58
  * @FilePath: \taobi\.eslintrc.js
  */
 module.exports = {
+	parser: "@babel/eslint-parser",
+	root: true,
 	env: {
 		node: true,
 		es2020: true,
 	},
 	extends: [
-		"airbnb-base",
+		"airbnb-base/legacy",
 		"plugin:prettier/recommended",
 		"plugin:jest/recommended",
 	],
+	plugins: ["prettier"],
 	parserOptions: {
 		ecmaVersion: 11,
 		sourceType: "module",
@@ -28,5 +31,15 @@ module.exports = {
 		"prefer-destructuring": 0,
 		"no-unused-expressions": 0,
 		"no-nested-ternary": 0,
+		"array-callback-return": 0,
+		"no-param-reassign": 0,
 	},
+	overrides: [
+		{
+			files: ["**/__test__/*.{j,t}s?(x)", "**/test/unit/**/*.test.{j,t}s?(x)"],
+			env: {
+				jest: true,
+			},
+		},
+	],
 };
