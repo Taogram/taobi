@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-02-27 23:56:15
+ * @LastEditTime: 2022-03-05 11:01:51
  */
 class Palace {
 	constructor(index) {
@@ -23,16 +23,42 @@ class Palace {
 		this.jobSymbol = false;
 	}
 
-	setHS(hs) {
+	// ######### earth celestial stems #########
+	setEarthCelestialStems(hs) {
+		this._hs = hs;
+	}
+
+	setECS(hs) {
+		this.setEarthCelestialStems(hs);
+	}
+
+	getEarthCelestialStems() {
+		return this._hs;
+	}
+
+	getECS() {
+		return this.getEarthCelestialStems();
+	}
+
+	// ######### heaven celestial stems #########
+	setHeavenCelestialStems(hs) {
 		this.hs = hs;
+	}
+
+	setHCS(hs) {
+		this.setHeavenCelestialStems(hs);
+	}
+
+	getHeavenCelestialStems() {
+		return this.hs;
+	}
+
+	getHCS() {
+		return this.getHeavenCelestialStems();
 	}
 
 	setName(name) {
 		this.name = name;
-	}
-
-	getHS() {
-		return this.hs;
 	}
 
 	getName() {

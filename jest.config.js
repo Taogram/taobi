@@ -1,3 +1,3 @@
 module.exports = {
-	testMatch: ["**/test/**/*.js?(x)", "**/?(*.)(spec|test).js?(x)"],
+	testMatch: ["**/test/**/(spec|test).js?(x)", "**/?(*.)(spec|test).js?(x)"],
 };

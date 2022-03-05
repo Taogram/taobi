@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-02-27 23:49:34
+ * @LastEditTime: 2022-03-05 11:45:30
  */
 const Calendar = require("./../cstb/Calendar");
 const { ceremony, surprise, star, people } = require("./../Tao");
@@ -67,7 +67,7 @@ class TheArtOfBecomingInvisible {
 			index = 9 - Math.abs(this.round);
 		}
 		Arr.arrayUp(acquired, index).map((palace, i) => {
-			palace.hs = [surpriseCeremony[i]];
+			palace.setECS([surpriseCeremony[i]]);
 		});
 		this.generateEarth();
 	}
@@ -158,7 +158,7 @@ class TheArtOfBecomingInvisible {
 	generateEarth() {
 		this.earth = new Map(
 			this.acquired.map((palace) => {
-				return [palace.hs[0], palace];
+				return [palace.getECS()[0], palace];
 			})
 		);
 	}
