@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-03-05 11:01:51
+ * @LastEditTime: 2022-03-05 15:14:21
  */
 class Palace {
 	constructor(index) {
@@ -16,6 +16,7 @@ class Palace {
 		this.hs = [];
 		// 地盘天干
 		this._hs = [];
+		this.star = "";
 		// 值
 		// this.name = value.name || this.hs;
 		// 卦
@@ -55,6 +56,14 @@ class Palace {
 
 	getHCS() {
 		return this.getHeavenCelestialStems();
+	}
+
+	setStar(star) {
+		this.star = star;
+	}
+
+	getStar() {
+		return this.star;
 	}
 
 	setName(name) {

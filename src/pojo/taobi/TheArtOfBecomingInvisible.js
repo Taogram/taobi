@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-03-05 11:45:30
+ * @LastEditTime: 2022-03-05 15:50:13
  */
 const Calendar = require("./../cstb/Calendar");
 const { ceremony, surprise, star, people } = require("./../Tao");
@@ -75,19 +75,24 @@ class TheArtOfBecomingInvisible {
 	// TODO
 	overHeaven() {
 		// 时干
-		const hourCS = this.calendar.hour.cs(true);
-		// 时干所在外环的序号
+		let hourCS = this.calendar.hour.cs(true);
+		if (hourCS === "甲") this.calendar.hour.getHide();
+		// 时干所在地盘落宫对应的外环序号
 		const hIndex = this.earth.get(hourCS).rIndex;
-		const eIndex = this.earth.get(ceremony[this.hideIndex].rIndex);
-		console.log(hIndex);
-		console.log(eIndex);
+		// 时辰旬首所遁宫对应的外环序号
+		const eIndex = this.earth.get(ceremony[this.hideIndex]).rIndex;
+		// 转距
+		const offset = Math.abs(hIndex - eIndex);
 
 		const stars = this.circle
 			.map((palace) => {
 				return star[palace.index - 1];
 			})
 			.slice(0, star.length - 1);
-		Arr.arrayUp(stars);
+		console.log(stars);
+		Arr.arrayUp(stars, offset).map((s, index) => {
+			this.circle[index].setStar(s);
+		});
 	}
 
 	// TODO
