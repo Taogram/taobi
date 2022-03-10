@@ -4,8 +4,10 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-03-05 15:14:21
+ * @LastEditTime: 2022-03-08 21:58:54
  */
+const { acquired, num } = require("@/pojo/Tao.js");
+
 class Palace {
 	constructor(index) {
 		// 后天八卦宫位序号
@@ -82,6 +84,12 @@ class Palace {
 		this.jobSymbol = is;
 	}
 
-	toString() {}
+	toCanvas() {
+		return [
+			["", "", ""],
+			["", "", this.hs[0]],
+			["", `${acquired[this.index - 1]}${num[this.index - 1]}`, this._hs[0]],
+		];
+	}
 }
 module.exports = Palace;

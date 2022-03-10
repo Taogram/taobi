@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-03-05 15:50:13
+ * @LastEditTime: 2022-03-10 23:56:04
  */
 const Calendar = require("./../cstb/Calendar");
 const { ceremony, surprise, star, people } = require("./../Tao");
@@ -13,9 +13,10 @@ const Arr = require("./../../tools/index");
 // const moment = require("moment");
 class TheArtOfBecomingInvisible {
 	constructor(questionTime, round) {
+		// step1:根据日期转化干支历
 		/**
-		 * step1:
-		 * 根据日期转化干支历
+		 * 求测阴阳历时
+		 * @type {Calendar}
 		 */
 		this.calendar = new Calendar(questionTime);
 
@@ -72,11 +73,12 @@ class TheArtOfBecomingInvisible {
 		this.generateEarth();
 	}
 
-	// TODO
+	/**
+	 * 布天盘九星
+	 */
 	overHeaven() {
 		// 时干
-		let hourCS = this.calendar.hour.cs(true);
-		if (hourCS === "甲") this.calendar.hour.getHide();
+		let hourCS = this.calendar.hour.getCsOrigin(true);
 		// 时干所在地盘落宫对应的外环序号
 		const hIndex = this.earth.get(hourCS).rIndex;
 		// 时辰旬首所遁宫对应的外环序号
@@ -89,8 +91,7 @@ class TheArtOfBecomingInvisible {
 				return star[palace.index - 1];
 			})
 			.slice(0, star.length - 1);
-		console.log(stars);
-		Arr.arrayUp(stars, offset).map((s, index) => {
+		Arr.arrayUp(stars, -offset).map((s, index) => {
 			this.circle[index].setStar(s);
 		});
 	}
@@ -170,6 +171,14 @@ class TheArtOfBecomingInvisible {
 
 	// TODO
 	getRound() {}
+
+	getCanvas() {
+		return this.box.map((row) => {
+			return row.map((palace) => {
+				return palace.toCanvas();
+			});
+		});
+	}
 }
 
 module.exports = TheArtOfBecomingInvisible;

@@ -5,30 +5,39 @@
  * @Author: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2022-03-05 14:54:36
+ * @LastEditTime: 2022-03-10 23:58:08
  */
 const moment = require("moment");
-const CSTB = require("@/pojo/cstb/SexagenaryCycle");
+const SexagenaryCycle = require("./SexagenaryCycle");
 const Algorithm = require("@/pojo/algorithm/");
 
+/**
+ * 干支历时
+ */
 class Calendar {
 	constructor(_obj = moment()) {
 		let obj = _obj;
+
+		/**
+		 * 时干支
+		 * @type {SexagenaryCycle}
+		 */
+		this.hour = null;
 
 		if (typeof obj === "string") {
 			obj = Array.from(obj.trim());
 		}
 		if (obj instanceof Array) {
 			if (obj.length >= 8) {
-				this.year = new CSTB(obj[0], obj[1]);
-				this.mouth = new CSTB(obj[2], obj[3]);
-				this.date = new CSTB(obj[4], obj[5]);
-				this.hour = new CSTB(obj[6], obj[7]);
+				this.year = new SexagenaryCycle(obj[0], obj[1]);
+				this.mouth = new SexagenaryCycle(obj[2], obj[3]);
+				this.date = new SexagenaryCycle(obj[4], obj[5]);
+				this.hour = new SexagenaryCycle(obj[6], obj[7]);
 			} else if (obj.length === 4) {
-				this.year = new CSTB(obj[0]);
-				this.mouth = new CSTB(obj[1]);
-				this.date = new CSTB(obj[2]);
-				this.hour = new CSTB(obj[3]);
+				this.year = new SexagenaryCycle(obj[0]);
+				this.mouth = new SexagenaryCycle(obj[1]);
+				this.date = new SexagenaryCycle(obj[2]);
+				this.hour = new SexagenaryCycle(obj[3]);
 			}
 		}
 		if (obj instanceof Date) {
@@ -85,22 +94,22 @@ class Calendar {
 
 	static getByYear(year) {
 		const data = this.algorithm.year(year);
-		return new CSTB(data);
+		return new SexagenaryCycle(data);
 	}
 
 	static getByMouth(year, mouth) {
 		const data = this.algorithm.mouth(year, mouth);
-		return new CSTB(data);
+		return new SexagenaryCycle(data);
 	}
 
 	static getByDate(year, mouth, date) {
 		const data = this.algorithm.date(year, mouth, date);
-		return new CSTB(data);
+		return new SexagenaryCycle(data);
 	}
 
 	static getByHour(year, mouth, day, hour) {
 		const data = this.algorithm.hour(year, mouth, day, hour);
-		return new CSTB(data);
+		return new SexagenaryCycle(data);
 	}
 
 	// 获取世纪数

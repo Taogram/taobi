@@ -4,14 +4,30 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2022-02-27 18:47:39
+ * @LastEditTime: 2022-03-10 23:54:21
  */
-const { celestialStems, terrestrialBranches } = require("@/pojo/Tao.js");
+const {
+	celestialStems,
+	terrestrialBranches,
+	ceremony,
+} = require("@/pojo/Tao.js");
 
+/**
+ * 天干地支对象
+ */
 class SexagenaryCycle {
 	constructor(x = 0, y = 0) {
+		/**
+		 * 天干序号 0~9
+		 */
 		this.x = x;
+		/**
+		 * 地支序号 0~11
+		 */
 		this.y = y;
+		/**
+		 * 干支序号 0~59
+		 */
 		this.index;
 		if (arguments.length === 1) {
 			if (x instanceof SexagenaryCycle) return x;
@@ -20,31 +36,62 @@ class SexagenaryCycle {
 		this.__getByTwoArg(this.x, this.y);
 	}
 
-	// 天干序列 Celestial Stems->0-9
+	/**
+	 * 天干序列 Celestial Stems->0-9
+	 * @param {boolean} is
+	 * @returns 名称/序号
+	 */
 	cs(is) {
 		return is ? celestialStems[this.x] : this.x;
 	}
 
-	// 地支序列 Terrestrial Branches->0-11
+	/**
+	 * 地支序列 Terrestrial Branches->0-11
+	 * @param {boolean} is
+	 * @returns 名称/序号
+	 */
 	tb(is) {
 		return is ? terrestrialBranches[this.y] : this.y;
 	}
 
-	// 天干地支序列 0-59
+	/**
+	 * 天干地支序列 0-59
+	 * @param {boolean} is
+	 * @returns 名称/序号
+	 */
 	cstb(is) {
 		return is ? this.cs(is) + this.tb(is) : this.index;
 	}
 
-	// 获得旬首
+	/**
+	 * 获得旬首
+	 * @returns {SexagenaryCycle} sexagenaryCycle
+	 */
 	getLead() {
 		const index = ~~(this.index / 10) * 10;
 		return new SexagenaryCycle(index);
 	}
 
-	// 获取隐旗
-	getHide() {
+	/**
+	 * 获取隐旗
+	 * @param {boolean} is
+	 * @returns 名称/序号
+	 */
+	getHide(is) {
 		const row = ~~(this.getLead().index / 10);
-		return row;
+		return is ? ceremony[row] : row;
+	}
+
+	/**
+	 * 获取天干对应的旗
+	 * @param {boolean} is
+	 * @returns 名称/序号
+	 */
+	getCsOrigin(is) {
+		// 时干
+		let cs = this.cs(is);
+		// 如果本身是旬首则选所隐旗
+		if (cs === "甲" || cs === 0) cs = this.getHide(is);
 	}
 	// 天干地支对应的序列
 
@@ -57,6 +104,10 @@ class SexagenaryCycle {
 		4 04/04		05/04	06/04	07/04	08/04	09/04	10/04	11/04	00/-8	01/-8
 		5 02/02		03/02	04/02	05/02	06/02	07/02	08/02	09/02	10/02	11/02
 	*/
+	/**
+	 * 获取对应的干支序号
+	 * @returns {Number} index
+	 */
 	__getIndex() {
 		if (this.x === -1 || this.y === -1)
 			throw new Error(`can\`t use this arg by x:${this.x} y:${this.y}`);
