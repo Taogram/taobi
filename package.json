@@ -9,6 +9,7 @@
     "consola": "^2.15.0",
     "docx": "^7.3.0",
     "fs-extra": "^10.0.1",
+    "jsdoc-babel": "^0.5.0",
     "moment": "^2.29.1"
   },
   "devDependencies": {

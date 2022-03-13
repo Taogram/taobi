@@ -1,0 +1,15 @@
+/*
+ * @Description:
+ * @Version: 1.0.0
+ * @Author: lax
+ * @Date: 2022-03-11 00:49:25
+ * @LastEditors: lax
+ * @LastEditTime: 2022-03-11 00:51:26
+ * @FilePath: \taobi\jsconfig.json
+ */
+{
+    "compilerOptions": {
+        "baseUrl": "./src/"
+    },
+    "exclude": ["node_modules"]
+}

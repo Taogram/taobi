@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2021-07-01 09:28:23
  * @LastEditors: lax
- * @LastEditTime: 2022-03-05 21:57:27
+ * @LastEditTime: 2022-03-13 14:32:30
  * @FilePath: \taobi\src\tools\word\index.js
  */
 const {
@@ -19,11 +19,11 @@ const {
 const fs = require("fs-extra");
 const moment = require("moment");
 
-const { wordName } = require("@/config/index.js").output;
-const { getRoot } = require("@/tools/path/index.js");
+const { word } = require("@/config/index.js");
+const { docsRoot, name } = word;
 
-function generateWord(callback) {
-	const pro = callback({
+function generateWord(callback, taobi) {
+	const pro = callback(taobi, {
 		Document,
 		HeadingLevel,
 		PageOrientation,
@@ -38,12 +38,12 @@ function saveWord(p, docx, date = new Date()) {
 	p = p || "";
 
 	return new Promise((resolve) => {
-		const usePath = getRoot(p);
+		const usePath = docsRoot;
 		fs.ensureDirSync(usePath);
 
 		Packer.toBuffer(docx).then((buffer) => {
 			fs.writeFileSync(
-				`${usePath}/${moment(date).format("YYYY-MM-DD")}-${wordName}.docx`,
+				`${usePath}/${moment(date).format("YYYY-MM-DD")}-${name}.docx`,
 				buffer
 			);
 			resolve(buffer);

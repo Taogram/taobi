@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2021-07-28 12:37:49
  * @LastEditors: lax
- * @LastEditTime: 2022-03-05 21:58:40
+ * @LastEditTime: 2022-03-13 16:20:49
  * @FilePath: \taobi\src\tools\word\table.js
  */
 const {
@@ -15,9 +15,10 @@ const {
 	VerticalAlign,
 	AlignmentType,
 	WidthType,
+	HeightRule,
 } = require("docx");
-const { merge } = require("webpack-merge");
 const { borders } = require("@/tools/word/properties.js");
+const CELL_SIZE = 1000;
 module.exports = {
 	arrToTable(
 		arr,
@@ -40,12 +41,25 @@ module.exports = {
 					],
 					verticalAlign: VerticalAlign.CENTER,
 				};
-				const opt = merge({}, option, diy);
+				const opt = Object.assign({}, option, diy);
 
 				return new TableCell(opt);
 			});
-			return new TableRow({ children: cols });
+			return new TableRow({
+				children: cols,
+				height: {
+					value: CELL_SIZE,
+					rule: HeightRule.EXACT,
+				},
+			});
 		});
-		return new Table({ rows });
+		return new Table({
+			rows,
+			width: {
+				size: CELL_SIZE * 9,
+				type: WidthType.DXA,
+			},
+			alignment: AlignmentType.CENTER,
+		});
 	},
 };

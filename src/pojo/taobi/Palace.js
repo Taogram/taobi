@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-03-08 21:58:54
+ * @LastEditTime: 2022-03-13 20:22:04
  */
 const { acquired, num } = require("@/pojo/Tao.js");
 
@@ -19,6 +19,7 @@ class Palace {
 		// 地盘天干
 		this._hs = [];
 		this.star = "";
+		this.door = "";
 		// 值
 		// this.name = value.name || this.hs;
 		// 卦
@@ -68,6 +69,14 @@ class Palace {
 		return this.star;
 	}
 
+	setDoor(door) {
+		this.door = door;
+	}
+
+	getDoor() {
+		return this.door;
+	}
+
 	setName(name) {
 		this.name = name;
 	}
@@ -86,9 +95,17 @@ class Palace {
 
 	toCanvas() {
 		return [
-			["", "", ""],
-			["", "", this.hs[0]],
-			["", `${acquired[this.index - 1]}${num[this.index - 1]}`, this._hs[0]],
+			["1", "1", "1"],
+			[
+				this.door,
+				"1",
+				`${this.hs[0] ? this.hs[0] : ""}${this.hs[1] ? this.hs[1] : ""}`,
+			],
+			[
+				this.star,
+				`${acquired[this.index - 1]}${num[this.index - 1]}`,
+				this._hs[0],
+			],
 		];
 	}
 }

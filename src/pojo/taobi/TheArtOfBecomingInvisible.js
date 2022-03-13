@@ -4,48 +4,41 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-03-10 23:56:04
+ * @LastEditTime: 2022-03-13 20:32:24
  */
 const Calendar = require("./../cstb/Calendar");
-const { ceremony, surprise, star, people } = require("./../Tao");
+const { ceremony, surprise, star, door } = require("./../Tao");
 const Palace = require("./Palace");
 const Arr = require("./../../tools/index");
 // const moment = require("moment");
 class TheArtOfBecomingInvisible {
 	constructor(questionTime, round) {
-		// step1:根据日期转化干支历
+		// step1: 根据日期转化干支历
 		/**
 		 * 求测阴阳历时
 		 * @type {Calendar}
 		 */
 		this.calendar = new Calendar(questionTime);
 
+		// step2: 根据节气和上中下三元获取用局
 		/**
-		 * step2:
-		 * 根据节气和上中下三元获取用局
 		 * -9~9对应阴遁九局、阳遁九局
 		 */
 		this.round = round || this.getRound();
 
 		this.__init();
 
-		/**
-		 * step3:
-		 * 根据用局布地盘三奇六仪
-		 */
+		// step3: 根据用局布地盘三奇六仪
 		this.overEarth();
 
-		/**
-		 * step4:
-		 * 根据时干支获取值使和值符
-		 */
+		// step4: 根据时干支获取值使和值符
 		this.getMandateAndSymbol();
 
-		/**
-		 * step5:
-		 * 根据值符布天盘三奇六仪和星
-		 */
+		// step5: 根据值符布天盘三奇六仪和星
 		this.overHeaven();
+
+		// step6: 根据值使布八门
+		this.overPeople();
 	}
 
 	__init() {
@@ -85,14 +78,54 @@ class TheArtOfBecomingInvisible {
 		const eIndex = this.earth.get(ceremony[this.hideIndex]).rIndex;
 		// 转距
 		const offset = Math.abs(hIndex - eIndex);
-
+		// 九星携带天干转移
 		const stars = this.circle
 			.map((palace) => {
-				return star[palace.index - 1];
+				return { star: star[palace.index - 1], _hs: palace._hs };
 			})
 			.slice(0, star.length - 1);
-		Arr.arrayUp(stars, -offset).map((s, index) => {
-			this.circle[index].setStar(s);
+		Arr.arrayUp(stars, -offset).map((data, index) => {
+			let palace = this.circle[index];
+			palace.setStar(data.star);
+			palace.setHCS(data._hs);
+		});
+		// 天禽不变
+		this.five.setStar("天禽星");
+		this.generateHeaven();
+		// 天禽随二宫
+		this.heaven.get("天芮星").hs.push(this.five._hs[0]);
+	}
+
+	// TODO
+	overPeople() {
+		// 时地支
+		const hourTb = this.calendar.hour.tb();
+		// 时旬首地支
+		const headTb = this.calendar.hour.getLead().tb();
+		// 时辰间距
+		const timeOffset = Math.abs(hourTb - headTb);
+		console.log(`时间相差：${timeOffset}`);
+		// 时旬首所遁环序号
+		let index = this.earth.get(ceremony[this.hideIndex]).rIndex;
+		if (this.round < 0) {
+			index -= index;
+		} else {
+			index += timeOffset;
+		}
+		index %= 8;
+		if (index < 0) index += 8;
+		console.log(`：${timeOffset}`);
+		let mandate = this.mandate;
+		const peoples = this.circle
+			.map((palace) => {
+				return door[palace.index - 1];
+			})
+			.slice(0, star.length - 1);
+		const offset = peoples.indexOf(mandate);
+		console.log(peoples);
+		Arr.arrayUp(peoples, -offset).map((data, i) => {
+			let palace = this.circle[i];
+			palace.setDoor(data);
 		});
 	}
 
@@ -106,7 +139,7 @@ class TheArtOfBecomingInvisible {
 		// 值符
 		this.symbol = star[index + 1];
 		// 值使
-		this.mandate = people[index + 1];
+		this.mandate = door[index + 1];
 	}
 
 	generatePalace() {
@@ -169,6 +202,14 @@ class TheArtOfBecomingInvisible {
 		);
 	}
 
+	generateHeaven() {
+		this.heaven = new Map(
+			this.acquired.map((palace) => {
+				return [palace.getStar(), palace];
+			})
+		);
+	}
+
 	// TODO
 	getRound() {}
 
@@ -178,6 +219,24 @@ class TheArtOfBecomingInvisible {
 				return palace.toCanvas();
 			});
 		});
+	}
+
+	getArray() {
+		return this.box
+			.map((row) => {
+				return row.reduce(
+					(acc, next) => {
+						const canvas = next.toCanvas();
+						return acc.map((each, i) => {
+							return each.concat(canvas[i]);
+						});
+					},
+					[[], [], []]
+				);
+			})
+			.reduce((acc, next) => {
+				return acc.concat(next);
+			}, []);
 	}
 }
 

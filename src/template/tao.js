@@ -4,25 +4,115 @@
  * @Author: lax
  * @Date: 2021-07-22 09:46:44
  * @LastEditors: lax
- * @LastEditTime: 2022-03-05 22:16:29
+ * @LastEditTime: 2022-03-13 17:12:11
  * @FilePath: \taobi\src\template\tao.js
  */
 
-const { Paragraph, TextRun, HeadingLevel } = require("docx");
+const {
+	Paragraph,
+	TextRun,
+	HeadingLevel,
+	VerticalAlign,
+	WidthType,
+	AlignmentType,
+	TableCell,
+	TableRow,
+	HeightRule,
+	Table,
+	BorderStyle,
+} = require("docx");
+const TITLE = "奇门遁甲求测图";
+// const Table = require("@/tools/word/table.js");
+const CELL_SIZE = 1000;
 
-module.exports = ({ title, table }) => {
-	return {
-		children: [
-			new Paragraph({
+function palaceBorders(x, y) {
+	let color = "000000";
+	let size = 1;
+	let style = BorderStyle.NONE;
+
+	let top = { style, size, color };
+	let left = { style, size, color };
+	let right = { style, size, color };
+	let bottom = { style, size, color };
+	if (x === 0 || x === 3 || x === 6) {
+		top.style = BorderStyle.SINGLE;
+	}
+	if (x === 2 || x === 5 || x === 8) {
+		bottom.style = BorderStyle.SINGLE;
+	}
+	if (y === 0 || y === 3 || y === 6) {
+		left.style = BorderStyle.SINGLE;
+	}
+	if (y === 2 || y === 5 || y === 8) {
+		right.style = BorderStyle.SINGLE;
+	}
+
+	return { top, bottom, left, right };
+}
+
+function generateTable(palace) {
+	const rows = palace.map((row, x) => {
+		if (!row.length) return null;
+		const cols = row.map((col, y) => {
+			const option = {
+				borders: palaceBorders(x, y),
 				children: [
-					new TextRun({
-						text: title,
-						bold: true,
+					new Paragraph({
+						children: [
+							new TextRun({
+								text: col + "",
+								font: "楷体",
+							}),
+						],
+						alignment: AlignmentType.CENTER,
 					}),
 				],
-				heading: HeadingLevel.TITLE,
-			}),
-			table,
+				width: {
+					size: CELL_SIZE,
+					type: WidthType.DXA,
+				},
+				verticalAlign: VerticalAlign.CENTER,
+			};
+			const opt = Object.assign({}, option);
+
+			return new TableCell(opt);
+		});
+		return new TableRow({
+			children: cols,
+			height: {
+				value: CELL_SIZE,
+				rule: HeightRule.EXACT,
+			},
+		});
+	});
+	return new Table({
+		rows,
+		width: {
+			size: CELL_SIZE * 9,
+			type: WidthType.DXA,
+		},
+		alignment: AlignmentType.CENTER,
+	});
+}
+
+module.exports = (taobi) => {
+	return {
+		sections: [
+			{
+				children: [
+					new Paragraph({
+						children: [
+							new TextRun({
+								text: TITLE,
+								bold: true,
+							}),
+						],
+						alignment: AlignmentType.CENTER,
+						heading: HeadingLevel.TITLE,
+					}),
+					generateTable(taobi),
+				],
+			},
 		],
 	};
 };
