@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2022-03-13 14:23:16
+ * @LastEditTime: 2022-03-15 20:35:29
  */
 const {
 	celestialStems,
@@ -77,7 +77,7 @@ class SexagenaryCycle {
 	 * @param {boolean} is
 	 * @returns 名称/序号
 	 */
-	getHide(is) {
+	getConceal(is) {
 		const row = ~~(this.getLead().index / 10);
 		return is ? ceremony[row] : row;
 	}

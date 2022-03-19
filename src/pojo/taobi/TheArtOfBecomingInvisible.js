@@ -1,66 +1,88 @@
 /*
- * @Description: 奇门遁甲对象
+ * @Description: 奇门遁甲
  * @Version: 1.0.0
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-03-13 20:32:24
+ * @LastEditTime: 2022-03-19 13:00:45
  */
-const Calendar = require("./../cstb/Calendar");
-const { ceremony, surprise, star, door } = require("./../Tao");
-const Palace = require("./Palace");
+const Calendar = require("@/pojo/cstb/Calendar.js");
+const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
+const { ceremony, surprise, star, door } = require("@/pojo/Tao.js");
 const Arr = require("./../../tools/index");
 // const moment = require("moment");
-class TheArtOfBecomingInvisible {
-	constructor(questionTime, round) {
-		// step1: 根据日期转化干支历
+/**
+ * 转盘周期
+ */
+const SPIN_CYCLE = 8;
+class TheArtOfBecomingInvisible extends TaoConvert {
+	constructor(questionTime, r) {
+		super();
+
 		/**
-		 * 求测阴阳历时
-		 * @type {Calendar}
+		 * 时旬首隐旗
 		 */
-		this.calendar = new Calendar(questionTime);
+		this.hourConceal = null;
+
+		// step1: 根据日期转化干支历
+		this.generateCalendar(questionTime);
 
 		// step2: 根据节气和上中下三元获取用局
-		/**
-		 * -9~9对应阴遁九局、阳遁九局
-		 */
-		this.round = round || this.getRound();
+		this.generateRound(r);
 
-		this.__init();
+		// step3: 根据时干支获取其旬首隐旗
+		this.generateHourConcealFlag();
 
-		// step3: 根据用局布地盘三奇六仪
+		// step4: 根据用局布地盘三奇六仪
 		this.overEarth();
 
-		// step4: 根据时干支获取值使和值符
+		// step5: 根据时干支获取值使和值符
 		this.getMandateAndSymbol();
 
-		// step5: 根据值符布天盘三奇六仪和星
+		// step6: 根据值符布天盘三奇六仪和星
 		this.overHeaven();
 
-		// step6: 根据值使布八门
-		this.overPeople();
+		// step7: 根据值使布八门
+		// this.overPeople();
 	}
 
-	__init() {
-		this.generatePalace();
-		this.generateAcquiredPalace();
-		this.generateNinePalace();
-		this.generateCirclePalace();
+	generateCalendar(questionTime) {
+		this.calendar = new Calendar(questionTime);
+		const { year, month, date, hour } = this.calendar;
+		this.year = year;
+		this.month = month;
+		this.date = date;
+		this.hour = hour;
+	}
+
+	// TODO
+	generateRound(r) {
+		this.round = r === undefined ? 3 : r;
 	}
 
 	/**
-	 * 布地盘三奇六仪
+	 * @description 时干支旬首所隐旗
+	 */
+	generateHourConcealFlag() {
+		this.hourConceal = this.hour.getLead().getConceal(true);
+	}
+
+	/**
+	 * @description 布地盘三奇六仪
+	 * @version 1.0.0
+	 * @author lax
 	 */
 	overEarth() {
 		const surpriseCeremony = ceremony.concat(surprise);
-		let acquired = this.acquired;
-		let index = Math.abs(this.round) - 1;
+		let _acquired = this.acquired;
+		let round = Math.abs(this.round);
+		let index = round - 1;
 		// 阳顺阴逆
 		if (this.round < 0) {
-			acquired = Array.from(acquired).reverse();
-			index = 9 - Math.abs(this.round);
+			_acquired = Array.from(_acquired).reverse();
+			index = 9 - round;
 		}
-		Arr.arrayUp(acquired, index).map((palace, i) => {
+		Arr.arrayUp(_acquired, index).map((palace, i) => {
 			palace.setECS([surpriseCeremony[i]]);
 		});
 		this.generateEarth();
@@ -75,7 +97,7 @@ class TheArtOfBecomingInvisible {
 		// 时干所在地盘落宫对应的外环序号
 		const hIndex = this.earth.get(hourCS).rIndex;
 		// 时辰旬首所遁宫对应的外环序号
-		const eIndex = this.earth.get(ceremony[this.hideIndex]).rIndex;
+		const eIndex = this.earth.get(this.hourConceal).rIndex;
 		// 转距
 		const offset = Math.abs(hIndex - eIndex);
 		// 九星携带天干转移
@@ -99,98 +121,48 @@ class TheArtOfBecomingInvisible {
 	// TODO
 	overPeople() {
 		// 时地支
-		const hourTb = this.calendar.hour.tb();
+		const hourTb = this.hour.tb();
 		// 时旬首地支
-		const headTb = this.calendar.hour.getLead().tb();
+		const headTb = this.hour.getLead().tb();
 		// 时辰间距
 		const timeOffset = Math.abs(hourTb - headTb);
-		console.log(`时间相差：${timeOffset}`);
 		// 时旬首所遁环序号
-		let index = this.earth.get(ceremony[this.hideIndex]).rIndex;
-		if (this.round < 0) {
-			index -= index;
-		} else {
-			index += timeOffset;
-		}
-		index %= 8;
+		let index = this.earth.get(this.hourConceal).index;
+		// 阳顺阴逆
+		index += timeOffset * (this.round > 0 ? 1 : -1);
+		// 周期循环过滤
+		index %= SPIN_CYCLE;
+		// 取正序
 		if (index < 0) index += 8;
-		console.log(`：${timeOffset}`);
-		let mandate = this.mandate;
+		// 值使落宫序号
+		const mandatePalace = this.acquired[index - 1].rIndex;
 		const peoples = this.circle
 			.map((palace) => {
 				return door[palace.index - 1];
 			})
 			.slice(0, star.length - 1);
-		const offset = peoples.indexOf(mandate);
-		console.log(peoples);
+		const offset = mandatePalace - peoples.indexOf(this.mandate);
+		console.log(offset);
 		Arr.arrayUp(peoples, -offset).map((data, i) => {
 			let palace = this.circle[i];
 			palace.setDoor(data);
 		});
 	}
 
-	// TODO
+	/**
+	 * @description 获取值使和值符
+	 * @version 1.0.0
+	 * @author lax
+	 */
 	getMandateAndSymbol() {
-		// 时干支旬首所隐旗序号
-		const hideIndex = this.calendar.hour.getLead().getHide();
-		this.hideIndex = hideIndex;
-		// 对应的后天卦序
-		const index = this.earth.get(ceremony[hideIndex]).index;
+		/**
+		 * 时干支旬首所隐旗对应的后天卦序
+		 */
+		const index = this.earth.get(this.hourConceal).index;
 		// 值符
 		this.symbol = star[index + 1];
 		// 值使
 		this.mandate = door[index + 1];
-	}
-
-	generatePalace() {
-		this.one = new Palace(1);
-		this.two = new Palace(2);
-		this.three = new Palace(3);
-		this.four = new Palace(4);
-		this.five = new Palace(5);
-		this.six = new Palace(6);
-		this.seven = new Palace(7);
-		this.eight = new Palace(8);
-		this.nine = new Palace(9);
-	}
-
-	generateAcquiredPalace() {
-		this.acquired = [
-			this.one,
-			this.two,
-			this.three,
-			this.four,
-			this.five,
-			this.six,
-			this.seven,
-			this.eight,
-			this.nine,
-		];
-	}
-
-	generateNinePalace() {
-		this.box = [
-			[this.four, this.nine, this.two],
-			[this.three, this.five, this.seven],
-			[this.eight, this.one, this.six],
-		];
-	}
-
-	generateCirclePalace() {
-		this.circle = [
-			this.four,
-			this.nine,
-			this.two,
-			this.seven,
-			this.six,
-			this.one,
-			this.eight,
-			this.three,
-			this.five,
-		];
-		this.circle.map((palace, index) => {
-			palace.rIndex = index;
-		});
 	}
 
 	// TODO
@@ -209,9 +181,6 @@ class TheArtOfBecomingInvisible {
 			})
 		);
 	}
-
-	// TODO
-	getRound() {}
 
 	getCanvas() {
 		return this.box.map((row) => {

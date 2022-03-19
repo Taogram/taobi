@@ -4,12 +4,18 @@
  * @Author: lax
  * @Date: 2022-03-11 00:49:25
  * @LastEditors: lax
- * @LastEditTime: 2022-03-11 00:51:26
+ * @LastEditTime: 2022-03-19 12:39:57
  * @FilePath: \taobi\jsconfig.json
  */
 {
     "compilerOptions": {
-        "baseUrl": "./src/"
+        "target": "ES6",
+        "module": "commonjs",
+        "baseUrl": "./",
+        "paths": {
+            "@/*": ["src/*"]
+        },
+        "allowSyntheticDefaultImports": true
     },
     "exclude": ["node_modules"]
 }

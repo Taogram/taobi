@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2021-07-22 09:46:44
  * @LastEditors: lax
- * @LastEditTime: 2022-03-13 17:12:11
+ * @LastEditTime: 2022-03-14 22:49:08
  * @FilePath: \taobi\src\template\tao.js
  */
 
@@ -111,6 +111,22 @@ module.exports = (taobi) => {
 						heading: HeadingLevel.TITLE,
 					}),
 					generateTable(taobi),
+					new Paragraph({
+						children: [
+							new TextRun({
+								text: "公历",
+								bold: true,
+							}),
+						],
+					}),
+					new Paragraph({
+						children: [
+							new TextRun({
+								text: "干支历",
+								bold: true,
+							}),
+						],
+					}),
 				],
 			},
 		],

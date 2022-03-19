@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2021-02-10 20:20:15
  * @LastEditors: lax
- * @LastEditTime: 2022-03-13 19:48:30
+ * @LastEditTime: 2022-03-15 21:05:19
  * @FilePath: \taobi\debug.js
  */
 console.log(~~"乙");
@@ -21,4 +21,5 @@ console.log(typeof new Date());
 const date = new Date();
 console.log(date instanceof Date);
 
-console.log(-10 % 8);
+const a = 12;
+console.log(`0${a}`.indexOf("-"));
