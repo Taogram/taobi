@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 13:58:10
  * @LastEditors: lax
- * @LastEditTime: 2022-03-15 21:36:25
+ * @LastEditTime: 2022-03-26 12:57:19
  * @FilePath: \taobi\src\taobi.js
  */
 const TheArtOfBecomingInvisible = require("@/pojo/taobi/TheArtOfBecomingInvisible.js");
@@ -22,5 +22,6 @@ class TheArtOfBecomingInvisibleTools extends TheArtOfBecomingInvisible {
 }
 
 module.exports = TheArtOfBecomingInvisibleTools;
-const taobi = new TheArtOfBecomingInvisibleTools("乙亥壬午癸酉丁巳");
+// const taobi = new TheArtOfBecomingInvisibleTools("己卯辛未癸亥庚申", -5);
+const taobi = new TheArtOfBecomingInvisibleTools("丁丑壬子甲午甲戌", 1);
 taobi.word();

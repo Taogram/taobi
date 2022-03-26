@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2022-03-15 20:35:29
+ * @LastEditTime: 2022-03-26 12:56:05
  */
 const {
 	celestialStems,
@@ -91,7 +91,7 @@ class SexagenaryCycle {
 		// 时干
 		let cs = this.cs(is);
 		// 如果本身是旬首则选所隐旗
-		if (cs === "甲" || cs === 0) cs = this.getHide(is);
+		if (cs === "甲" || cs === 0) cs = this.getConceal(is);
 		return cs;
 	}
 	// 天干地支对应的序列
