@@ -5,7 +5,7 @@
  * @Author: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2022-03-10 23:58:08
+ * @LastEditTime: 2022-03-19 16:12:35
  */
 const moment = require("moment");
 const SexagenaryCycle = require("./SexagenaryCycle");
@@ -22,7 +22,7 @@ class Calendar {
 		 * 时干支
 		 * @type {SexagenaryCycle}
 		 */
-		this.hour = null;
+		this.hour;
 
 		if (typeof obj === "string") {
 			obj = Array.from(obj.trim());

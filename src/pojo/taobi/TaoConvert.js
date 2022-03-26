@@ -4,11 +4,13 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2022-03-19 12:53:04
+ * @LastEditTime: 2022-03-19 16:17:09
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
+/* eslint-disable */
+const SexagenaryCycle = require("@/pojo/cstb/SexagenaryCycle.js");
 
 /**
  * @description 道化，推阴阳，衍九宫，定八卦

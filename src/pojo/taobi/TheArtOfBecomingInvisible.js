@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-03-19 13:00:45
+ * @LastEditTime: 2022-03-19 16:12:54
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -93,7 +93,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 */
 	overHeaven() {
 		// 时干
-		let hourCS = this.calendar.hour.getCsOrigin(true);
+		let hourCS = this.hour.getCsOrigin(true);
 		// 时干所在地盘落宫对应的外环序号
 		const hIndex = this.earth.get(hourCS).rIndex;
 		// 时辰旬首所遁宫对应的外环序号
