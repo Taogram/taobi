@@ -4,12 +4,19 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-03-26 12:58:32
+ * @LastEditTime: 2022-03-27 20:30:20
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
-const { ceremony, surprise, star, door } = require("@/pojo/Tao.js");
-const Arr = require("./../../tools/index");
+const {
+	ceremony,
+	surprise,
+	star,
+	door,
+	divinity,
+	DIVINITY,
+} = require("@/pojo/Tao.js");
+const Arr = require("@/tools/index.js");
 // const moment = require("moment");
 /**
  * 转盘周期
@@ -27,6 +34,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// step1: 根据日期转化干支历
 		this.generateCalendar(questionTime);
 
+		// TODO
 		// step2: 根据节气和上中下三元获取用局
 		this.generateRound(r);
 
@@ -43,7 +51,10 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.overHeaven();
 
 		// step7: 根据值使布八门
-		// this.overPeople();
+		this.overPeople();
+
+		// step8: 根据值符布八神
+		this.overDivinity();
 	}
 
 	generateCalendar(questionTime) {
@@ -62,6 +73,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	/**
 	 * @description 时干支旬首所隐旗
+	 * @version 1.0.0
+	 * @author lax
 	 */
 	generateHourConcealFlag() {
 		this.hourConceal = this.hour.getLead().getConceal(true);
@@ -83,7 +96,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			index = 9 - round;
 		}
 		Arr.arrayUp(_acquired, index).map((palace, i) => {
-			palace.setECS([surpriseCeremony[i]]);
+			palace.setECS(surpriseCeremony[i]);
 		});
 		this.generateEarth();
 	}
@@ -95,11 +108,13 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 时干
 		let hourCS = this.hour.getCsOrigin(true);
 		// 时干所在地盘落宫对应的外环序号
-		const hIndex = this.earth.get(hourCS).rIndex;
+		let hIndex = this.earth.get(hourCS).rIndex;
+		// 值符落五宫寄坤二宫
+		if (hIndex === 8) hIndex = 2;
 		// 时辰旬首所遁宫对应的外环序号
 		const eIndex = this.earth.get(this.hourConceal).rIndex;
 		// 转距
-		const offset = Math.abs(hIndex - eIndex);
+		const offset = (8 + (hIndex - eIndex)) % 8;
 		// 九星携带天干转移
 		const stars = this.circle
 			.map((palace) => {
@@ -109,31 +124,31 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		Arr.arrayUp(stars, -offset).map((data, index) => {
 			let palace = this.circle[index];
 			palace.setStar(data.star);
-			palace.setHCS(data._hs);
+			palace.setHCS([data._hs]);
 		});
 		// 天禽不变
 		this.five.setStar("天禽星");
 		this.generateHeaven();
-		// 天禽随二宫
-		this.heaven.get("天芮星").hs.push(this.five._hs[0]);
+		// 天禽寄二宫
+		this.heaven.get("天芮星").hs.push(this.five._hs);
 	}
 
-	// TODO
+	/**
+	 * 布人盘
+	 */
 	overPeople() {
 		// 时地支
 		const hourTb = this.hour.tb();
 		// 时旬首地支
 		const headTb = this.hour.getLead().tb();
 		// 时辰间距
-		const timeOffset = Math.abs(hourTb - headTb);
-		// 时旬首所遁环序号
+		const timeOffset = (12 + (hourTb - headTb)) % 12;
+		// 时旬首所遁序号
 		let index = this.earth.get(this.hourConceal).index;
 		// 阳顺阴逆
 		index += timeOffset * (this.round > 0 ? 1 : -1);
 		// 周期循环过滤
-		index %= SPIN_CYCLE;
-		// 取正序
-		if (index < 0) index += 8;
+		index = (index + 9) % 9;
 		// 值使落宫序号
 		const mandatePalace = this.acquired[index - 1].rIndex;
 		const peoples = this.circle
@@ -142,11 +157,33 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			})
 			.slice(0, star.length - 1);
 		const offset = mandatePalace - peoples.indexOf(this.mandate);
-		console.log(offset);
+		// 布八门
 		Arr.arrayUp(peoples, -offset).map((data, i) => {
 			let palace = this.circle[i];
 			palace.setDoor(data);
 		});
+		this.generatePeople();
+	}
+
+	/**
+	 * 布神盘
+	 */
+	overDivinity() {
+		// 大值符内环序号
+		const symbol = this.heaven.get(this.symbol).rIndex;
+		let _divinity = divinity;
+		// 阳顺阴逆
+		if (this.round < 0) {
+			_divinity = Array.from(divinity).reverse();
+		}
+		let offset = symbol - _divinity.indexOf(DIVINITY.SYMBOL);
+		offset = (offset + 8) % 8;
+		// 布八神
+		Arr.arrayUp(_divinity, -offset).map((data, i) => {
+			let palace = this.circle[i];
+			palace.setDivinity(data);
+		});
+		this.generateDivinity();
 	}
 
 	/**
@@ -160,26 +197,33 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		 */
 		const index = this.earth.get(this.hourConceal).index;
 		// 值符
-		this.symbol = star[index + 1];
+		this.symbol = star[index - 1];
 		// 值使
-		this.mandate = door[index + 1];
+		this.mandate = door[index - 1];
 	}
 
-	// TODO
-	generateEarth() {
-		this.earth = new Map(
+	generateBy(area, pro) {
+		this[area] = new Map(
 			this.acquired.map((palace) => {
-				return [palace.getECS()[0], palace];
+				return [palace[`get${pro}`](), palace];
 			})
 		);
+	}
+
+	generateEarth() {
+		this.generateBy("earth", "ECS");
 	}
 
 	generateHeaven() {
-		this.heaven = new Map(
-			this.acquired.map((palace) => {
-				return [palace.getStar(), palace];
-			})
-		);
+		this.generateBy("heaven", "Star");
+	}
+
+	generatePeople() {
+		this.generateBy("people", "Door");
+	}
+
+	generateDivinity() {
+		this.generateBy("divinity", "Divinity");
 	}
 
 	getCanvas() {

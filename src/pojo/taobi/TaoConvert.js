@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2022-03-19 16:17:09
+ * @LastEditTime: 2022-03-27 20:10:22
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -22,7 +22,7 @@ class TaoConvert {
 		 * 阴阳历时
 		 * @type {Calendar}
 		 */
-		this.calendar;
+		this.calendar = null;
 		/**
 		 * 年天干
 		 * @type {SexagenaryCycle}

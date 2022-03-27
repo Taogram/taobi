@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-03-13 20:22:04
+ * @LastEditTime: 2022-03-27 20:22:53
  */
 const { acquired, num } = require("@/pojo/Tao.js");
 
@@ -17,14 +17,13 @@ class Palace {
 		// 天盘天干
 		this.hs = [];
 		// 地盘天干
-		this._hs = [];
+		this._hs = "";
 		this.star = "";
 		this.door = "";
 		// 值
 		// this.name = value.name || this.hs;
-		// 卦
-		// this.trigrams = value.trigrams || this.name;
-		this.jobSymbol = false;
+		// 神
+		this.divinity = "";
 	}
 
 	// ######### earth celestial stems #########
@@ -85,26 +84,26 @@ class Palace {
 		return this.name || this.getHS();
 	}
 
-	setTrigrams(trigrams) {
-		this.trigrams = trigrams;
+	setDivinity(divinity) {
+		this.divinity = divinity;
 	}
 
-	setSymbol(is) {
-		this.jobSymbol = is;
+	getDivinity() {
+		return this.divinity;
 	}
 
 	toCanvas() {
 		return [
-			["1", "1", "1"],
+			[this.divinity, "", ""],
 			[
 				this.door,
-				"1",
+				"",
 				`${this.hs[0] ? this.hs[0] : ""}${this.hs[1] ? this.hs[1] : ""}`,
 			],
 			[
 				this.star,
 				`${acquired[this.index - 1]}${num[this.index - 1]}`,
-				this._hs[0],
+				this._hs,
 			],
 		];
 	}
