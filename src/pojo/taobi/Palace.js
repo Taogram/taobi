@@ -4,25 +4,39 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-03-27 20:22:53
+ * @LastEditTime: 2022-04-03 13:05:49
  */
 const { acquired, num } = require("@/pojo/Tao.js");
 
 class Palace {
 	constructor(index) {
-		// 后天八卦宫位序号
+		/**
+		 * 后天八卦宫位序号
+		 */
 		this.index = index;
-		// 周序位 顺时序位
+		/**
+		 * 周序位 顺时序位
+		 */
 		this.rIndex = null;
-		// 天盘天干
+		/**
+		 * 天盘天干
+		 */
 		this.hs = [];
-		// 地盘天干
+		/**
+		 * 地盘天干
+		 */
 		this._hs = "";
+		/**
+		 * 星
+		 */
 		this.star = "";
+		/**
+		 * 门
+		 */
 		this.door = "";
-		// 值
-		// this.name = value.name || this.hs;
-		// 神
+		/**
+		 * 神
+		 */
 		this.divinity = "";
 	}
 
@@ -76,14 +90,6 @@ class Palace {
 		return this.door;
 	}
 
-	setName(name) {
-		this.name = name;
-	}
-
-	getName() {
-		return this.name || this.getHS();
-	}
-
 	setDivinity(divinity) {
 		this.divinity = divinity;
 	}
@@ -100,11 +106,7 @@ class Palace {
 				"",
 				`${this.hs[0] ? this.hs[0] : ""}${this.hs[1] ? this.hs[1] : ""}`,
 			],
-			[
-				this.star,
-				`${acquired[this.index - 1]}${num[this.index - 1]}`,
-				this._hs,
-			],
+			[this.star, `${acquired[this.index]}${num[this.index]}`, this._hs],
 		];
 	}
 }

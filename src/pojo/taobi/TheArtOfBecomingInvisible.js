@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-03-27 20:30:20
+ * @LastEditTime: 2022-04-03 13:29:58
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -114,11 +114,12 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 时辰旬首所遁宫对应的外环序号
 		const eIndex = this.earth.get(this.hourConceal).rIndex;
 		// 转距
-		const offset = (8 + (hIndex - eIndex)) % 8;
+		let offset = hIndex - eIndex;
+		offset = this.#cycle(8, offset);
 		// 九星携带天干转移
 		const stars = this.circle
 			.map((palace) => {
-				return { star: star[palace.index - 1], _hs: palace._hs };
+				return { star: star[palace.index], _hs: palace._hs };
 			})
 			.slice(0, star.length - 1);
 		Arr.arrayUp(stars, -offset).map((data, index) => {
@@ -142,18 +143,18 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 时旬首地支
 		const headTb = this.hour.getLead().tb();
 		// 时辰间距
-		const timeOffset = (12 + (hourTb - headTb)) % 12;
+		const timeOffset = this.#cycle(12, hourTb - headTb);
 		// 时旬首所遁序号
 		let index = this.earth.get(this.hourConceal).index;
 		// 阳顺阴逆
 		index += timeOffset * (this.round > 0 ? 1 : -1);
 		// 周期循环过滤
-		index = (index + 9) % 9;
+		index = this.#cycle(9, index);
 		// 值使落宫序号
-		const mandatePalace = this.acquired[index - 1].rIndex;
+		const mandatePalace = this.acquired[index].rIndex;
 		const peoples = this.circle
 			.map((palace) => {
-				return door[palace.index - 1];
+				return door[palace.index];
 			})
 			.slice(0, star.length - 1);
 		const offset = mandatePalace - peoples.indexOf(this.mandate);
@@ -177,7 +178,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			_divinity = Array.from(divinity).reverse();
 		}
 		let offset = symbol - _divinity.indexOf(DIVINITY.SYMBOL);
-		offset = (offset + 8) % 8;
+		offset = this.#cycle(8, offset);
 		// 布八神
 		Arr.arrayUp(_divinity, -offset).map((data, i) => {
 			let palace = this.circle[i];
@@ -192,14 +193,12 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @author lax
 	 */
 	getMandateAndSymbol() {
-		/**
-		 * 时干支旬首所隐旗对应的后天卦序
-		 */
+		// 时干支旬首所隐旗对应的后天卦序
 		const index = this.earth.get(this.hourConceal).index;
 		// 值符
-		this.symbol = star[index - 1];
+		this.symbol = star[index];
 		// 值使
-		this.mandate = door[index - 1];
+		this.mandate = door[index];
 	}
 
 	generateBy(area, pro) {
@@ -225,6 +224,10 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	generateDivinity() {
 		this.generateBy("divinity", "Divinity");
 	}
+
+	#cycle = (r, v) => {
+		return (r + v) % r;
+	};
 
 	getCanvas() {
 		return this.box.map((row) => {
