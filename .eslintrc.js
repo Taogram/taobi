@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-22 18:58:04
  * @LastEditors: lax
- * @LastEditTime: 2022-02-27 18:10:58
+ * @LastEditTime: 2022-04-09 13:10:23
  * @FilePath: \taobi\.eslintrc.js
  */
 module.exports = {
@@ -33,6 +33,7 @@ module.exports = {
 		"no-nested-ternary": 0,
 		"array-callback-return": 0,
 		"no-param-reassign": 0,
+		"class-methods-use-this": 0,
 	},
 	overrides: [
 		{

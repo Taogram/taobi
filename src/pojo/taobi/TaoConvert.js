@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2022-04-03 13:05:09
+ * @LastEditTime: 2022-04-09 13:24:03
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -113,16 +113,16 @@ class TaoConvert {
 		 * @type {Map<String,Palace>}
 		 */
 		this.earth;
-		this.generatePalace();
-		this.generateAcquiredPalace();
-		this.generateNinePalace();
-		this.generateCirclePalace();
+		this.#generatePalace();
+		this.#generateAcquiredPalace();
+		this.#generateNinePalace();
+		this.#generateCirclePalace();
 	}
 
 	/**
 	 * 生成九宫
 	 */
-	generatePalace() {
+	#generatePalace() {
 		this.one = new Palace(0);
 		this.two = new Palace(1);
 		this.three = new Palace(2);
@@ -137,7 +137,7 @@ class TaoConvert {
 	/**
 	 * 后台八卦
 	 */
-	generateAcquiredPalace() {
+	#generateAcquiredPalace() {
 		this.acquired = [
 			this.one,
 			this.two,
@@ -154,7 +154,7 @@ class TaoConvert {
 	/**
 	 * 生成九宫格
 	 */
-	generateNinePalace() {
+	#generateNinePalace() {
 		this.box = [
 			[this.four, this.nine, this.two],
 			[this.three, this.five, this.seven],
@@ -165,7 +165,7 @@ class TaoConvert {
 	/**
 	 * 生成环宫
 	 */
-	generateCirclePalace() {
+	#generateCirclePalace() {
 		this.circle = [
 			this.four,
 			this.nine,

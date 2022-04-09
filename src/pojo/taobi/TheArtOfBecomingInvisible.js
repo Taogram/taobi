@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-04-03 13:29:58
+ * @LastEditTime: 2022-04-09 13:15:01
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -18,10 +18,6 @@ const {
 } = require("@/pojo/Tao.js");
 const Arr = require("@/tools/index.js");
 // const moment = require("moment");
-/**
- * 转盘周期
- */
-const SPIN_CYCLE = 8;
 class TheArtOfBecomingInvisible extends TaoConvert {
 	constructor(questionTime, r) {
 		super();
@@ -42,19 +38,19 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.generateHourConcealFlag();
 
 		// step4: 根据用局布地盘三奇六仪
-		this.overEarth();
+		this.#overEarth();
 
 		// step5: 根据时干支获取值使和值符
 		this.getMandateAndSymbol();
 
 		// step6: 根据值符布天盘三奇六仪和星
-		this.overHeaven();
+		this.#overHeaven();
 
 		// step7: 根据值使布八门
-		this.overPeople();
+		this.#overPeople();
 
 		// step8: 根据值符布八神
-		this.overDivinity();
+		this.#overDivinity();
 	}
 
 	generateCalendar(questionTime) {
@@ -85,7 +81,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @version 1.0.0
 	 * @author lax
 	 */
-	overEarth() {
+	#overEarth() {
 		const surpriseCeremony = ceremony.concat(surprise);
 		let _acquired = this.acquired;
 		let round = Math.abs(this.round);
@@ -98,13 +94,13 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		Arr.arrayUp(_acquired, index).map((palace, i) => {
 			palace.setECS(surpriseCeremony[i]);
 		});
-		this.generateEarth();
+		this.#generateEarth();
 	}
 
 	/**
 	 * 布天盘九星
 	 */
-	overHeaven() {
+	#overHeaven() {
 		// 时干
 		let hourCS = this.hour.getCsOrigin(true);
 		// 时干所在地盘落宫对应的外环序号
@@ -129,7 +125,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		});
 		// 天禽不变
 		this.five.setStar("天禽星");
-		this.generateHeaven();
+		this.#generateHeaven();
 		// 天禽寄二宫
 		this.heaven.get("天芮星").hs.push(this.five._hs);
 	}
@@ -137,7 +133,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	/**
 	 * 布人盘
 	 */
-	overPeople() {
+	#overPeople() {
 		// 时地支
 		const hourTb = this.hour.tb();
 		// 时旬首地支
@@ -150,6 +146,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		index += timeOffset * (this.round > 0 ? 1 : -1);
 		// 周期循环过滤
 		index = this.#cycle(9, index);
+		// 值使落五宫寄坤二宫
+		if (index === 4) index = 1;
 		// 值使落宫序号
 		const mandatePalace = this.acquired[index].rIndex;
 		const peoples = this.circle
@@ -163,13 +161,13 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			let palace = this.circle[i];
 			palace.setDoor(data);
 		});
-		this.generatePeople();
+		this.#generatePeople();
 	}
 
 	/**
 	 * 布神盘
 	 */
-	overDivinity() {
+	#overDivinity() {
 		// 大值符内环序号
 		const symbol = this.heaven.get(this.symbol).rIndex;
 		let _divinity = divinity;
@@ -184,7 +182,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			let palace = this.circle[i];
 			palace.setDivinity(data);
 		});
-		this.generateDivinity();
+		this.#generateDivinity();
 	}
 
 	/**
@@ -201,7 +199,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.mandate = door[index];
 	}
 
-	generateBy(area, pro) {
+	#generateBy(area, pro) {
 		this[area] = new Map(
 			this.acquired.map((palace) => {
 				return [palace[`get${pro}`](), palace];
@@ -209,25 +207,25 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		);
 	}
 
-	generateEarth() {
-		this.generateBy("earth", "ECS");
+	#generateEarth() {
+		this.#generateBy("earth", "ECS");
 	}
 
-	generateHeaven() {
-		this.generateBy("heaven", "Star");
+	#generateHeaven() {
+		this.#generateBy("heaven", "Star");
 	}
 
-	generatePeople() {
-		this.generateBy("people", "Door");
+	#generatePeople() {
+		this.#generateBy("people", "Door");
 	}
 
-	generateDivinity() {
-		this.generateBy("divinity", "Divinity");
+	#generateDivinity() {
+		this.#generateBy("divinity", "Divinity");
 	}
 
-	#cycle = (r, v) => {
+	#cycle(r, v) {
 		return (r + v) % r;
-	};
+	}
 
 	getCanvas() {
 		return this.box.map((row) => {
