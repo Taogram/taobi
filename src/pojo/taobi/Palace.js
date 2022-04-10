@@ -4,9 +4,10 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-04-03 13:05:49
+ * @LastEditTime: 2022-04-10 14:19:04
  */
 const { acquired, num } = require("@/pojo/Tao.js");
+const inspect = Symbol.for("nodejs.util.inspect.custom");
 
 class Palace {
 	constructor(index) {
@@ -108,6 +109,10 @@ class Palace {
 			],
 			[this.star, `${acquired[this.index]}${num[this.index]}`, this._hs],
 		];
+	}
+
+	[inspect]() {
+		return this.toCanvas();
 	}
 }
 module.exports = Palace;
