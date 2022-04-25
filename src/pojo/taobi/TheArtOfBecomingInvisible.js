@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-04-09 13:15:01
+ * @LastEditTime: 2022-04-25 21:47:37
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -19,29 +19,29 @@ const {
 const Arr = require("@/tools/index.js");
 // const moment = require("moment");
 class TheArtOfBecomingInvisible extends TaoConvert {
+	/**
+	 * 时旬首隐旗
+	 */
+	#hourConceal;
+
 	constructor(questionTime, r) {
 		super();
 
-		/**
-		 * 时旬首隐旗
-		 */
-		this.hourConceal = null;
-
 		// step1: 根据日期转化干支历
-		this.generateCalendar(questionTime);
+		this.#generateCalendar(questionTime);
 
 		// TODO
 		// step2: 根据节气和上中下三元获取用局
 		this.generateRound(r);
 
 		// step3: 根据时干支获取其旬首隐旗
-		this.generateHourConcealFlag();
+		this.#generateHourConcealFlag();
 
 		// step4: 根据用局布地盘三奇六仪
 		this.#overEarth();
 
 		// step5: 根据时干支获取值使和值符
-		this.getMandateAndSymbol();
+		this.#getMandateAndSymbol();
 
 		// step6: 根据值符布天盘三奇六仪和星
 		this.#overHeaven();
@@ -53,7 +53,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.#overDivinity();
 	}
 
-	generateCalendar(questionTime) {
+	#generateCalendar(questionTime) {
 		this.calendar = new Calendar(questionTime);
 		const { year, month, date, hour } = this.calendar;
 		this.year = year;
@@ -72,8 +72,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @version 1.0.0
 	 * @author lax
 	 */
-	generateHourConcealFlag() {
-		this.hourConceal = this.hour.getLead().getConceal(true);
+	#generateHourConcealFlag() {
+		this.#hourConceal = this.hour.getLead().getConceal(true);
 	}
 
 	/**
@@ -108,7 +108,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 值符落五宫寄坤二宫
 		if (hIndex === 8) hIndex = 2;
 		// 时辰旬首所遁宫对应的外环序号
-		const eIndex = this.earth.get(this.hourConceal).rIndex;
+		const eIndex = this.earth.get(this.#hourConceal).rIndex;
+		// TODO 时辰旬首同落五宫
 		// 转距
 		let offset = hIndex - eIndex;
 		offset = this.#cycle(8, offset);
@@ -141,7 +142,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 时辰间距
 		const timeOffset = this.#cycle(12, hourTb - headTb);
 		// 时旬首所遁序号
-		let index = this.earth.get(this.hourConceal).index;
+		let index = this.earth.get(this.#hourConceal).index;
 		// 阳顺阴逆
 		index += timeOffset * (this.round > 0 ? 1 : -1);
 		// 周期循环过滤
@@ -190,9 +191,9 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @version 1.0.0
 	 * @author lax
 	 */
-	getMandateAndSymbol() {
+	#getMandateAndSymbol() {
 		// 时干支旬首所隐旗对应的后天卦序
-		const index = this.earth.get(this.hourConceal).index;
+		const index = this.earth.get(this.#hourConceal).index;
 		// 值符
 		this.symbol = star[index];
 		// 值使
