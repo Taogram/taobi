@@ -3,6 +3,7 @@ node_modules
 /dist
 yarn.lock
 word
+debug.js
 
 /tests/e2e/reports/
 selenium-debug.log
