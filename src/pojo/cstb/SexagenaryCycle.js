@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2022-06-05 10:15:33
+ * @LastEditTime: 2022-06-11 15:07:45
  */
 const {
 	celestialStems,
@@ -16,24 +16,27 @@ const {
  * 天干地支对象
  */
 class SexagenaryCycle {
-	constructor(x = 0, y = 0) {
+	constructor(...num) {
 		/**
 		 * 天干序号 0~9
+		 * @type {number}
 		 */
-		this.x = x;
+		this.x;
 		/**
 		 * 地支序号 0~11
+		 * @type {number}
 		 */
-		this.y = y;
+		this.y;
 		/**
 		 * 干支序号 0~59
+		 * @type {number}
 		 */
 		this.index;
-		if (arguments.length === 1) {
-			if (x instanceof SexagenaryCycle) return x;
-			this.__getByOneArg(x);
+		if (num.length === 1) {
+			if (num[0] instanceof SexagenaryCycle) return num[0];
+			this.__generateByOne(num[0]);
 		}
-		this.__getByTwoArg(this.x, this.y);
+		if (num.length >= 2) this.__generateByTwo(num[0], num[1]);
 	}
 
 	/**
@@ -107,22 +110,23 @@ class SexagenaryCycle {
 	*/
 	/**
 	 * 获取对应的干支序号
-	 * @returns {Number} index
+	 * @param {*} x 天干
+	 * @param {*} y 地支
+	 * @returns {Number} 干支序号
 	 */
-	__getIndex() {
-		if (this.x === -1 || this.y === -1)
-			throw new Error(`can\`t use this arg by x:${this.x} y:${this.y}`);
+	__getIndex(x = this.x, y = this.y) {
+		if (x === -1 || y === -1)
+			throw new Error(`can\`t use this arg by x:${x} y:${y}`);
 		// 干支相差之数（负按12转正）/2 = 6-干支十位数值
-		const difference = this.y - this.x;
-		const index = (difference < 0 ? difference + 12 : difference) / 2;
-		const tensPlace = index === 0 ? 0 : 6 - index;
-		return tensPlace * 10 + this.x;
+		const difference = y - x;
+		const index = ((difference + 24) % 12) / 2;
+		const tensPlace = index % 6;
+		return tensPlace * 10 + x;
 	}
 
 	/**
-	 * @method
-	 * @description 根据一个序列获取干支
-	 * @param {*} arg
+	 * 根据一个序列获取干支
+	 * @param {*} arg 参数
 	 */
 	__getByIndex(_arg) {
 		// 参数为数 取值范围0-59
@@ -135,36 +139,41 @@ class SexagenaryCycle {
 		this.x = x;
 		this.y = y;
 		this.index = arg;
-		return { x, y, index: arg };
 	}
 
-	__getByOneArg(_arg) {
+	__generateByOne(_arg) {
 		let arg = _arg;
-		if (typeof _arg === "string") {
-			if (~~(_arg + 1)) {
-				arg = ~~_arg;
-			} else if (_arg.length === 2) {
-				arg = Array.from(_arg);
+		if (typeof arg === "string") {
+			if (~~(arg + 1)) {
+				// 转数字处理
+				arg = ~~arg;
+			} else if (arg.length === 2) {
+				// 转数组处理
+				arg = Array.from(arg);
+			} else {
+				throw new Error(`array length must be equals two`);
 			}
 		}
-		if (arg instanceof Array) {
-			this.x = arg[0];
-			this.y = arg[1];
-		} else if (typeof arg === "object") {
-			this.x = arg.x;
-			this.y = arg.y;
-		} else if (typeof arg === "number") {
+		if (typeof arg === "number") {
 			this.__getByIndex(arg);
-		} else {
-			throw new Error("this arg can't to use");
+			return;
 		}
+		if (arg instanceof Array) {
+			this.__generateByTwo(arg[0], arg[1]);
+			return;
+		}
+		if (typeof arg === "object") {
+			// 将key,value的对象转为基本对象
+			const { x, y } = Object.fromEntries(Object.entries(arg));
+			this.__generateByTwo(x, y);
+			return;
+		}
+		throw new Error("this arg can't to use");
 	}
 
-	__getByTwoArg(arg1, arg2) {
-		// TODO 当传入两个参数时判断是否存在对应干支
-		this.x = ~~(arg1 + 1) === 0 ? celestialStems.indexOf(arg1) : ~~arg1 % 10;
-		this.y =
-			~~(arg2 + 1) === 0 ? terrestrialBranches.indexOf(arg2) : ~~arg2 % 12;
+	__generateByTwo(x, y) {
+		this.x = ~~(x + 1) === 0 ? celestialStems.indexOf(x) : ~~x % 10;
+		this.y = ~~(y + 1) === 0 ? terrestrialBranches.indexOf(y) : ~~y % 12;
 		this.index = this.__getIndex();
 	}
 }
