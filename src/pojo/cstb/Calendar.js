@@ -5,7 +5,7 @@
  * @Author: lax
  * @Date: 2020-10-22 15:38:09
  * @LastEditors: lax
- * @LastEditTime: 2022-03-19 16:12:35
+ * @LastEditTime: 2022-07-19 20:44:05
  */
 const moment = require("moment");
 const SexagenaryCycle = require("./SexagenaryCycle");
@@ -29,15 +29,19 @@ class Calendar {
 		}
 		if (obj instanceof Array) {
 			if (obj.length >= 8) {
-				this.year = new SexagenaryCycle(obj[0], obj[1]);
-				this.mouth = new SexagenaryCycle(obj[2], obj[3]);
-				this.date = new SexagenaryCycle(obj[4], obj[5]);
-				this.hour = new SexagenaryCycle(obj[6], obj[7]);
+				const [y, y_, m, m_, d, d_, h, h_] = obj;
+				this.year = new SexagenaryCycle(y, y_);
+				this.mouth = new SexagenaryCycle(m, m_);
+				this.date = new SexagenaryCycle(d, d_);
+				this.hour = new SexagenaryCycle(h, h_);
 			} else if (obj.length === 4) {
-				this.year = new SexagenaryCycle(obj[0]);
-				this.mouth = new SexagenaryCycle(obj[1]);
-				this.date = new SexagenaryCycle(obj[2]);
-				this.hour = new SexagenaryCycle(obj[3]);
+				const [y, m, d, h] = obj;
+				this.year = new SexagenaryCycle(y);
+				this.mouth = new SexagenaryCycle(m);
+				this.date = new SexagenaryCycle(d);
+				this.hour = new SexagenaryCycle(h);
+			} else {
+				throw new Error(" array length error ");
 			}
 		}
 		if (obj instanceof Date) {
