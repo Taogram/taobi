@@ -4,10 +4,11 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2022-06-11 15:07:45
+ * @LastEditTime: 2022-09-06 01:09:09
  */
 const {
 	celestialStems,
+	CELESTIAL_STEMS,
 	terrestrialBranches,
 	ceremony,
 } = require("@/pojo/Tao.js");
@@ -94,7 +95,7 @@ class SexagenaryCycle {
 		// 时干
 		let cs = this.cs(is);
 		// 如果本身是旬首则选所隐旗
-		if (cs === "甲" || cs === 0) cs = this.getConceal(is);
+		if (cs === CELESTIAL_STEMS.METH || cs === 0) cs = this.getConceal(is);
 		return cs;
 	}
 	// 天干地支对应的序列
@@ -120,7 +121,7 @@ class SexagenaryCycle {
 		// 干支相差之数（负按12转正）/2 = 6-干支十位数值
 		const difference = y - x;
 		const index = ((difference + 24) % 12) / 2;
-		const tensPlace = index % 6;
+		const tensPlace = (6 - index) % 6;
 		return tensPlace * 10 + x;
 	}
 
