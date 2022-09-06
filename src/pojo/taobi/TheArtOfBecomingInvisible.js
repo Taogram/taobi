@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-09-07 07:14:51
+ * @LastEditTime: 2022-09-07 07:37:35
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -102,7 +102,9 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	}
 
 	/**
-	 * 布天盘九星
+	 * @description 布天盘九星，值符随时干，坤五寄二宫
+	 * @version 1.0.0
+	 * @author lax
 	 */
 	#overHeaven() {
 		// 时干
@@ -113,7 +115,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		if (hIndex === 8) hIndex = 2;
 		// 时辰旬首所遁宫对应的外环序号
 		let eIndex = this.earth.get(this.#hourConceal).rIndex;
-		// 时辰旬首落五宫
+		// 时辰旬首落五宫寄坤二宫
 		if (eIndex === 8) eIndex = 2;
 		// 转距
 		let offset = hIndex - eIndex;
@@ -129,6 +131,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			palace.setStar(data.star);
 			palace.setHCS([data._hs]);
 		});
+		// TODO 优化固定字符串
 		// 天禽不变
 		this.five.setStar("天禽星");
 		this.#generateHeaven();
