@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-06-05 10:22:54
+ * @LastEditTime: 2022-09-07 07:14:51
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -77,21 +77,25 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	}
 
 	/**
-	 * @description 布地盘三奇六仪
+	 * @description 布地盘三奇六仪，按阳顺阴逆
 	 * @version 1.0.0
 	 * @author lax
 	 */
 	#overEarth() {
+		// 六仪三奇
 		const surpriseCeremony = ceremony.concat(surprise);
-		let _acquired = this.acquired;
 		let round = Math.abs(this.round);
+		// 用局->宫数组下标
 		let index = round - 1;
+		let _acquired;
 		// 阳顺阴逆
 		if (this.round < 0) {
-			_acquired = Array.from(_acquired).reverse();
-			index = 9 - round;
+			const list = Arr.arrayUp(this.acquired, index + 1);
+			_acquired = Array.from(list).reverse();
+		} else {
+			_acquired = Arr.arrayUp(this.acquired, index);
 		}
-		Arr.arrayUp(_acquired, index).map((palace, i) => {
+		_acquired.map((palace, i) => {
 			palace.setECS(surpriseCeremony[i]);
 		});
 		this.#generateEarth();
@@ -108,8 +112,9 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 值符落五宫寄坤二宫
 		if (hIndex === 8) hIndex = 2;
 		// 时辰旬首所遁宫对应的外环序号
-		const eIndex = this.earth.get(this.#hourConceal).rIndex;
-		// TODO 时辰旬首同落五宫
+		let eIndex = this.earth.get(this.#hourConceal).rIndex;
+		// 时辰旬首落五宫
+		if (eIndex === 8) eIndex = 2;
 		// 转距
 		let offset = hIndex - eIndex;
 		offset = this.#cycle(8, offset);
