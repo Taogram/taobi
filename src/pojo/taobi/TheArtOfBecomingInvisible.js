@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-09-07 07:37:35
+ * @LastEditTime: 2022-09-07 23:56:10
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -121,11 +121,10 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		let offset = hIndex - eIndex;
 		offset = this.#cycle(8, offset);
 		// 九星携带天干转移
-		const stars = this.circle
-			.map((palace) => {
-				return { star: star[palace.index], _hs: palace._hs };
-			})
-			.slice(0, star.length - 1);
+		const stars = this.circle.map(({ index, _hs }) => {
+			return { star: star[index], _hs };
+		});
+		stars.pop();
 		Arr.arrayUp(stars, -offset).map((data, index) => {
 			let palace = this.circle[index];
 			palace.setStar(data.star);
