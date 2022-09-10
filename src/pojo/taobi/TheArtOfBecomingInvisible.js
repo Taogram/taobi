@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-09-07 23:56:10
+ * @LastEditTime: 2022-09-10 11:52:51
  */
 const Calendar = require("@/pojo/cstb/Calendar.js");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -38,16 +38,16 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.#generateHourConcealFlag();
 
 		// step4: 根据用局布地盘三奇六仪
-		this.#overEarth();
+		this.#overEarths();
 
 		// step5: 根据时干支获取值使和值符
 		this.#getMandateAndSymbol();
 
 		// step6: 根据值符布天盘三奇六仪和星
-		this.#overHeaven();
+		this.#overHeavens();
 
 		// step7: 根据值使布八门
-		this.#overPeople();
+		this.#overPeoples();
 
 		// step8: 根据值符布八神
 		this.#overDivinity();
@@ -77,11 +77,11 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	}
 
 	/**
-	 * @description 布地盘三奇六仪，按阳顺阴逆
+	 * @description 布地盘三奇六仪，阳顺阴逆
 	 * @version 1.0.0
 	 * @author lax
 	 */
-	#overEarth() {
+	#overEarths() {
 		// 六仪三奇
 		const surpriseCeremony = ceremony.concat(surprise);
 		let round = Math.abs(this.round);
@@ -98,7 +98,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		_acquired.map((palace, i) => {
 			palace.setECS(surpriseCeremony[i]);
 		});
-		this.#generateEarth();
+		this.#generateEarths();
 	}
 
 	/**
@@ -106,15 +106,15 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @version 1.0.0
 	 * @author lax
 	 */
-	#overHeaven() {
+	#overHeavens() {
 		// 时干
 		let hourCS = this.hour.getCsOrigin(true);
 		// 时干所在地盘落宫对应的外环序号
-		let hIndex = this.earth.get(hourCS).rIndex;
+		let hIndex = this.earths.get(hourCS).rIndex;
 		// 值符落五宫寄坤二宫
 		if (hIndex === 8) hIndex = 2;
 		// 时辰旬首所遁宫对应的外环序号
-		let eIndex = this.earth.get(this.#hourConceal).rIndex;
+		let eIndex = this.earths.get(this.#hourConceal).rIndex;
 		// 时辰旬首落五宫寄坤二宫
 		if (eIndex === 8) eIndex = 2;
 		// 转距
@@ -133,15 +133,17 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// TODO 优化固定字符串
 		// 天禽不变
 		this.five.setStar("天禽星");
-		this.#generateHeaven();
+		this.#generateHeavens();
 		// 天禽寄二宫
-		this.heaven.get("天芮星").hs.push(this.five._hs);
+		this.heavens.get("天芮星").hs.push(this.five._hs);
 	}
 
 	/**
-	 * 布人盘
+	 * @description 布人盘,值使随时宫
+	 * @version 1.0.0
+	 * @author lax
 	 */
-	#overPeople() {
+	#overPeoples() {
 		// 时地支
 		const hourTb = this.hour.tb();
 		// 时旬首地支
@@ -149,7 +151,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 时辰间距
 		const timeOffset = this.#cycle(12, hourTb - headTb);
 		// 时旬首所遁序号
-		let index = this.earth.get(this.#hourConceal).index;
+		let index = this.earths.get(this.#hourConceal).index;
 		// 阳顺阴逆
 		index += timeOffset * (this.round > 0 ? 1 : -1);
 		// 周期循环过滤
@@ -158,18 +160,17 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		if (index === 4) index = 1;
 		// 值使落宫序号
 		const mandatePalace = this.acquired[index].rIndex;
-		const peoples = this.circle
-			.map((palace) => {
-				return door[palace.index];
-			})
-			.slice(0, star.length - 1);
+		const peoples = this.circle.map((palace) => {
+			return door[palace.index];
+		});
+		peoples.pop();
 		const offset = mandatePalace - peoples.indexOf(this.mandate);
 		// 布八门
 		Arr.arrayUp(peoples, -offset).map((data, i) => {
 			let palace = this.circle[i];
 			palace.setDoor(data);
 		});
-		this.#generatePeople();
+		this.#generatePeoples();
 	}
 
 	/**
@@ -177,7 +178,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 */
 	#overDivinity() {
 		// 大值符内环序号
-		const symbol = this.heaven.get(this.symbol).rIndex;
+		const symbol = this.heavens.get(this.symbol).rIndex;
 		let _divinity = divinity;
 		// 阳顺阴逆
 		if (this.round < 0) {
@@ -200,10 +201,12 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 */
 	#getMandateAndSymbol() {
 		// 时干支旬首所隐旗对应的后天卦序
-		const index = this.earth.get(this.#hourConceal).index;
+		let index = this.earths.get(this.#hourConceal).index;
 		// 值符
 		this.symbol = star[index];
 		// 值使
+		// 五宫寄二宫
+		if (index === 4) index = 1;
 		this.mandate = door[index];
 	}
 
@@ -215,16 +218,16 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		);
 	}
 
-	#generateEarth() {
-		this.#generateBy("earth", "ECS");
+	#generateEarths() {
+		this.#generateBy("earths", "ECS");
 	}
 
-	#generateHeaven() {
-		this.#generateBy("heaven", "Star");
+	#generateHeavens() {
+		this.#generateBy("heavens", "Star");
 	}
 
-	#generatePeople() {
-		this.#generateBy("people", "Door");
+	#generatePeoples() {
+		this.#generateBy("peoples", "Door");
 	}
 
 	#generateDivinity() {

@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2022-04-10 14:19:04
+ * @LastEditTime: 2022-09-10 11:55:30
  */
 const { acquired, num } = require("@/pojo/Tao.js");
 const inspect = Symbol.for("nodejs.util.inspect.custom");
@@ -41,40 +41,41 @@ class Palace {
 		this.divinity = "";
 	}
 
-	// ######### earth celestial stems #########
-	setEarthCelestialStems(hs) {
+	// ######### earths celestial stems #########
+	setEarthsCelestialStems(hs) {
 		this._hs = hs;
 	}
 
 	setECS(hs) {
-		this.setEarthCelestialStems(hs);
+		this.setEarthsCelestialStems(hs);
 	}
 
-	getEarthCelestialStems() {
+	getEarthsCelestialStems() {
 		return this._hs;
 	}
 
 	getECS() {
-		return this.getEarthCelestialStems();
+		return this.getEarthsCelestialStems();
 	}
 
-	// ######### heaven celestial stems #########
-	setHeavenCelestialStems(hs) {
+	// ######### heavens celestial stems #########
+	setHeavensCelestialStems(hs) {
 		this.hs = hs;
 	}
 
 	setHCS(hs) {
-		this.setHeavenCelestialStems(hs);
+		this.setHeavensCelestialStems(hs);
 	}
 
-	getHeavenCelestialStems() {
+	getHeavensCelestialStems() {
 		return this.hs;
 	}
 
 	getHCS() {
-		return this.getHeavenCelestialStems();
+		return this.getHeavensCelestialStems();
 	}
 
+	// ######### star #########
 	setStar(star) {
 		this.star = star;
 	}
@@ -83,6 +84,7 @@ class Palace {
 		return this.star;
 	}
 
+	// ######### door #########
 	setDoor(door) {
 		this.door = door;
 	}
@@ -91,6 +93,7 @@ class Palace {
 		return this.door;
 	}
 
+	// ######### divinity #########
 	setDivinity(divinity) {
 		this.divinity = divinity;
 	}

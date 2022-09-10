@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-19 16:45:51
  * @LastEditors: lax
- * @LastEditTime: 2022-08-10 15:30:25
+ * @LastEditTime: 2022-09-10 10:36:20
  * @FilePath: \taobi\readme.md
 -->
 # 在线奇门
@@ -172,3 +172,9 @@
 兑：DUI
 艮：GEN
 离：LEAVE
+
+## 地盘 Earths
+
+## 天盘 Heavens
+
+## 人盘 Peoples

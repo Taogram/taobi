@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2022-07-19 20:36:39
+ * @LastEditTime: 2022-09-10 11:49:49
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -19,7 +19,7 @@ const SexagenaryCycle = require("@/pojo/cstb/SexagenaryCycle.js");
 class TaoConvert {
 	constructor() {
 		/**
-		 * 阴阳历时
+		 * 干支历时
 		 * @type {Calendar}
 		 */
 		this.calendar = null;
@@ -112,7 +112,17 @@ class TaoConvert {
 		 * 地盘
 		 * @type {Map<String,Palace>}
 		 */
-		this.earth;
+		this.earths;
+		/**
+		 * 天盘
+		 * @type {Map<String,Palace>}
+		 */
+		this.heavens;
+		/**
+		 * 人盘
+		 * @type {Map<String,Palace>}
+		 */
+		this.peoples;
 		this.#generatePalace();
 		this.#generateAcquiredPalace();
 		this.#generateNinePalace();
