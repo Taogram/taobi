@@ -11,37 +11,39 @@
 
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
-# 计划
-## 算法
+# 简介
+
+# 功能
+## 干支历
 * 年干支
 * 月干支
 * 日干支
 * 时干支
-## 功能
-### 公历转干支历
-### 根据干支摆盘
-* step1：获取用局 ing
-* step2：布地盘三奇六仪 ✔
-* step3：获取值使/值符 ✔
-* step4：布天盘三奇六仪/九星 ✔
+## 用局 施工中
+## 算法
+## 摆盘
+* step1：获取用局
+* step2：布三奇六仪 ✔
+* step3：得值使/值符 ✔
+* step4：布九星 ✔
 * step5：布八门 ✔
 * step6：布八神 ✔
-### 解盘
+## 解盘
 * 标记空亡
 * 标记马星
 * 对冲
 * 旺相休囚废（死）
 * 落宫
-### 输出
+## 工具
 * array
-* word ing
+* 文档输出 测试
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
 # 文档
+
 ## 对象
 ### 干支 SexagenaryCycle
 #### 属性
-
 * x 
 天干序号
 * y 
@@ -50,7 +52,6 @@
 干支序号
 
 #### 方法
-
 * cs(is)
 返回天干序号或字符
 
@@ -58,8 +59,8 @@
 ### 干支历 Calendar
 ### 宫 Palace
 ### 奇门 TheArtOfBecomingInvisible
-## 工具
-* 生成word
+
+
 # 标准词汇表
 ## 天干 Celestial Stems
 甲：METH
