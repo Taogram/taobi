@@ -25,13 +25,19 @@
 
 #### 世界时与力学时差
 默认采用了NASA的计算方法，存在一定的误差
+
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
 ### 用局计算
 用局安自转断二十四节气，考虑按天或小时两种精度计算，也可以作为自定义参数自定义指定
+
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
 ### 摆盘法
 目前仅支持时家转盘奇门
+
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
+
 ## 讨论组
 暂无，可以在github上
 
