@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2022-09-10 11:49:49
+ * @LastEditTime: 2022-10-11 20:19:56
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -145,7 +145,7 @@ class TaoConvert {
 	}
 
 	/**
-	 * 后台八卦
+	 * 后天八卦
 	 */
 	#generateAcquiredPalace() {
 		this.acquired = [
