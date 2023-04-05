@@ -1,8 +1,8 @@
 .DS_Store
 node_modules
-/dist
+dist
 yarn.lock
-word
+lib
 debug.js
 
 /tests/e2e/reports/

@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test:unit": "jest --verbose"
+    "test:unit": "jest --verbose",
+    "lib": "babel src/ -d lib/"
   },
+  "files": [
+    "src/p"
+  ],
   "dependencies": {
     "consola": "^2.15.0",
     "docx": "^7.3.0",
