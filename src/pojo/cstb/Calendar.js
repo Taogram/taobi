@@ -9,7 +9,7 @@
  */
 const moment = require("moment");
 const SexagenaryCycle = require("./SexagenaryCycle");
-const Algorithm = require("@/pojo/algorithm/");
+const Algorithm = require("@/algorithm");
 
 /**
  * 干支历时

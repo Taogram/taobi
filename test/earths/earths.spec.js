@@ -14,6 +14,7 @@ describe("奇门摆盘-第三步:地盘布三奇六仪", () => {
 	for (let i = -9; i <= 9; i++) {
 		if (i) {
 			const tao = new Tao(now, i);
+			console.log(tao);
 			const name = `${i < 0 ? "_" : ""}list${Math.abs(i)}`;
 			const round = surpriseCeremony[name];
 			it(`用局:${i > 0 ? "阳" : "阴"}${Math.abs(i)},结果:${round}`, () => {

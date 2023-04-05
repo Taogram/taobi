@@ -4,11 +4,11 @@
  * @Author: lax
  * @Date: 2021-10-15 23:25:06
  * @LastEditors: lax
- * @LastEditTime: 2021-10-16 00:12:30
+ * @LastEditTime: 2023-04-05 23:09:30
  * @FilePath: \taobi\src\pojo\algorithm\mouth.js
  */
 const _ = require("@/tools/index");
-const getByYear = require("@/pojo/algorithm/year.js");
+const getByYear = require("@/algorithm/year.js");
 module.exports = (year, mouth) => {
 	// 月份=>地支 12月对应0
 	const y = mouth;

@@ -21,7 +21,7 @@
  * @param {*} day
  * @param {*} hour (0-23)
  */
-const getByDate = require("@/pojo/algorithm/date.js");
+const getByDate = require("@/algorithm/date.js");
 module.exports = (year, mouth, day, hour) => {
 	// 十二时辰=>十二地支
 	// 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12

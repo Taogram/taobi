@@ -7,8 +7,8 @@
  * @LastEditTime: 2021-10-16 00:24:19
  * @FilePath: \taobi\src\pojo\algorithm\index.js
  */
-const year = require("@/pojo/algorithm/year.js");
-const mouth = require("@/pojo/algorithm/mouth.js");
-const day = require("@/pojo/algorithm/date.js");
-const hour = require("@/pojo/algorithm/hour.js");
+const year = require("@/algorithm/year.js");
+const mouth = require("@/algorithm/mouth.js");
+const day = require("@/algorithm/date.js");
+const hour = require("@/algorithm/hour.js");
 module.exports = { year, mouth, day, hour };
