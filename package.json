@@ -4,7 +4,7 @@
   "private": false,
   "description": "基于js的奇门摆盘",
   "main": "lib/pojo/taobi/TheArtOfBecomingInvisible.js",
-  "license": "GPL",
+  "license": "MPL-2.0",
   "scripts": {
     "test:unit": "jest --verbose",
     "lib": "babel src/ -d lib/"
