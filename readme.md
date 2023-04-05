@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-19 16:45:51
  * @LastEditors: lax
- * @LastEditTime: 2022-09-10 10:36:20
+ * @LastEditTime: 2023-04-05 22:53:15
  * @FilePath: \taobi\readme.md
 -->
 # 在线奇门
@@ -24,7 +24,7 @@
 地球章动默认采用了IAU1980的算法，尚未实现IAU2000
 
 #### 世界时与力学时差
-默认采用了NASA的计算方法，存在一定的误差
+默认采用了NASA的计算方法，存在一定的误差，非百年时间可忽略不计
 
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 

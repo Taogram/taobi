@@ -7,7 +7,8 @@
     "lib": "babel src/ -d lib/"
   },
   "files": [
-    "src/p"
+    "lib/",
+    "readme.md"
   ],
   "dependencies": {
     "consola": "^2.15.0",
