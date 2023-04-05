@@ -1,7 +1,10 @@
 {
   "name": "taobi",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
+  "description": "基于js的奇门摆盘",
+  "main": "lib/pojo/taobi/TheArtOfBecomingInvisible.js",
+  "license": "GPL",
   "scripts": {
     "test:unit": "jest --verbose",
     "lib": "babel src/ -d lib/"
@@ -29,5 +32,6 @@
     "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.6.3",
     "prettier": "^2.2.1"
-  }
+  },
+  "repository": "https://github.com/Taogram/julian.js.git",
 }
