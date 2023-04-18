@@ -10,8 +10,8 @@
 
 const Palace = require("@/pojo/taobi/Palace.js");
 /* eslint-disable */
-const SexagenaryCycle = require("@/pojo/cstb/SexagenaryCycle.js");
-
+const {SexagenaryCycle} = require("tao_calendar");
+require("@/pojo/cstb/SexagenaryCycle.js");
 /**
  * @description 道化，推阴阳，衍九宫，定八卦
  *

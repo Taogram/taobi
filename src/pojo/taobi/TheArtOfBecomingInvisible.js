@@ -4,9 +4,10 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2022-09-10 11:52:51
+ * @LastEditTime: 2023-04-18 21:19:44
  */
-const Calendar = require("@/pojo/cstb/Calendar.js");
+const { Calendar } = require("tao_calendar");
+
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
 const {
 	ceremony,
@@ -17,7 +18,7 @@ const {
 	DIVINITY,
 } = require("@/pojo/Tao.js");
 const Arr = require("@/tools/index.js");
-// const moment = require("moment");
+
 class TheArtOfBecomingInvisible extends TaoConvert {
 	/**
 	 * 时旬首隐旗
