@@ -1,9 +1,9 @@
 {
   "name": "taobi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "基于js的奇门摆盘",
-  "main": "lib/pojo/taobi/TheArtOfBecomingInvisible.js",
+  "main": "lib/index.js",
   "license": "MPL-2.0",
   "scripts": {
     "test:unit": "jest --verbose",
