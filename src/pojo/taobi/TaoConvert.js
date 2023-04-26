@@ -4,14 +4,15 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2022-10-11 20:19:56
+ * @LastEditTime: 2023-04-26 23:01:05
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
-/* eslint-disable */
-const {SexagenaryCycle} = require("tao_calendar");
+/* eslint-disable-next-line */
+const { SexagenaryCycle } = require("tao_calendar");
 require("@/pojo/cstb/SexagenaryCycle.js");
+const { acquired, num, terrestrialBranches } = require("@/pojo/Tao");
 /**
  * @description 道化，推阴阳，衍九宫，定八卦
  *
@@ -123,10 +124,15 @@ class TaoConvert {
 		 * @type {Map<String,Palace>}
 		 */
 		this.peoples;
+
 		this.#generatePalace();
 		this.#generateAcquiredPalace();
 		this.#generateNinePalace();
 		this.#generateCirclePalace();
+		this.#generateTimePalace();
+
+		this._ = new Map();
+		this.#generate_();
 	}
 
 	/**
@@ -190,6 +196,37 @@ class TaoConvert {
 		this.circle.map((palace, index) => {
 			palace.rIndex = index;
 		});
+	}
+
+	#generateTimePalace() {
+		this.time = [
+			this.one,
+			this.eight,
+			this.eight,
+			this.three,
+			this.four,
+			this.four,
+			this.nine,
+			this.two,
+			this.two,
+			this.seven,
+			this.six,
+			this.six,
+		];
+	}
+
+	#generate_() {
+		this.acquired.map((palace, index) => {
+			this._.set(acquired[index], palace);
+			this._.set(num[index], palace);
+		});
+		this.time.map((palace, index) => {
+			this._.set(terrestrialBranches[index], palace);
+		});
+	}
+
+	select(deities) {
+		return this._.get(deities);
 	}
 }
 
