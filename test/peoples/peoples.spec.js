@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-12-11 00:57:08
  * @LastEditors: lax
- * @LastEditTime: 2022-09-10 10:59:40
+ * @LastEditTime: 2023-04-28 19:04:44
  * @FilePath: \taobi\test\tao.spec.js
  */
 const DOOR = require("./door");
@@ -24,7 +24,7 @@ describe("奇门摆盘-第六步:人盘布八门", () => {
 				const circle = tao.circle;
 				circle.pop();
 				circle.map((palace, index) => {
-					expect(palace.getDoor()).toContain(door[index]);
+					expect(palace.getDoor(true)).toContain(door[index]);
 				});
 			});
 		}

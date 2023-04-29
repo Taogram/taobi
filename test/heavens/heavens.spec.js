@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-12-11 00:57:08
  * @LastEditors: lax
- * @LastEditTime: 2022-09-10 10:30:18
+ * @LastEditTime: 2023-04-28 19:00:20
  * @FilePath: \taobi\test\tao.spec.js
  */
 const STAR = require("./star");
@@ -24,7 +24,7 @@ describe("奇门摆盘-第五步:天盘布九星", () => {
 				const circle = tao.circle;
 				circle.pop();
 				circle.map((palace, index) => {
-					expect(palace.getStar()).toContain(star[index]);
+					expect(palace.getStar(true)).toContain(star[index]);
 				});
 			});
 		}
@@ -41,7 +41,7 @@ describe("奇门摆盘-第五步:天盘布九星", () => {
 				const circle = tao.circle;
 				circle.pop();
 				circle.map((palace, index) => {
-					expect(palace.getStar()).toContain(star[index]);
+					expect(palace.getStar(true)).toContain(star[index]);
 				});
 			});
 		}

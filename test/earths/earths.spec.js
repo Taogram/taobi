@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-12-11 00:57:08
  * @LastEditors: lax
- * @LastEditTime: 2023-04-18 21:15:45
+ * @LastEditTime: 2023-04-29 07:56:25
  * @FilePath: \taobi\test\tao.spec.js
  */
 const surpriseCeremony = require("./surpriseCeremony");
@@ -18,7 +18,7 @@ describe("奇门摆盘-第三步:地盘布三奇六仪", () => {
 			const round = surpriseCeremony[name];
 			it(`用局:${i > 0 ? "阳" : "阴"}${Math.abs(i)},结果:${round}`, () => {
 				tao.acquired.map((palace, index) => {
-					expect(palace.getECS()[0]).toBe(round[index]);
+					expect(palace.getECS(true)[0]).toBe(round[index]);
 				});
 			});
 		}
