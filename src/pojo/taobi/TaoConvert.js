@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2023-04-29 08:44:43
+ * @LastEditTime: 2023-04-29 09:07:21
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -264,12 +264,12 @@ class TaoConvert {
 		this.cs.map((palace, index) => {
 			const title = celestialStems[index];
 			this._.set(title, palace);
-			palace.setCS([index]);
+			palace.setCS(index, true);
 		});
 		this.tb.map((palace, index) => {
 			const title = terrestrialBranches[index];
 			this._.set(title, palace);
-			palace.setTB([index]);
+			palace.setTB(index, true);
 		});
 	}
 

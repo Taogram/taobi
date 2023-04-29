@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2023-04-29 08:31:30
+ * @LastEditTime: 2023-04-29 09:04:02
  */
 const {
 	acquired,
@@ -133,12 +133,13 @@ class Palace {
 	}
 
 	// ######### celestial stems #########
-	setCelestialStems(index) {
-		this.cs = index;
+	setCelestialStems(index, isUpdate = false) {
+		if (isUpdate) this.cs.push(index);
+		if (!isUpdate) this.cs = index;
 	}
 
-	setCS(index) {
-		this.setCelestialStems(index);
+	setCS(index, isUpdate) {
+		this.setCelestialStems(index, isUpdate);
 	}
 
 	getCelestialStems(is = false) {
@@ -150,12 +151,13 @@ class Palace {
 	}
 
 	// ######### terrestrial branches #########
-	setTerrestrialBranches(index) {
-		this.tb = index;
+	setTerrestrialBranches(index, isUpdate = false) {
+		if (isUpdate) this.tb.push(index);
+		if (!isUpdate) this.tb = index;
 	}
 
-	setTB(index) {
-		this.setTerrestrialBranches(index);
+	setTB(index, isUpdate) {
+		this.setTerrestrialBranches(index, isUpdate);
 	}
 
 	getTerrestrialBranches(is = false) {
