@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2023-04-26 23:01:05
+ * @LastEditTime: 2023-04-29 08:44:43
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -12,7 +12,12 @@ const Palace = require("@/pojo/taobi/Palace.js");
 /* eslint-disable-next-line */
 const { SexagenaryCycle } = require("tao_calendar");
 require("@/pojo/cstb/SexagenaryCycle.js");
-const { acquired, num, terrestrialBranches } = require("@/pojo/Tao");
+const {
+	acquired,
+	num,
+	celestialStems,
+	terrestrialBranches,
+} = require("@/pojo/Tao");
 /**
  * @description 道化，推阴阳，衍九宫，定八卦
  *
@@ -120,16 +125,37 @@ class TaoConvert {
 		 */
 		this.heavens;
 		/**
+		 * 星盘
+		 * @type {Map<String,Palace>}
+		 */
+		this.stars;
+		/**
 		 * 人盘
 		 * @type {Map<String,Palace>}
 		 */
 		this.peoples;
+		/**
+		 * 神盘
+		 * @type {Map<String,Palace>}
+		 */
+		this.divinity;
+		/**
+		 * 十天干
+		 * @type {Map<String,Palace>}
+		 */
+		this.cs;
+		/**
+		 * 十二地支
+		 * @type {Map<String,Palace>}
+		 */
+		this.tb;
 
 		this.#generatePalace();
 		this.#generateAcquiredPalace();
 		this.#generateNinePalace();
 		this.#generateCirclePalace();
-		this.#generateTimePalace();
+		this.#generateCSPalace();
+		this.#generateTBPalace();
 
 		this._ = new Map();
 		this.#generate_();
@@ -198,8 +224,23 @@ class TaoConvert {
 		});
 	}
 
-	#generateTimePalace() {
-		this.time = [
+	#generateCSPalace() {
+		this.cs = [
+			this.three,
+			this.three,
+			this.nine,
+			this.nine,
+			this.five,
+			this.five,
+			this.seven,
+			this.seven,
+			this.one,
+			this.one,
+		];
+	}
+
+	#generateTBPalace() {
+		this.tb = [
 			this.one,
 			this.eight,
 			this.eight,
@@ -220,8 +261,15 @@ class TaoConvert {
 			this._.set(acquired[index], palace);
 			this._.set(num[index], palace);
 		});
-		this.time.map((palace, index) => {
-			this._.set(terrestrialBranches[index], palace);
+		this.cs.map((palace, index) => {
+			const title = celestialStems[index];
+			this._.set(title, palace);
+			palace.setCS([index]);
+		});
+		this.tb.map((palace, index) => {
+			const title = terrestrialBranches[index];
+			this._.set(title, palace);
+			palace.setTB([index]);
 		});
 	}
 
