@@ -1,6 +1,6 @@
 {
   "name": "taobi",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "description": "基于js的奇门摆盘",
   "main": "lib/index.js",
@@ -14,7 +14,8 @@
     "readme.md"
   ],
   "dependencies": {
-    "tao_calendar": "^0.1.0"
+    "tao_calendar": "^0.1.0",
+    "tao_taichi.js": "^0.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",

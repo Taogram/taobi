@@ -4,20 +4,20 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2023-04-29 09:04:02
+ * @LastEditTime: 2023-07-09 19:52:17
  */
 const {
 	acquired,
 	num,
-	door,
-	star,
-	divinity,
 	ceremony,
 	surprise,
 	celestialStems,
 	terrestrialBranches,
 } = require("@/pojo/Tao.js");
 const inspect = Symbol.for("nodejs.util.inspect.custom");
+const Door = require("@/pojo/taobi/Door");
+const Star = require("@/pojo/taobi/Star");
+const Divinity = require("@/pojo/taobi/Divinity");
 const surpriseCeremony = ceremony.concat(surprise);
 class Palace {
 	constructor(index) {
@@ -39,16 +39,19 @@ class Palace {
 		this.ecs = [];
 		/**
 		 * 星
+		 * @type {Star}
 		 */
-		this.star = null;
+		this.star;
 		/**
 		 * 门
+		 * @type {Door}
 		 */
-		this.door = null;
+		this.door;
 		/**
 		 * 神
+		 * @type {Divinity}
 		 */
-		this.divinity = null;
+		this.divinity;
 		/**
 		 * 原始天干
 		 */
@@ -94,33 +97,33 @@ class Palace {
 	}
 
 	// ######### star #########
-	setStar(index) {
-		this.star = index;
+	setStar(obj) {
+		this.star = new Star(obj);
 	}
 
 	getStar(is = false) {
-		if (this.star === null) return "";
-		return is ? star[this.star] : this.star;
+		if (this.star === undefined) return "";
+		return is ? this.star.getIndex(true) : this.star;
 	}
 
 	// ######### door #########
-	setDoor(index) {
-		this.door = index;
+	setDoor(obj) {
+		this.door = new Door(obj);
 	}
 
 	getDoor(is = false) {
-		if (this.door === null) return "";
-		return is ? door[this.door] : this.door;
+		if (this.door === undefined) return "";
+		return is ? this.door.getIndex(true) : this.door;
 	}
 
 	// ######### divinity #########
-	setDivinity(index) {
-		this.divinity = index;
+	setDivinity(obj) {
+		this.divinity = new Divinity(obj);
 	}
 
 	getDivinity(is = false) {
-		if (this.divinity === null) return "";
-		return is ? divinity[this.divinity] : this.divinity;
+		if (this.divinity === undefined) return "";
+		return is ? this.divinity.getIndex(true) : this.divinity;
 	}
 
 	// ######### palace #########
