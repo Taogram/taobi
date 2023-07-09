@@ -4,14 +4,20 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-07-09 20:28:15
+ * @LastEditTime: 2023-07-09 22:33:32
  */
 const { Calendar } = require("tao_calendar");
-
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
-const { star, door, divinity, DIVINITY } = require("@/pojo/Tao.js");
+const {
+	star,
+	door,
+	ceremony,
+	surprise,
+	divinity,
+	DIVINITY,
+} = require("@/pojo/Tao.js");
 const Arr = require("@/tools/index.js");
-
+const surpriseCeremony = ceremony.concat(surprise);
 class TheArtOfBecomingInvisible extends TaoConvert {
 	/**
 	 * 时旬首隐旗
@@ -88,7 +94,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			_acquired = Arr.arrayUp(this.acquired, index);
 		}
 		_acquired.map((palace, i) => {
-			palace.setECS([i]);
+			palace.setECS([surpriseCeremony[i]]);
 		});
 		this.#generateEarths();
 	}

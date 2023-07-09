@@ -4,23 +4,17 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2023-07-09 21:05:15
+ * @LastEditTime: 2023-07-09 22:29:33
  */
-const {
-	ceremony,
-	surprise,
-	celestialStems,
-	terrestrialBranches,
-} = require("@/pojo/Tao.js");
 const INDEX = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 const ACQUIRED = ["坎", "坤", "震", "巽", "中", "乾", "兑", "艮", "离"];
 const ACQUIRED_PHASES = ["水", "土", "木", "木", "土", "金", "金", "土", "火"];
 const { Phases } = require("tao_taichi.js");
+const { CelestialStems, TerrestrialBranches } = require("tao_calendar");
 const inspect = Symbol.for("nodejs.util.inspect.custom");
 const Door = require("@/pojo/taobi/Door");
 const Star = require("@/pojo/taobi/Star");
 const Divinity = require("@/pojo/taobi/Divinity");
-const surpriseCeremony = ceremony.concat(surprise);
 class Palace extends Phases {
 	constructor(index) {
 		if (index instanceof Palace) return index;
@@ -37,10 +31,12 @@ class Palace extends Phases {
 		this.rIndex = null;
 		/**
 		 * 天盘天干
+		 * @type {[CelestialStems]}
 		 */
 		this.hcs = [];
 		/**
 		 * 地盘天干
+		 * @type {[CelestialStems]}
 		 */
 		this.ecs = [];
 		/**
@@ -60,25 +56,38 @@ class Palace extends Phases {
 		this.divinity;
 		/**
 		 * 原始天干
+		 * @type {[CelestialStems]}
 		 */
 		this.cs = [];
 		/**
 		 * 原始地支
+		 * @type {[TerrestrialBranches]}
 		 */
 		this.tb = [];
 	}
 
 	// ######### earths celestial stems #########
-	setEarthsCelestialStems(index) {
-		this.ecs = index;
+	/**
+	 * @description 设置地盘天干
+	 * @param {CelestialStems} obj
+	 * @param {boolean} isUpdate
+	 */
+	setEarthsCelestialStems(obj, isUpdate = false) {
+		if (isUpdate) this.ecs.push(new CelestialStems(obj));
+		if (!isUpdate) this.ecs = obj.map((o) => new CelestialStems(o));
 	}
 
-	setECS(index) {
-		this.setEarthsCelestialStems(index);
+	setECS(obj, isUpdate) {
+		this.setEarthsCelestialStems(obj, isUpdate);
 	}
 
+	/**
+	 * @description 获取地盘天干
+	 * @param {boolean} is
+	 * @returns {CelestialStems} cs
+	 */
 	getEarthsCelestialStems(is = false) {
-		return is ? this.ecs.map((o) => surpriseCeremony[o]) : this.ecs;
+		return is ? this.ecs.map((o) => o.getValue(true)) : this.ecs;
 	}
 
 	getECS(is) {
@@ -86,16 +95,27 @@ class Palace extends Phases {
 	}
 
 	// ######### heavens celestial stems #########
-	setHeavensCelestialStems(index) {
-		this.hcs = index;
+	/**
+	 * @description 设置天盘天干
+	 * @param {CelestialStems} obj
+	 * @param {boolean} isUpdate
+	 */
+	setHeavensCelestialStems(obj, isUpdate = false) {
+		if (isUpdate) this.hcs.push(new CelestialStems(obj));
+		if (!isUpdate) this.hcs = obj.map((o) => new CelestialStems(o));
 	}
 
-	setHCS(index) {
-		this.setHeavensCelestialStems(index);
+	setHCS(obj, isUpdate) {
+		this.setHeavensCelestialStems(obj, isUpdate);
 	}
 
+	/**
+	 * @description 获取天盘天干
+	 * @param {boolean} is
+	 * @returns {CelestialStems} cs
+	 */
 	getHeavensCelestialStems(is = false) {
-		return is ? this.hcs.map((o) => surpriseCeremony[o]) : this.hcs;
+		return is ? this.hcs.map((o) => o.getValue(true)) : this.hcs;
 	}
 
 	getHCS(is) {
@@ -142,17 +162,27 @@ class Palace extends Phases {
 	}
 
 	// ######### celestial stems #########
-	setCelestialStems(index, isUpdate = false) {
-		if (isUpdate) this.cs.push(index);
-		if (!isUpdate) this.cs = index;
+	/**
+	 * @description 设置原始天干
+	 * @param {CelestialStems} obj
+	 * @param {boolean} isUpdate
+	 */
+	setCelestialStems(obj, isUpdate = false) {
+		if (isUpdate) this.cs.push(new CelestialStems(obj));
+		if (!isUpdate) this.cs = obj.map((o) => new CelestialStems(o));
 	}
 
-	setCS(index, isUpdate) {
-		this.setCelestialStems(index, isUpdate);
+	setCS(obj, isUpdate) {
+		this.setCelestialStems(obj, isUpdate);
 	}
 
+	/**
+	 * @description 获取原始天干
+	 * @param {boolean} is
+	 * @returns {CelestialStems} cs
+	 */
 	getCelestialStems(is = false) {
-		return is ? this.cs.map((o) => celestialStems[o]) : this.cs;
+		return is ? this.cs.map((o) => o.getValue(true)) : this.cs;
 	}
 
 	getCS(is) {
@@ -160,17 +190,27 @@ class Palace extends Phases {
 	}
 
 	// ######### terrestrial branches #########
-	setTerrestrialBranches(index, isUpdate = false) {
-		if (isUpdate) this.tb.push(index);
-		if (!isUpdate) this.tb = index;
+	/**
+	 * @description 设置原始地支
+	 * @param {TerrestrialBranches} obj
+	 * @param {boolean} isUpdate
+	 */
+	setTerrestrialBranches(obj, isUpdate = false) {
+		if (isUpdate) this.tb.push(new TerrestrialBranches(obj));
+		if (!isUpdate) this.tb = obj.map((o) => new TerrestrialBranches(o));
 	}
 
 	setTB(index, isUpdate) {
 		this.setTerrestrialBranches(index, isUpdate);
 	}
 
+	/**
+	 * @description 获取原始地支
+	 * @param {boolean} is
+	 * @returns {TerrestrialBranches} tb
+	 */
 	getTerrestrialBranches(is = false) {
-		return is ? this.tb.map((o) => terrestrialBranches[o]) : this.tb;
+		return is ? this.tb.map((o) => o.getValue(true)) : this.tb;
 	}
 
 	getTB(is) {
