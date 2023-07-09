@@ -4,27 +4,33 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2023-07-09 19:52:17
+ * @LastEditTime: 2023-07-09 21:05:15
  */
 const {
-	acquired,
-	num,
 	ceremony,
 	surprise,
 	celestialStems,
 	terrestrialBranches,
 } = require("@/pojo/Tao.js");
+const INDEX = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
+const ACQUIRED = ["坎", "坤", "震", "巽", "中", "乾", "兑", "艮", "离"];
+const ACQUIRED_PHASES = ["水", "土", "木", "木", "土", "金", "金", "土", "火"];
+const { Phases } = require("tao_taichi.js");
 const inspect = Symbol.for("nodejs.util.inspect.custom");
 const Door = require("@/pojo/taobi/Door");
 const Star = require("@/pojo/taobi/Star");
 const Divinity = require("@/pojo/taobi/Divinity");
 const surpriseCeremony = ceremony.concat(surprise);
-class Palace {
+class Palace extends Phases {
 	constructor(index) {
+		if (index instanceof Palace) return index;
+		const i = ~~(index + 1) === 0 ? ACQUIRED.indexOf(index) : ~~index % 9;
+		if (i < 0) throw new Error(`arg can\`t be use => ${index}`);
+		super(ACQUIRED_PHASES[i], null);
 		/**
 		 * 后天八卦宫位序号
 		 */
-		this.index = index;
+		this.index = i;
 		/**
 		 * 周序位 顺时序位
 		 */
@@ -128,7 +134,7 @@ class Palace {
 
 	// ######### palace #########
 	getPalace(is = false) {
-		return is ? acquired[this.index] : this.index;
+		return is ? ACQUIRED[this.index] : this.index;
 	}
 
 	setPalace(index) {
@@ -177,7 +183,7 @@ class Palace {
 			[this.getDoor(true), "", `${this.getHCS(true)}`],
 			[
 				this.getStar(true),
-				`${this.getPalace(true)}${num[this.index]}`,
+				`${this.getPalace(true)}${INDEX[this.index]}`,
 				`${this.getECS(true)}`,
 			],
 		];
