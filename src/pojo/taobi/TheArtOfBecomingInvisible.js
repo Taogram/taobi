@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-04-29 08:10:26
+ * @LastEditTime: 2023-07-09 20:28:15
  */
 const { Calendar } = require("tao_calendar");
 
@@ -142,7 +142,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 时旬首地支
 		const headTb = this.hour.getLead().tb();
 		// 时辰间距
-		const timeOffset = this.#cycle(12, hourTb - headTb);
+		const timeOffset = this.#cycle(12, hourTb.getValue() - headTb.getValue());
 		// 时旬首所遁序号
 		let index = this.earths.get(this.#hourConceal).index;
 		// 阳顺阴逆
