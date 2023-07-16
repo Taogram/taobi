@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-07-09 22:33:32
+ * @LastEditTime: 2023-07-16 10:43:26
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -24,8 +24,15 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 */
 	#hourConceal;
 
-	constructor(questionTime, r) {
-		super();
+	/**
+	 * @description 奇门起局
+	 * @param {Calendar} questionTime 求测时辰
+	 * @param {Number} 用局
+	 * @param {*} arranged 排盘方法，转盘/飞盘
+	 * @param {*} follow 中五宫随法，寄坤二宫/宫二八宫/...
+	 */
+	constructor(questionTime, r, arranged, follow) {
+		super(follow);
 
 		// step1: 根据日期转化干支历
 		this.#generateCalendar(questionTime);
@@ -76,31 +83,50 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.#hourConceal = this.hour.getLead().getConceal(true);
 	}
 
+	#midPlace(follow = this.follow) {
+		switch (follow) {
+			// 寄坤二宫
+			case 0:
+				return 1;
+			// 阳遁八宫，阴遁二宫
+			case 1:
+				return this.round > 0 ? 7 : 1;
+			// TODO寄四维宫
+			case 2:
+				return 1;
+			// TODO寄八节法
+			case 3:
+				return 1;
+			default:
+				return 1;
+		}
+	}
+
+	#rotary(palaces, arr) {}
+
 	/**
-	 * @description 布地盘三奇六仪，阳顺阴逆
+	 * @description 布地盘三奇六仪，用局数对应宫为戊，阳顺阴逆
 	 * @version 1.0.0
 	 * @author lax
 	 */
 	#overEarths() {
-		let round = Math.abs(this.round);
 		// 用局->宫数组下标
-		let index = round - 1;
-		let _acquired;
+		let index = this.round - 1;
+		let _acquired = this.acquired;
 		// 阳顺阴逆
 		if (this.round < 0) {
-			const list = Arr.arrayUp(this.acquired, index + 1);
-			_acquired = Array.from(list).reverse();
-		} else {
-			_acquired = Arr.arrayUp(this.acquired, index);
+			index += 1;
+			_acquired = Array.from(this.acquired).reverse();
 		}
-		_acquired.map((palace, i) => {
+		_acquired = Arr.arrayUp(_acquired, index);
+		_acquired.forEach((palace, i) => {
 			palace.setECS([surpriseCeremony[i]]);
 		});
 		this.#generateEarths();
 	}
 
 	/**
-	 * @description 布天盘九星，值符随时干，坤五寄二宫
+	 * @description 布天盘九星，值符随时干，坤五随宫
 	 * @version 1.0.0
 	 * @author lax
 	 */
@@ -109,32 +135,25 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		let hourCS = this.hour.getCsOrigin(true);
 		// 时干所在地盘落宫对应的外环序号
 		let hIndex = this.earths.get(hourCS).rIndex;
-		// 值符落五宫寄坤二宫
-		if (hIndex === 8) hIndex = 2;
 		// 时辰旬首所遁宫对应的外环序号
 		let eIndex = this.earths.get(this.#hourConceal).rIndex;
-		// 时辰旬首落五宫寄坤二宫
-		if (eIndex === 8) eIndex = 2;
 		// 转距
 		let offset = hIndex - eIndex;
 		offset = this.#cycle(8, offset);
 		// 九星携带天干转移
 		const stars = this.circle.map(({ index, ecs }) => {
-			return { star: index, ecs };
+			return { star: [index], ecs };
 		});
-		stars.pop();
 		Arr.arrayUp(stars, -offset).map((data, index) => {
 			let palace = this.circle[index];
 			palace.setStar(data.star);
 			palace.setHCS(data.ecs);
 		});
-		// TODO 天禽寄坤
-		// 天禽寄二宫
-		this.five.setStar(4);
+		const p = this.acquired[this.#midPlace()];
+		p.setStar("天禽星", true);
+		p.setHCS(this.five.ecs[0], true);
 		this.#generateHeavens();
 		this.#generateStars();
-		// 天禽寄二宫
-		this.stars.get("天芮星").hcs.push(this.five.ecs[0]);
 	}
 
 	/**
@@ -162,7 +181,6 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		const peoples = this.circle.map((palace) => {
 			return palace.index;
 		});
-		peoples.pop();
 		const offset = mandatePalace - peoples.indexOf(this.mandate);
 		// 布八门
 		Arr.arrayUp(peoples, -offset).map((data, i) => {
@@ -204,20 +222,22 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		let index = this.earths.get(this.#hourConceal).index;
 		// 值符
 		this.symbol = index;
+		// 五宫随
+		if (index === 4) index = this.#midPlace();
 		// 值使
-		// 五宫寄二宫
-		if (index === 4) index = 1;
 		this.mandate = index;
+		// 随宫修正转盘计数
+		this.five.rIndex = this.acquired[this.#midPlace()].rIndex;
 	}
 
 	#generateBy(area, pro) {
 		this[area] = new Map(
-			this.acquired.map((palace) => {
-				let tag = palace[`get${pro}`](true);
-				// 天地盘作单独处理和区分
-				if (tag instanceof Array) tag = tag[0];
-				return [tag, palace];
-			})
+			this.acquired.reduce((acc, next) => {
+				let tag = next[`get${pro}`](true);
+				tag = [].concat(tag);
+				tag = tag.map((t) => [t, next]);
+				return acc.concat(tag);
+			}, [])
 		);
 	}
 
