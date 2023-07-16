@@ -4,6 +4,7 @@ dist
 yarn.lock
 lib
 debug.js
+coverage
 
 /tests/e2e/reports/
 selenium-debug.log
