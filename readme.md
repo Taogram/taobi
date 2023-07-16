@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-19 16:45:51
  * @LastEditors: lax
- * @LastEditTime: 2023-04-05 22:53:15
+ * @LastEditTime: 2023-07-15 21:26:02
  * @FilePath: \taobi\readme.md
 -->
 # 在线奇门
@@ -91,6 +91,8 @@
 
 
 # 标准词汇表
+
+## 八卦 Trigrams
 ## 天干 Celestial Stems
 甲：METH
 乙：ETH
