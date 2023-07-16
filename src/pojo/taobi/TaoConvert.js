@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2023-04-29 09:07:21
+ * @LastEditTime: 2023-07-16 10:45:03
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -23,12 +23,12 @@ const {
  *
  */
 class TaoConvert {
-	constructor() {
+	constructor(follow = 0) {
 		/**
 		 * 干支历时
 		 * @type {Calendar}
 		 */
-		this.calendar = null;
+		this.calendar;
 		/**
 		 * 年天干
 		 * @type {SexagenaryCycle}
@@ -95,6 +95,10 @@ class TaoConvert {
 		 */
 		this.nine;
 		/**
+		 * 先天八卦
+		 */
+		this.priori;
+		/**
 		 * 后天八卦
 		 * @type {Array<Palace>}
 		 */
@@ -114,6 +118,11 @@ class TaoConvert {
 		 * @type {Number}
 		 */
 		this.round;
+		/**
+		 *中宫随法
+		 * @type {Number}
+		 */
+		this.follow = follow;
 		/**
 		 * 地盘
 		 * @type {Map<String,Palace>}
@@ -217,7 +226,6 @@ class TaoConvert {
 			this.one,
 			this.eight,
 			this.three,
-			this.five,
 		];
 		this.circle.map((palace, index) => {
 			palace.rIndex = index;
@@ -264,12 +272,12 @@ class TaoConvert {
 		this.cs.map((palace, index) => {
 			const title = celestialStems[index];
 			this._.set(title, palace);
-			palace.setCS(index, true);
+			palace.setOCS(index, true);
 		});
 		this.tb.map((palace, index) => {
 			const title = terrestrialBranches[index];
 			this._.set(title, palace);
-			palace.setTB(index, true);
+			palace.setOTB(index, true);
 		});
 	}
 
