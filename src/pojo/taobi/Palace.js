@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2023-07-09 22:29:33
+ * @LastEditTime: 2023-07-16 10:42:38
  */
 const INDEX = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 const ACQUIRED = ["坎", "坤", "震", "巽", "中", "乾", "兑", "艮", "离"];
@@ -21,12 +21,13 @@ class Palace extends Phases {
 		const i = ~~(index + 1) === 0 ? ACQUIRED.indexOf(index) : ~~index % 9;
 		if (i < 0) throw new Error(`arg can\`t be use => ${index}`);
 		super(ACQUIRED_PHASES[i], null);
+
 		/**
 		 * 后天八卦宫位序号
 		 */
 		this.index = i;
 		/**
-		 * 周序位 顺时序位
+		 * 转盘序位 顺时序位
 		 */
 		this.rIndex = null;
 		/**
@@ -40,30 +41,47 @@ class Palace extends Phases {
 		 */
 		this.ecs = [];
 		/**
-		 * 星
-		 * @type {Star}
+		 * 原始天干
+		 * @type {[CelestialStems]}
+		 */
+		this._cs = [];
+		/**
+		 * 原始地支
+		 * @type {[TerrestrialBranches]}
+		 */
+		this._tb = [];
+		/**
+		 * 九星
+		 * @type {[Star]}
 		 */
 		this.star;
 		/**
-		 * 门
+		 * 原始九星
+		 * @type {Star}
+		 */
+		this._star;
+		/**
+		 * 八门
 		 * @type {Door}
 		 */
 		this.door;
+		/**
+		 * 原始八门
+		 * @type {Door}
+		 */
+		this._door;
 		/**
 		 * 神
 		 * @type {Divinity}
 		 */
 		this.divinity;
-		/**
-		 * 原始天干
-		 * @type {[CelestialStems]}
-		 */
-		this.cs = [];
-		/**
-		 * 原始地支
-		 * @type {[TerrestrialBranches]}
-		 */
-		this.tb = [];
+
+		this.init();
+	}
+
+	init() {
+		this._star = new Star(this.index);
+		if (!(this.index === 4)) this._door = new Door(this.index);
 	}
 
 	// ######### earths celestial stems #########
@@ -122,14 +140,80 @@ class Palace extends Phases {
 		return this.getHeavensCelestialStems(is);
 	}
 
+	// ######### celestial stems #########
+	/**
+	 * @description 设置原始天干
+	 * @param {CelestialStems} obj
+	 * @param {boolean} isUpdate
+	 */
+	setOriginCelestialStems(obj, isUpdate = false) {
+		if (isUpdate) this._cs.push(new CelestialStems(obj));
+		if (!isUpdate) this._cs = obj.map((o) => new CelestialStems(o));
+	}
+
+	setOCS(obj, isUpdate) {
+		this.setOriginCelestialStems(obj, isUpdate);
+	}
+
+	/**
+	 * @description 获取原始天干
+	 * @param {boolean} is
+	 * @returns {CelestialStems} cs
+	 */
+	getOCelestialStems(is = false) {
+		return is ? this._cs.map((o) => o.getValue(true)) : this._cs;
+	}
+
+	getOCS(is) {
+		return this.getOCelestialStems(is);
+	}
+
+	// ######### terrestrial branches #########
+	/**
+	 * @description 设置原始地支
+	 * @param {TerrestrialBranches} obj
+	 * @param {boolean} isUpdate
+	 */
+	setOriginTerrestrialBranches(obj, isUpdate = false) {
+		if (isUpdate) this._tb.push(new TerrestrialBranches(obj));
+		if (!isUpdate) this._tb = obj.map((o) => new TerrestrialBranches(o));
+	}
+
+	setOTB(index, isUpdate) {
+		this.setOriginTerrestrialBranches(index, isUpdate);
+	}
+
+	/**
+	 * @description 获取原始地支
+	 * @param {boolean} is
+	 * @returns {TerrestrialBranches} tb
+	 */
+	getOriginTerrestrialBranches(is = false) {
+		return is ? this._tb.map((o) => o.getValue(true)) : this._tb;
+	}
+
+	getOTB(is) {
+		return this.getOriginTerrestrialBranches(is);
+	}
+
 	// ######### star #########
-	setStar(obj) {
-		this.star = new Star(obj);
+	setStar(obj, isUpdate = false) {
+		if (isUpdate) this.star.push(new Star(obj));
+		if (!isUpdate) this.star = obj.map((o) => new Star(o));
 	}
 
 	getStar(is = false) {
 		if (this.star === undefined) return "";
-		return is ? this.star.getIndex(true) : this.star;
+		return is ? this.star.map((o) => o.getIndex(true)) : this.star;
+	}
+
+	getOriginStar(is = false) {
+		if (this._star === undefined) return "";
+		return is ? this._star.getIndex(true) : this._star;
+	}
+
+	getOStar(is) {
+		return this.getOriginStar(is);
 	}
 
 	// ######### door #########
@@ -140,6 +224,15 @@ class Palace extends Phases {
 	getDoor(is = false) {
 		if (this.door === undefined) return "";
 		return is ? this.door.getIndex(true) : this.door;
+	}
+
+	getOriginDoor(is = false) {
+		if (this._door === undefined) return "";
+		return is ? this._door.getIndex(true) : this._door;
+	}
+
+	getODoor(is) {
+		return this.getOriginDoor(is);
 	}
 
 	// ######### divinity #########
@@ -161,68 +254,12 @@ class Palace extends Phases {
 		this.index = index;
 	}
 
-	// ######### celestial stems #########
-	/**
-	 * @description 设置原始天干
-	 * @param {CelestialStems} obj
-	 * @param {boolean} isUpdate
-	 */
-	setCelestialStems(obj, isUpdate = false) {
-		if (isUpdate) this.cs.push(new CelestialStems(obj));
-		if (!isUpdate) this.cs = obj.map((o) => new CelestialStems(o));
-	}
-
-	setCS(obj, isUpdate) {
-		this.setCelestialStems(obj, isUpdate);
-	}
-
-	/**
-	 * @description 获取原始天干
-	 * @param {boolean} is
-	 * @returns {CelestialStems} cs
-	 */
-	getCelestialStems(is = false) {
-		return is ? this.cs.map((o) => o.getValue(true)) : this.cs;
-	}
-
-	getCS(is) {
-		return this.getCelestialStems(is);
-	}
-
-	// ######### terrestrial branches #########
-	/**
-	 * @description 设置原始地支
-	 * @param {TerrestrialBranches} obj
-	 * @param {boolean} isUpdate
-	 */
-	setTerrestrialBranches(obj, isUpdate = false) {
-		if (isUpdate) this.tb.push(new TerrestrialBranches(obj));
-		if (!isUpdate) this.tb = obj.map((o) => new TerrestrialBranches(o));
-	}
-
-	setTB(index, isUpdate) {
-		this.setTerrestrialBranches(index, isUpdate);
-	}
-
-	/**
-	 * @description 获取原始地支
-	 * @param {boolean} is
-	 * @returns {TerrestrialBranches} tb
-	 */
-	getTerrestrialBranches(is = false) {
-		return is ? this.tb.map((o) => o.getValue(true)) : this.tb;
-	}
-
-	getTB(is) {
-		return this.getTerrestrialBranches(is);
-	}
-
 	toCanvas() {
 		return [
 			[this.getDivinity(true), "", ""],
 			[this.getDoor(true), "", `${this.getHCS(true)}`],
 			[
-				this.getStar(true),
+				`${this.getStar(true)}`,
 				`${this.getPalace(true)}${INDEX[this.index]}`,
 				`${this.getECS(true)}`,
 			],
