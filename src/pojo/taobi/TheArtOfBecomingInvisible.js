@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-07-16 10:43:26
+ * @LastEditTime: 2023-07-16 11:25:53
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -83,6 +83,12 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.#hourConceal = this.hour.getLead().getConceal(true);
 	}
 
+	/**
+	 * @description 中宫所寄宫
+	 * 二宫/二八宫/四维宫/八节
+	 * @param {Number} follow
+	 * @returns index
+	 */
 	#midPlace(follow = this.follow) {
 		switch (follow) {
 			// 寄坤二宫
@@ -102,6 +108,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		}
 	}
 
+	// TODO
 	#rotary(palaces, arr) {}
 
 	/**
@@ -265,6 +272,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		return (r + v) % r;
 	}
 
+	// TODO
 	getSymbol(is = false) {
 		return is ? star[this.symbol] : this.symbol;
 	}
