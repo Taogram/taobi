@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-12-11 00:57:08
  * @LastEditors: lax
- * @LastEditTime: 2023-04-28 19:00:20
+ * @LastEditTime: 2023-07-16 11:17:09
  * @FilePath: \taobi\test\tao.spec.js
  */
 const STAR = require("./star");
@@ -13,37 +13,23 @@ const Tao = require("@/pojo/taobi/TheArtOfBecomingInvisible.js");
 const { sexagenaryCycle } = require("@/pojo/Tao.js");
 
 describe("奇门摆盘-第五步:天盘布九星", () => {
-	describe("阴9局", () => {
-		const round = -9;
-		for (let i = 0; i <= 59; i++) {
-			const sc = sexagenaryCycle[i];
-			const tao = new Tao(`壬寅壬寅辛亥${sc}`, round);
-			const head = HEAVENS[`${round < 0 ? "m" : "p"}${Math.abs(round)}`][i];
-			const star = STAR[head - 1];
-			it(`时干-${sc} ${star[0]}`, () => {
-				const circle = tao.circle;
-				circle.pop();
-				circle.map((palace, index) => {
-					expect(palace.getStar(true)).toContain(star[index]);
-				});
+	for (let i = -9; i < 10; i++) {
+		if (i !== 0) {
+			describe(`${i}局`, () => {
+				for (let j = 0; j < 10; j++) {
+					const sc = sexagenaryCycle[j];
+					const tao = new Tao(["壬寅", "壬寅", "辛亥", `${sc}`], i);
+					const head = HEAVENS[`${i < 0 ? "m" : "p"}${Math.abs(i)}`][j];
+					const star = STAR[head - 1];
+					it(`时干-${sc} ${star.toString()}`, () => {
+						const circle = tao.circle;
+						circle.pop();
+						circle.map((palace, index) => {
+							expect(palace.getStar(true).toString()).toContain(star[index]);
+						});
+					});
+				}
 			});
 		}
-	});
-
-	describe("阴8局", () => {
-		for (let i = 0; i <= 59; i++) {
-			const round = -8;
-			const sc = sexagenaryCycle[i];
-			const tao = new Tao(`壬寅壬寅辛亥${sc}`, round);
-			const head = HEAVENS[`${round < 0 ? "m" : "p"}${Math.abs(round)}`][i];
-			const star = STAR[head - 1];
-			it(`时干-${sc} ${star[0]}`, () => {
-				const circle = tao.circle;
-				circle.pop();
-				circle.map((palace, index) => {
-					expect(palace.getStar(true)).toContain(star[index]);
-				});
-			});
-		}
-	});
+	}
 });
