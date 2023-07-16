@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-07-16 11:25:53
+ * @LastEditTime: 2023-07-16 18:13:47
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -140,22 +140,23 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	#overHeavens() {
 		// 时干
 		let hourCS = this.hour.getCsOrigin(true);
-		// 时干所在地盘落宫对应的外环序号
+		// 转盘序列起始->时干所在地盘落宫对应的外环序号
 		let hIndex = this.earths.get(hourCS).rIndex;
 		// 时辰旬首所遁宫对应的外环序号
 		let eIndex = this.earths.get(this.#hourConceal).rIndex;
 		// 转距
-		let offset = hIndex - eIndex;
+		let offset = eIndex - hIndex;
 		offset = this.#cycle(8, offset);
 		// 九星携带天干转移
 		const stars = this.circle.map(({ index, ecs }) => {
 			return { star: [index], ecs };
 		});
-		Arr.arrayUp(stars, -offset).map((data, index) => {
+		Arr.arrayUp(stars, offset).map((data, index) => {
 			let palace = this.circle[index];
 			palace.setStar(data.star);
 			palace.setHCS(data.ecs);
 		});
+		// 中宫随宫
 		const p = this.acquired[this.#midPlace()];
 		p.setStar("天禽星", true);
 		p.setHCS(this.five.ecs[0], true);
@@ -181,16 +182,14 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		index += timeOffset * (this.round > 0 ? 1 : -1);
 		// 周期循环过滤
 		index = this.#cycle(9, index);
-		// 值使落五宫寄坤二宫
-		if (index === 4) index = 1;
 		// 值使落宫序号
 		const mandatePalace = this.acquired[index].rIndex;
 		const peoples = this.circle.map((palace) => {
 			return palace.index;
 		});
-		const offset = mandatePalace - peoples.indexOf(this.mandate);
+		const offset = peoples.indexOf(this.mandate) - mandatePalace;
 		// 布八门
-		Arr.arrayUp(peoples, -offset).map((data, i) => {
+		Arr.arrayUp(peoples, offset).map((data, i) => {
 			let palace = this.circle[i];
 			palace.setDoor(data);
 		});
