@@ -1,6 +1,6 @@
 {
   "name": "taobi",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": false,
   "description": "基于js的奇门摆盘",
   "main": "lib/index.js",
