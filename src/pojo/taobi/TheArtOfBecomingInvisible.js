@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-07-16 18:13:47
+ * @LastEditTime: 2023-07-20 19:36:08
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -157,7 +157,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			palace.setHCS(data.ecs);
 		});
 		// 中宫随宫
-		const p = this.acquired[this.#midPlace()];
+		const r = this.acquired[this.#midPlace()].rIndex;
+		const p = this.circle[this.#cycle(8, r - offset)];
 		p.setStar("天禽星", true);
 		p.setHCS(this.five.ecs[0], true);
 		this.#generateHeavens();
