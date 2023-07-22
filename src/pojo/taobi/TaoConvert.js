@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2023-07-22 10:23:56
+ * @LastEditTime: 2023-07-22 10:58:54
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -188,15 +188,15 @@ class TaoConvert {
 	 * 生成九宫
 	 */
 	#generatePalace() {
-		this.one = new Palace(0);
-		this.two = new Palace(1);
-		this.three = new Palace(2);
-		this.four = new Palace(3);
-		this.five = new Palace(4);
-		this.six = new Palace(5);
-		this.seven = new Palace(6);
-		this.eight = new Palace(7);
-		this.nine = new Palace(8);
+		this.one = new this.Palace(0);
+		this.two = new this.Palace(1);
+		this.three = new this.Palace(2);
+		this.four = new this.Palace(3);
+		this.five = new this.Palace(4);
+		this.six = new this.Palace(5);
+		this.seven = new this.Palace(6);
+		this.eight = new this.Palace(7);
+		this.nine = new this.Palace(8);
 	}
 
 	/**
