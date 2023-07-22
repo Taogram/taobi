@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-06-03 16:19:08
  * @LastEditors: lax
- * @LastEditTime: 2023-07-09 19:14:35
+ * @LastEditTime: 2023-07-22 10:36:37
  */
 const { Phases } = require("tao_taichi.js");
 const STAR = [
@@ -34,5 +34,5 @@ class Star extends Phases {
 
 	// TODO
 }
-Star.STAR = Star;
+Star.STAR = STAR;
 module.exports = Star;
