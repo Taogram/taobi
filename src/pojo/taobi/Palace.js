@@ -4,10 +4,11 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2023-07-16 10:42:38
+ * @LastEditTime: 2023-07-22 10:13:39
  */
 const INDEX = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
 const ACQUIRED = ["坎", "坤", "震", "巽", "中", "乾", "兑", "艮", "离"];
+// TODO 先天
 const ACQUIRED_PHASES = ["水", "土", "木", "木", "土", "金", "金", "土", "火"];
 const { Phases } = require("tao_taichi.js");
 const { CelestialStems, TerrestrialBranches } = require("tao_calendar");
@@ -20,12 +21,18 @@ class Palace extends Phases {
 		if (index instanceof Palace) return index;
 		const i = ~~(index + 1) === 0 ? ACQUIRED.indexOf(index) : ~~index % 9;
 		if (i < 0) throw new Error(`arg can\`t be use => ${index}`);
+		// TODO 阴阳
 		super(ACQUIRED_PHASES[i], null);
 
 		/**
 		 * 后天八卦宫位序号
 		 */
 		this.index = i;
+		/**
+		 * 先天八卦宫位序号
+		 */
+		// TODO
+		this._index;
 		/**
 		 * 转盘序位 顺时序位
 		 */
@@ -75,12 +82,18 @@ class Palace extends Phases {
 		 * @type {Divinity}
 		 */
 		this.divinity;
+		/**
+		 * 地盘神
+		 */
+		// TODO
 
 		this.init();
 	}
 
 	init() {
+		// 本宫星
 		this._star = new Star(this.index);
+		// 本宫门（中宫无门）
 		if (!(this.index === 4)) this._door = new Door(this.index);
 	}
 
@@ -270,4 +283,6 @@ class Palace extends Phases {
 		return this.toCanvas();
 	}
 }
+Palace.INDEX = INDEX;
+Palace.ACQUIRED = ACQUIRED;
 module.exports = Palace;
