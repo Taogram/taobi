@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2023-07-22 10:58:54
+ * @LastEditTime: 2023-07-22 11:11:02
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
@@ -31,7 +31,9 @@ class TaoConvert {
 		 * @type {Palace}
 		 */
 		this.Palace =
-			this.options.Palace instanceof Palace ? this.options.Palace : Palace;
+			this.options.Palace.prototype instanceof Palace
+				? this.options.Palace
+				: Palace;
 		/**
 		 * 干支历时
 		 * @type {Calendar}
