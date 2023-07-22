@@ -4,26 +4,34 @@
  * @Author: lax
  * @Date: 2022-03-13 22:00:15
  * @LastEditors: lax
- * @LastEditTime: 2023-07-16 10:45:03
+ * @LastEditTime: 2023-07-22 10:23:56
  * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
 /* eslint-disable-next-line */
-const { SexagenaryCycle } = require("tao_calendar");
+const { SexagenaryCycle,CelestialStems,TerrestrialBranches } = require("tao_calendar");
+const { CELESTIAL_STEMS } = CelestialStems;
+const { TERRESTRIAL_BRANCHES } = TerrestrialBranches;
 require("@/pojo/cstb/SexagenaryCycle.js");
-const {
-	acquired,
-	num,
-	celestialStems,
-	terrestrialBranches,
-} = require("@/pojo/Tao");
 /**
  * @description 道化，推阴阳，衍九宫，定八卦
  *
  */
 class TaoConvert {
-	constructor(follow = 0) {
+	constructor(follow = 0, options = {}) {
+		/**
+		 * 配置
+		 * @type {Object}
+		 */
+		this.options = this.generateOptions(options);
+
+		/**
+		 * 宫对象
+		 * @type {Palace}
+		 */
+		this.Palace =
+			this.options.Palace instanceof Palace ? this.options.Palace : Palace;
 		/**
 		 * 干支历时
 		 * @type {Calendar}
@@ -97,6 +105,7 @@ class TaoConvert {
 		/**
 		 * 先天八卦
 		 */
+		// TODO
 		this.priori;
 		/**
 		 * 后天八卦
@@ -168,6 +177,11 @@ class TaoConvert {
 
 		this._ = new Map();
 		this.#generate_();
+	}
+
+	generateOptions(options) {
+		const DEFAULT_OPTIONS = { Palace };
+		return Object.assign({}, DEFAULT_OPTIONS, options);
 	}
 
 	/**
@@ -266,16 +280,16 @@ class TaoConvert {
 
 	#generate_() {
 		this.acquired.map((palace, index) => {
-			this._.set(acquired[index], palace);
-			this._.set(num[index], palace);
+			this._.set(this.Palace.ACQUIRED[index], palace);
+			this._.set(this.Palace.INDEX[index], palace);
 		});
 		this.cs.map((palace, index) => {
-			const title = celestialStems[index];
+			const title = CELESTIAL_STEMS[index];
 			this._.set(title, palace);
 			palace.setOCS(index, true);
 		});
 		this.tb.map((palace, index) => {
-			const title = terrestrialBranches[index];
+			const title = TERRESTRIAL_BRANCHES[index];
 			this._.set(title, palace);
 			palace.setOTB(index, true);
 		});

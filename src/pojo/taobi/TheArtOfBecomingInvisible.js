@@ -4,18 +4,14 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-07-20 19:36:08
+ * @LastEditTime: 2023-07-22 10:36:54
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
-const {
-	star,
-	door,
-	ceremony,
-	surprise,
-	divinity,
-	DIVINITY,
-} = require("@/pojo/Tao.js");
+const Star = require("@/pojo/taobi/Star");
+const Door = require("@/pojo/taobi/Door");
+const Divinity = require("@/pojo/taobi/Divinity");
+const { ceremony, surprise } = require("@/pojo/Tao.js");
 const Arr = require("@/tools/index.js");
 const surpriseCeremony = ceremony.concat(surprise);
 class TheArtOfBecomingInvisible extends TaoConvert {
@@ -31,8 +27,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @param {*} arranged 排盘方法，转盘/飞盘
 	 * @param {*} follow 中五宫随法，寄坤二宫/宫二八宫/...
 	 */
-	constructor(questionTime, r, arranged, follow) {
-		super(follow);
+	constructor(questionTime, r, arranged, follow, options) {
+		super(follow, options);
 
 		// step1: 根据日期转化干支历
 		this.#generateCalendar(questionTime);
@@ -203,18 +199,19 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	#overDivinity() {
 		// 大值符内环序号
 		const symbol = this.stars.get(this.getSymbol(true)).rIndex;
-		let _divinity = divinity;
+		let _divinity = Divinity.DIVINITY;
 		// 阳顺阴逆
 		if (this.round < 0) {
-			_divinity = Array.from(divinity).reverse();
+			_divinity = Array.from(_divinity).reverse();
 		}
-		let offset = symbol - _divinity.indexOf(DIVINITY.SYMBOL);
+		// TODO DIVINITY.SYMBOL
+		let offset = symbol - _divinity.indexOf(Divinity.DIVINITY[0]);
 		offset = this.#cycle(8, offset);
 		// 布八神
 		Arr.arrayUp(_divinity, -offset).map((data, i) => {
 			let palace = this.circle[i];
 			// TODO index
-			palace.setDivinity(divinity.indexOf(data));
+			palace.setDivinity(Divinity.DIVINITY.indexOf(data));
 		});
 		this.#generateDivinity();
 	}
@@ -274,11 +271,11 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	// TODO
 	getSymbol(is = false) {
-		return is ? star[this.symbol] : this.symbol;
+		return is ? Star.STAR[this.symbol] : this.symbol;
 	}
 
 	getMandate(is = false) {
-		return is ? door[this.mandate] : this.mandate;
+		return is ? Door.DOOR[this.mandate] : this.mandate;
 	}
 
 	getCanvas() {
