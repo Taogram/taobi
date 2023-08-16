@@ -14,6 +14,8 @@
     "readme.md"
   ],
   "dependencies": {
+    "julian.js": "^1.1.0",
+    "solar_terms.js": "^0.0.3",
     "tao_calendar": "^0.2.1",
     "tao_taichi.js": "^0.0.5"
   },

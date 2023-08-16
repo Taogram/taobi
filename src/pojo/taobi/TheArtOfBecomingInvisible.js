@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-07-22 10:36:54
+ * @LastEditTime: 2023-08-16 22:41:07
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -14,6 +14,8 @@ const Divinity = require("@/pojo/taobi/Divinity");
 const { ceremony, surprise } = require("@/pojo/Tao.js");
 const Arr = require("@/tools/index.js");
 const surpriseCeremony = ceremony.concat(surprise);
+const { Ecliptic } = require("solar_terms.js");
+const Julian = require("julian.js");
 class TheArtOfBecomingInvisible extends TaoConvert {
 	/**
 	 * 时旬首隐旗
@@ -21,11 +23,18 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	#hourConceal;
 
 	/**
+	 * 地心黄经
+	 * @type {Number}
+	 */
+	#longitude;
+
+	/**
 	 * @description 奇门起局
 	 * @param {Calendar} questionTime 求测时辰
-	 * @param {Number} 用局
+	 * @param {Number} r 用局
 	 * @param {*} arranged 排盘方法，转盘/飞盘
 	 * @param {*} follow 中五宫随法，寄坤二宫/宫二八宫/...
+	 * @param {Object} options 配置项
 	 */
 	constructor(questionTime, r, arranged, follow, options) {
 		super(follow, options);
@@ -35,7 +44,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 		// TODO
 		// step2: 根据节气和上中下三元获取用局
-		this.generateRound(r);
+		this.round = this.generateRound(r);
 
 		// step3: 根据时干支获取其旬首隐旗
 		this.#generateHourConcealFlag();
@@ -57,6 +66,12 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	}
 
 	#generateCalendar(questionTime) {
+		if (questionTime instanceof Date) {
+			const jd = new Julian(questionTime).getJD();
+			let l = new Ecliptic(jd).getSunEclipticLongitude();
+			l = ((l % 360) + 360) % 360;
+			this.#longitude = l;
+		}
 		this.calendar = new Calendar(questionTime);
 		const { year, month, date, hour } = this.calendar;
 		this.year = year;
@@ -65,9 +80,52 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.hour = hour;
 	}
 
-	// TODO
-	generateRound(r) {
-		this.round = r === undefined ? 3 : r;
+	/**
+	 * @description 落宫节气之首用局为宫数，余气按阴阳递进加减
+	 * 三元则六甲一旬
+	 * @param {Number} r 用局数
+	 * @param {Number} element 上中下元
+	 */
+	generateRound(r, element = this.generateElement()) {
+		if (!this.#longitude && !r)
+			throw new Error("传入时辰为干支时，用局为必填项，否则无法起盘");
+		if (typeof r === "number") return r;
+		// 坎一转至乾六
+		const ACQUIRED_INDEX = [1, 8, 3, 4, 9, 2, 7, 6];
+		// 节气角度 0~23
+		const rotate = ~~(this.#longitude / 15);
+		// 节气宫序列 节气落宫
+		const index = ~~((rotate / 3 + 2) % 8);
+		// 宫中节气序数
+		const pl = rotate % 3;
+		// 阴/阳遁
+		const yy = index < 4 ? 1 : -1;
+
+		let round = ACQUIRED_INDEX[index] + yy * pl;
+		round = (round + yy * 6 * element + 18) % 9;
+		if (round > 9) round = 1;
+		if (round < 1) round = 9;
+		return round * yy;
+	}
+
+	/**
+	 * @description 生成上中下元
+	 */
+	generateElement() {
+		switch (this.options.element) {
+			// 均分法
+			default:
+				return ~~(this.#longitude / 5) % 3;
+			// 拆补法
+			case 1:
+				return ~~(~~(this.hour.index / 5) / 3);
+			// 茅山法
+			case 2:
+				return 0;
+			// 置润法
+			case 3:
+				return 0;
+		}
 	}
 
 	/**
