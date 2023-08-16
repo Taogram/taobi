@@ -8,7 +8,8 @@
  * @FilePath: \taobi\readme.md
 -->
 # 在线奇门
-基于js的在线奇门摆盘库
+基于js的在线奇门摆盘库，干支历采用天文VSOP87算法
+2023持续更新中
 
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
