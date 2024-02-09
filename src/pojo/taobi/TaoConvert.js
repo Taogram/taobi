@@ -2,10 +2,9 @@
  * @Description:
  * @Version: 1.0.0
  * @Author: lax
- * @Date: 2022-03-13 22:00:15
+ * @Date: 2023-08-16 23:27:53
  * @LastEditors: lax
- * @LastEditTime: 2023-07-22 11:11:02
- * @FilePath: \taobi\src\pojo\taobi\TaoConvert.js
+ * @LastEditTime: 2024-02-09 09:46:31
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
@@ -19,7 +18,7 @@ require("@/pojo/cstb/SexagenaryCycle.js");
  *
  */
 class TaoConvert {
-	constructor(follow = 0, options = {}) {
+	constructor(options = {}) {
 		/**
 		 * 配置
 		 * @type {Object}
@@ -106,21 +105,29 @@ class TaoConvert {
 		this.nine;
 		/**
 		 * 先天八卦
+		 * 乾一、兑二、离三、震四、巽五、坎六、艮七、坤八
+		 * @type {Array<Palace>}
 		 */
-		// TODO
 		this.priori;
 		/**
 		 * 后天八卦
+		 * 坎一、坤二、震三、巽四、中五、乾六、兑七、艮八、离九
 		 * @type {Array<Palace>}
 		 */
 		this.acquired;
 		/**
 		 * 九宫格
+		 * [
+		 * 	[4,9,2]
+		 * 	[3,5,7]
+		 * 	[8,1,6]
+		 * ]
 		 * @type {Array<Palace>}
 		 */
 		this.box;
 		/**
 		 * 环宫
+		 * [4,9,2,7,6,1,8,3]
 		 * @type {Array<Palace>}
 		 */
 		this.circle;
@@ -130,10 +137,14 @@ class TaoConvert {
 		 */
 		this.round;
 		/**
-		 *中宫随法
+		 * 中宫随法
+		 * * 中宫寄二宫
+		 * * 中宫二八宫
+		 * * 中宫寄四维宫
+		 * * 中宫寄八节
 		 * @type {Number}
 		 */
-		this.follow = follow;
+		this.follow;
 		/**
 		 * 地盘
 		 * @type {Map<String,Palace>}
@@ -169,16 +180,20 @@ class TaoConvert {
 		 * @type {Map<String,Palace>}
 		 */
 		this.tb;
+		/**
+		 * 用神集
+		 * @type {Map<name,Palace>}
+		 */
+		this._ = new Map();
 
 		this.#generatePalace();
+		this.#generatePrioriPalace();
 		this.#generateAcquiredPalace();
 		this.#generateNinePalace();
 		this.#generateCirclePalace();
 		this.#generateCSPalace();
 		this.#generateTBPalace();
-
-		this._ = new Map();
-		this.#generate_();
+		this.#generateFlag();
 	}
 
 	generateOptions(options) {
@@ -215,6 +230,22 @@ class TaoConvert {
 			this.seven,
 			this.eight,
 			this.nine,
+		];
+	}
+
+	/**
+	 * 先天八卦
+	 */
+	#generatePrioriPalace() {
+		this.priori = [
+			this.six,
+			this.seven,
+			this.nine,
+			this.three,
+			this.four,
+			this.one,
+			this.eight,
+			this.two,
 		];
 	}
 
@@ -280,7 +311,7 @@ class TaoConvert {
 		];
 	}
 
-	#generate_() {
+	#generateFlag() {
 		this.acquired.map((palace, index) => {
 			this._.set(this.Palace.ACQUIRED[index], palace);
 			this._.set(this.Palace.INDEX[index], palace);
