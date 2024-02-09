@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-28 19:51:37
  * @LastEditors: lax
- * @LastEditTime: 2022-03-27 20:00:50
+ * @LastEditTime: 2024-02-09 08:53:22
  */
 module.exports = {
 	/**
@@ -212,12 +212,25 @@ module.exports = {
 		PROP: "丙",
 		ETH: "乙",
 	},
+	/**
+	 * 先天八卦
+	 */
+	priori: ["乾", "兑", "离", "震", "巽", "坎", "艮", "坤"],
+	PRIORI: {
+		HEAVEN: "乾",
+		DUI: "兑",
+		LEAVE: "离",
+		SHAKE: "震",
+		XUN: "巽",
+		KAN: "坎",
+		GEN: "艮",
+		EARTH: "坤",
+	},
 
 	/**
 	 * 后天八卦：
 	 */
 	acquired: ["坎", "坤", "震", "巽", "中", "乾", "兑", "艮", "离"],
-	// TODO
 	ACQUIRED: {
 		KAN: "坎",
 		EARTH: "坤",
