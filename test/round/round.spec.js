@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-08-15 23:23:47
  * @LastEditors: lax
- * @LastEditTime: 2023-08-16 00:34:14
+ * @LastEditTime: 2024-02-09 12:20:05
  */
 const moment = require("moment");
 const { SolarTerms } = require("solar_terms.js");
@@ -52,3 +52,16 @@ describe("用局表", () => {
 		});
 	});
 });
+
+// describe("拆补法", () => {
+// 	const time = "2024-01-19 11:31:38";
+// 	describe(`时间:${time}`, () => {
+// 		const r = new Taobi(new Date(time), null, null, null, {
+// 			element: 1,
+// 		}).generateElement();
+// 		const element = ["上", "中", "下"];
+// 		it(`${element[r]}元`, () => {
+// 			expect(r).toBe(0);
+// 		});
+// 	});
+// });

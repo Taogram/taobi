@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2023-08-16 22:41:07
+ * @LastEditTime: 2024-02-09 11:50:37
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -36,8 +36,10 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @param {*} follow 中五宫随法，寄坤二宫/宫二八宫/...
 	 * @param {Object} options 配置项
 	 */
-	constructor(questionTime, r, arranged, follow, options) {
-		super(follow, options);
+	constructor(questionTime, r, arranged, follow = 0, options) {
+		super(options);
+
+		this.follow = follow;
 
 		// step1: 根据日期转化干支历
 		this.#generateCalendar(questionTime);
@@ -102,9 +104,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		const yy = index < 4 ? 1 : -1;
 
 		let round = ACQUIRED_INDEX[index] + yy * pl;
-		round = (round + yy * 6 * element + 18) % 9;
-		if (round > 9) round = 1;
-		if (round < 1) round = 9;
+		round = (round + yy * 6 * element + 17) % 9;
+		round += 1;
 		return round * yy;
 	}
 
@@ -118,7 +119,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 				return ~~(this.#longitude / 5) % 3;
 			// 拆补法
 			case 1:
-				return ~~(~~(this.hour.index / 5) / 3);
+				return ~~(this.hour.index / 5) % 3;
 			// 茅山法
 			case 2:
 				return 0;
