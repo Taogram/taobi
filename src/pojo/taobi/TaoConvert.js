@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-08-16 23:27:53
  * @LastEditors: lax
- * @LastEditTime: 2024-02-14 10:03:57
+ * @LastEditTime: 2024-05-17 19:34:20
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
@@ -207,7 +207,12 @@ class TaoConvert {
 	}
 
 	generateOptions(options) {
-		const DEFAULT_OPTIONS = { Palace };
+		/**
+		 * @Palace 宫对象
+		 * @element 直接指定上中下元[0-2]
+		 * @elements 均分法/拆补法/茅山法/置闰法
+		 */
+		const DEFAULT_OPTIONS = { Palace, element: null, elements: null };
 		return Object.assign({}, DEFAULT_OPTIONS, options);
 	}
 

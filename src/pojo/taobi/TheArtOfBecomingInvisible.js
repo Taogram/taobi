@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2024-02-24 11:25:28
+ * @LastEditTime: 2024-05-17 19:31:27
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -35,8 +35,11 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @param {*} arranged 排盘方法，转盘/飞盘
 	 * @param {*} follow 中五宫随法，寄坤二宫/宫二八宫/...
 	 * @param {Object} options 配置项
+	 * @version 1.0.0
+	 * @author lax
 	 */
 	constructor(questionTime, r, arranged, follow = 0, options) {
+		// TODO options and r/arranged/follow...
 		super(options);
 
 		this.follow = follow;
@@ -45,7 +48,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.#generateCalendar(questionTime);
 
 		// step2: 根据节气和上中下三元获取用局
-		this.round = this.generateRound(r);
+		this.round = this.#generateRound(r);
 
 		// step3: 根据时干支获取其旬首隐旗
 		this.#generateHourConcealFlag();
@@ -66,8 +69,16 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.#overDivinity();
 	}
 
+	/**
+	 * @description 生成日历
+	 * @check FALSE
+	 * @param {Date/String} questionTime
+	 * @version 1.0.0
+	 * @author lax
+	 */
 	#generateCalendar(questionTime) {
 		const t = Date.parse(questionTime);
+		// todo longitude 重新计算可优化
 		if (t) {
 			const jd = new Julian(questionTime).getJD();
 			let l = new Ecliptic(jd).getSunEclipticLongitude();
@@ -87,26 +98,53 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	/**
 	 * @description 落宫节气之首用局为宫数，余气按阴阳递进加减
 	 * 三元则六甲一旬
+	 * @check TRUE
 	 * @param {Number} r 用局数
 	 * @param {Number} element 上中下元
 	 * @returns {Number} round 用局数
+	 * @version 1.0.0
+	 * @author lax
 	 */
-	generateRound(r, element = this.generateElement()) {
+	#generateRound(r, element = this.#generateElement()) {
+		/**
+		 * 若无指定用局数且未传入公历时间，则无法起盘，返回报错
+		 */
 		if (!this.#longitude && !r)
 			throw new Error("传入时辰为干支时，用局为必填项，否则无法起盘");
-		if (typeof r === "number") return r % 10;
+		/**
+		 * 若直接指定用局数则直接处理返回
+		 * 正整数表示阳局，范围1~9
+		 * 负整数表示阴局，范围-1~-9
+		 * 无论正负，若超过10则取余
+		 * 若用局为0，则默认 = 1
+		 */
+		if (typeof r === "number") return r === 0 ? 1 : r % 10;
+
+		/**
+		 * 若传入公历时间，则自动计算对应的用局
+		 */
 		// 坎一转至乾六
 		const ACQUIRED_INDEX = [1, 8, 3, 4, 9, 2, 7, 6];
-		// 节气角度 0~23
+		/**
+		 * 节气角度 0~23
+		 * 根据公历时间计算得到的太阳地心视黄经均分而得，即地球公转的角度
+		 * 每一节气对应15°，0°对应春分
+		 */
 		const rotate = ~~(this.#longitude / 15);
-		// 节气宫序列 节气落宫
+		/**
+		 * 按奇门遁甲用局表，计算节气宫序列
+		 * 一宫三节气，故rotate / 3
+		 * 又起点为坎宫小寒，与春分差2，故便宜2个单位
+		 */
 		const index = ~~((rotate / 3 + 2) % 8);
-		// 宫中节气序数
+		// 宫中节气序数，为一宫中从左往右排列的第几个节气
 		const pl = rotate % 3;
-		// 阴/阳遁
+		// 阴/阳遁，按前四宫为阴，后四宫为阳计算
 		const yy = index < 4 ? 1 : -1;
 
+		// 取落宫卦数为该宫第三节气上元之数，计算对应所需第几节气的上元之数
 		let round = ACQUIRED_INDEX[index] + yy * pl;
+		// 同节气三元每元差值为6，按阴负阳正计算
 		round = (round + yy * 6 * element + 17) % 9;
 		round += 1;
 		return round * yy;
@@ -114,24 +152,41 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	/**
 	 * @description 生成上中下元
+	 * @check FALSE
+	 * @version 1.0.0
+	 * @author lax
 	 */
-	generateElement() {
-		switch (this.options.element) {
-			// 均分法
+	#generateElement(e) {
+		if (this.options.element) return this.options.element % 3;
+		let use = e || this.options.elements;
+		switch (use) {
+			/**
+			 * 均分法
+			 * 按节气时长完全均分计算
+			 */
 			default:
 				return ~~(this.#longitude / 5) % 3;
-			// 拆补法
+			/**
+			 * 拆补法
+			 * 遵循六十甲子循环
+			 * 子午卯酉为上元
+			 * 寅申巳亥为中元
+			 * 辰戌丑未为下元
+			 */
 			case 1:
 				return ~~(this.hour.index / 5) % 3;
-			// 茅山法
+			/**
+			 * 茅山法
+			 * 根据当前时间与节气所差计算
+			 */
 			case 2:
 				return ~~(
 					(this.time - this.during[(~~(this.#longitude / 15) + 5) % 24]) /
 					(24 * 60 * 60 * 1000) /
 					5
 				);
-			// 置润法
-			// TODO
+			// 置润法 暂不使用，也不建议用
+			// TODO will be delete
 			case 3:
 				return 0;
 		}
@@ -139,6 +194,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	/**
 	 * @description 时干支旬首所隐旗
+	 * @check TRUE
 	 * @version 1.0.0
 	 * @author lax
 	 */
@@ -151,6 +207,9 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * 二宫/二八宫/四维宫/八节
 	 * @param {Number} follow
 	 * @returns index
+	 * @check FALSE
+	 * @version 1.0.0
+	 * @author lax
 	 */
 	#midPlace(follow = this.follow) {
 		switch (follow) {
@@ -176,6 +235,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	/**
 	 * @description 布地盘三奇六仪，用局数对应宫为戊，阳顺阴逆
+	 * @check TRUE
 	 * @version 1.0.0
 	 * @author lax
 	 */
@@ -197,6 +257,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	/**
 	 * @description 布天盘九星，值符随时干，坤五随宫
+	 * @check TRUE
 	 * @version 1.0.0
 	 * @author lax
 	 */
@@ -230,6 +291,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	/**
 	 * @description 布人盘,值使随时宫
+	 * @check TRUE
 	 * @version 1.0.0
 	 * @author lax
 	 */
@@ -261,7 +323,10 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	}
 
 	/**
-	 * 布神盘
+	 * @description 布神盘
+	 * @check FALSE
+	 * @version 1.0.0
+	 * @author lax
 	 */
 	#overDivinity() {
 		// 大值符内环序号
@@ -285,6 +350,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	/**
 	 * @description 获取值使和值符
+	 * @check TRUE
 	 * @version 1.0.0
 	 * @author lax
 	 */

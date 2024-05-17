@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-08-15 23:23:47
  * @LastEditors: lax
- * @LastEditTime: 2024-02-09 12:20:05
+ * @LastEditTime: 2024-05-17 19:32:00
  */
 const moment = require("moment");
 const { SolarTerms } = require("solar_terms.js");
@@ -43,7 +43,8 @@ describe("用局表", () => {
 	arr.map((time, i) => {
 		describe(`时间:${time}-节气${name[i]}`, () => {
 			for (let j = 0; j < 3; j++) {
-				const r = new Taobi(new Date(time)).generateRound(null, j);
+				const r = new Taobi(new Date(time), null, null, null, { element: j })
+					.round;
 				const element = ["上", "中", "下"];
 				it(`${element[j]}元-用局：${r}`, () => {
 					expect(r).toBe(result[i][j]);
@@ -53,6 +54,9 @@ describe("用局表", () => {
 	});
 });
 
+// TODO  均分法 可不测试
+// TODO  拆补法 可不测试
+// TODO  茅山法待测试
 // describe("拆补法", () => {
 // 	const time = "2024-01-19 11:31:38";
 // 	describe(`时间:${time}`, () => {
