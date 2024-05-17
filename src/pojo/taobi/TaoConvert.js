@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-08-16 23:27:53
  * @LastEditors: lax
- * @LastEditTime: 2024-02-09 09:46:31
+ * @LastEditTime: 2024-02-14 10:03:57
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
@@ -58,6 +58,16 @@ class TaoConvert {
 		 * @type {SexagenaryCycle}
 		 */
 		this.hour;
+		/**
+		 * 时间
+		 * @type {Date}
+		 */
+		this.time;
+		/**
+		 * 二十四节气
+		 * @type {Array[Date]}
+		 */
+		this.during;
 		/**
 		 * 一宫
 		 * @type {Palace}

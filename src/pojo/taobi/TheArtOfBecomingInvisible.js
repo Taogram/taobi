@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2024-02-09 11:50:37
+ * @LastEditTime: 2024-02-24 11:25:28
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -44,7 +44,6 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// step1: 根据日期转化干支历
 		this.#generateCalendar(questionTime);
 
-		// TODO
 		// step2: 根据节气和上中下三元获取用局
 		this.round = this.generateRound(r);
 
@@ -68,18 +67,21 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	}
 
 	#generateCalendar(questionTime) {
-		if (questionTime instanceof Date) {
+		const t = Date.parse(questionTime);
+		if (t) {
 			const jd = new Julian(questionTime).getJD();
 			let l = new Ecliptic(jd).getSunEclipticLongitude();
 			l = ((l % 360) + 360) % 360;
 			this.#longitude = l;
 		}
 		this.calendar = new Calendar(questionTime);
-		const { year, month, date, hour } = this.calendar;
+		const { year, month, date, hour, time, during } = this.calendar;
 		this.year = year;
 		this.month = month;
 		this.date = date;
 		this.hour = hour;
+		this.time = time;
+		this.during = during;
 	}
 
 	/**
@@ -87,11 +89,12 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * 三元则六甲一旬
 	 * @param {Number} r 用局数
 	 * @param {Number} element 上中下元
+	 * @returns {Number} round 用局数
 	 */
 	generateRound(r, element = this.generateElement()) {
 		if (!this.#longitude && !r)
 			throw new Error("传入时辰为干支时，用局为必填项，否则无法起盘");
-		if (typeof r === "number") return r;
+		if (typeof r === "number") return r % 10;
 		// 坎一转至乾六
 		const ACQUIRED_INDEX = [1, 8, 3, 4, 9, 2, 7, 6];
 		// 节气角度 0~23
@@ -122,8 +125,13 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 				return ~~(this.hour.index / 5) % 3;
 			// 茅山法
 			case 2:
-				return 0;
+				return ~~(
+					(this.time - this.during[(~~(this.#longitude / 15) + 5) % 24]) /
+					(24 * 60 * 60 * 1000) /
+					5
+				);
 			// 置润法
+			// TODO
 			case 3:
 				return 0;
 		}
@@ -163,7 +171,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		}
 	}
 
-	// TODO
+	// TODO转盘
 	#rotary(palaces, arr) {}
 
 	/**
