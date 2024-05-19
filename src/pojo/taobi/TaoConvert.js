@@ -4,14 +4,14 @@
  * @Author: lax
  * @Date: 2023-08-16 23:27:53
  * @LastEditors: lax
- * @LastEditTime: 2024-05-17 19:34:20
+ * @LastEditTime: 2024-05-19 10:00:05
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
 /* eslint-disable-next-line */
 const { SexagenaryCycle,CelestialStems,TerrestrialBranches } = require("tao_calendar");
-const { CELESTIAL_STEMS } = CelestialStems;
-const { TERRESTRIAL_BRANCHES } = TerrestrialBranches;
+const { CELESTIAL_STEMS_ARR } = CelestialStems;
+const { TERRESTRIAL_BRANCHES_ARR } = TerrestrialBranches;
 require("@/pojo/cstb/SexagenaryCycle.js");
 /**
  * @description 道化，推阴阳，衍九宫，定八卦
@@ -332,12 +332,12 @@ class TaoConvert {
 			this._.set(this.Palace.INDEX[index], palace);
 		});
 		this.cs.map((palace, index) => {
-			const title = CELESTIAL_STEMS[index];
+			const title = CELESTIAL_STEMS_ARR[index];
 			this._.set(title, palace);
 			palace.setOCS(index, true);
 		});
 		this.tb.map((palace, index) => {
-			const title = TERRESTRIAL_BRANCHES[index];
+			const title = TERRESTRIAL_BRANCHES_ARR[index];
 			this._.set(title, palace);
 			palace.setOTB(index, true);
 		});

@@ -4,11 +4,10 @@
  * @Author: lax
  * @Date: 2020-10-27 16:35:18
  * @LastEditors: lax
- * @LastEditTime: 2024-02-09 08:49:47
+ * @LastEditTime: 2024-05-19 10:05:22
  */
 const INDEX = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
-const ACQUIRED = ["坎", "坤", "震", "巽", "中", "乾", "兑", "艮", "离"];
-const PRIORI = ["乾", "兑", "离", "震", "巽", "坎", "艮", "坤"];
+const { ACQUIRED, ACQUIRED_ARR, APRIORI, APRIORI_ARR } = require("tao_name");
 const ACQUIRED_PHASES = ["水", "土", "木", "木", "土", "金", "金", "土", "火"];
 const { Phases } = require("tao_taichi.js");
 const { CelestialStems, TerrestrialBranches } = require("tao_calendar");
@@ -19,7 +18,7 @@ const Divinity = require("@/pojo/taobi/Divinity");
 class Palace extends Phases {
 	constructor(index) {
 		if (index instanceof Palace) return index;
-		const i = ~~(index + 1) === 0 ? ACQUIRED.indexOf(index) : ~~index % 9;
+		const i = ~~(index + 1) === 0 ? ACQUIRED_ARR.indexOf(index) : ~~index % 9;
 		if (i < 0) throw new Error(`arg can\`t be use => ${index}`);
 		// TODO 阴阳
 		super(ACQUIRED_PHASES[i], null);
@@ -31,7 +30,7 @@ class Palace extends Phases {
 		/**
 		 * 先天八卦宫位序号
 		 */
-		this._index = PRIORI.indexOf(ACQUIRED[this.index]);
+		this._index = APRIORI_ARR.indexOf(ACQUIRED_ARR[this.index]);
 		/**
 		 * 转盘序位 顺时序位
 		 */
@@ -261,7 +260,7 @@ class Palace extends Phases {
 	// ######### palace #########
 	getPalace(is = false, type = false) {
 		let i = type ? this._index : this.index;
-		return is ? (type ? PRIORI[i] : ACQUIRED[i]) : i;
+		return is ? (type ? APRIORI_ARR[i] : ACQUIRED_ARR[i]) : i;
 	}
 
 	setPalace(index, type = false) {
@@ -287,5 +286,5 @@ class Palace extends Phases {
 }
 Palace.INDEX = INDEX;
 Palace.ACQUIRED = ACQUIRED;
-Palace.PRIORI = PRIORI;
+Palace.APRIORI = APRIORI;
 module.exports = Palace;
