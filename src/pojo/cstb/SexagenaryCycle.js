@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-22 20:15:13
  * @LastEditors: lax
- * @LastEditTime: 2024-05-19 09:46:25
+ * @LastEditTime: 2024-05-19 11:05:54
  */
 
 const { CEREMONY_ARR, CELESTIAL_STEMS } = require("tao_name");
@@ -14,6 +14,9 @@ const { SexagenaryCycle } = require("tao_calendar");
  * 获取隐旗
  * @param {boolean} is
  * @returns 名称/序号
+ * @check TRUE
+ * @version 1.0.0
+ * @author lax
  */
 SexagenaryCycle.prototype.getConceal = function getConceal(is) {
 	const row = ~~(this.getLead().index / 10);
@@ -24,6 +27,9 @@ SexagenaryCycle.prototype.getConceal = function getConceal(is) {
  * 获取天干对应的旗
  * @param {boolean} is
  * @returns 名称/序号
+ * @check TRUE
+ * @version 1.0.0
+ * @author lax
  */
 SexagenaryCycle.prototype.getCsOrigin = function getCsOrigin(is) {
 	// 时干
