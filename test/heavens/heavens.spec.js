@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-12-11 00:57:08
  * @LastEditors: lax
- * @LastEditTime: 2024-05-19 10:29:41
+ * @LastEditTime: 2024-05-19 10:56:50
  * @FilePath: \taobi\test\tao.spec.js
  */
 const STAR = require("./star");
@@ -14,7 +14,7 @@ const { SC_ARR } = require("tao_name");
 
 describe("奇门摆盘-第五步:天盘布九星", () => {
 	for (let i = -9; i < 10; i++) {
-		if (i !== 0) {
+		if (i) {
 			describe(`${i}局`, () => {
 				for (let j = 0; j < 10; j++) {
 					const sc = SC_ARR[j];
