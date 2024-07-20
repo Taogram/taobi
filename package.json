@@ -1,6 +1,6 @@
 {
   "name": "taobi",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": false,
   "description": "奇门遁甲-基于js的奇门摆盘",
   "main": "lib/index.js",
@@ -17,7 +17,7 @@
   "dependencies": {
     "julian.js": "^1.6.0",
     "solar_terms.js": "^0.0.4",
-    "tao_calendar": "^0.3.0",
+    "tao_calendar": "^0.3.1",
     "tao_name": "^0.1.1",
     "tao_taichi.js": "^0.1.0"
   },
