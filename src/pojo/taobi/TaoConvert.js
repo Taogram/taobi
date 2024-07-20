@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-08-16 23:27:53
  * @LastEditors: lax
- * @LastEditTime: 2024-05-19 10:00:05
+ * @LastEditTime: 2024-07-20 15:55:31
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
@@ -23,15 +23,15 @@ class TaoConvert {
 		 * 配置
 		 * @type {Object}
 		 */
-		this.options = this.generateOptions(options);
+		this.OPTIONS = this.generateOptions(options);
 
 		/**
 		 * 宫对象
 		 * @type {Palace}
 		 */
 		this.Palace =
-			this.options.Palace.prototype instanceof Palace
-				? this.options.Palace
+			this.OPTIONS.Palace.prototype instanceof Palace
+				? this.OPTIONS.Palace
 				: Palace;
 		/**
 		 * 干支历时

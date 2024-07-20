@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2024-05-19 10:28:28
+ * @LastEditTime: 2024-06-21 20:09:04
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -42,7 +42,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// TODO options and r/arranged/follow...
 		super(options);
 
-		this.follow = follow;
+		this.follow =
+			this.OPTIONS.follow === undefined ? follow : this.OPTIONS.follow;
 
 		// step1: 根据日期转化干支历
 		this.#generateCalendar(questionTime);
@@ -118,7 +119,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		 * 无论正负，若超过10则取余
 		 * 若用局为0，则默认 = 1
 		 */
-		if (typeof r === "number") return r === 0 ? 1 : r % 10;
+		if (typeof r === "number") return r % 10 === 0 ? 1 : r % 10;
 
 		/**
 		 * 若传入公历时间，则自动计算对应的用局
@@ -134,7 +135,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		/**
 		 * 按奇门遁甲用局表，计算节气宫序列
 		 * 一宫三节气，故rotate / 3
-		 * 又起点为坎宫小寒，与春分差2，故便宜2个单位
+		 * 又起点为坎宫小寒，与春分差2，故偏移2个单位
 		 */
 		const index = ~~((rotate / 3 + 2) % 8);
 		// 宫中节气序数，为一宫中从左往右排列的第几个节气
@@ -157,8 +158,8 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @author lax
 	 */
 	#generateElement(e) {
-		if (this.options.element) return this.options.element % 3;
-		let use = e || this.options.elements;
+		if (this.OPTIONS.element) return this.OPTIONS.element % 3;
+		let use = e || this.OPTIONS.elements;
 		switch (use) {
 			/**
 			 * 均分法
@@ -179,6 +180,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			 * 茅山法
 			 * 根据当前时间与节气所差计算
 			 */
+			// todo test
 			case 2:
 				return ~~(
 					(this.time - this.during[(~~(this.#longitude / 15) + 5) % 24]) /
