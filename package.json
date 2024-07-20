@@ -1,12 +1,13 @@
 {
   "name": "taobi",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "private": false,
-  "description": "基于js的奇门摆盘",
+  "description": "奇门遁甲-基于js的奇门摆盘",
   "main": "lib/index.js",
   "license": "MPL-2.0",
   "scripts": {
     "test:unit": "jest --verbose",
+    "build": "webpack",
     "lib": "rm -rf lib && babel src/ -d lib/"
   },
   "files": [
@@ -14,8 +15,8 @@
     "readme.md"
   ],
   "dependencies": {
-    "julian.js": "^1.1.0",
-    "solar_terms.js": "^0.0.3",
+    "julian.js": "^1.6.0",
+    "solar_terms.js": "^0.0.4",
     "tao_calendar": "^0.3.0",
     "tao_name": "^0.1.1",
     "tao_taichi.js": "^0.1.0"
@@ -23,7 +24,9 @@
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "@babel/eslint-parser": "^7.15.8",
+    "@babel/preset-env": "^7.24.8",
     "babel-jest": "^27.2.5",
+    "babel-loader": "^9.1.3",
     "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^7.9.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -33,7 +36,9 @@
     "eslint-plugin-prettier": "^3.3.1",
     "jest": "^26.6.3",
     "moment": "^2.29.4",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4"
   },
   "repository": "https://github.com/Taogram/taobi.git",
   "keywords": [

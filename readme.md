@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2022-03-19 16:45:51
  * @LastEditors: lax
- * @LastEditTime: 2024-05-17 20:33:15
+ * @LastEditTime: 2024-07-20 17:47:58
  * @FilePath: \taobi\readme.md
 -->
 # 在线奇门
@@ -78,6 +78,13 @@
 暂无，可以在github上
 
 # 文档
+
+## 引入
+
+### node.js
+```
+const { TheArtOfBecomingInvisible } = require("taobi");
+```
 
 ## 快速使用
 
