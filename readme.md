@@ -4,14 +4,14 @@
  * @Author: lax
  * @Date: 2022-03-19 16:45:51
  * @LastEditors: lax
- * @LastEditTime: 2024-07-20 17:47:58
+ * @LastEditTime: 2024-07-21 23:07:21
  * @FilePath: \taobi\readme.md
 -->
 # 在线奇门
 基于js的在线奇门摆盘库，二十四节气采用天文VSOP87D算法，可精确至分钟
 支持自定义拆补法、茅山法、均分法（原创）
 2024持续更新中
-
+[查看全部项目](https://github.com/Taogram/taogram)
 <hr style="height:1px;border:none;border-top:1px solid #555555;" />
 
 ## 简介
