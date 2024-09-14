@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2024-09-14 21:32:12
+ * @LastEditTime: 2024-09-14 23:53:52
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -39,39 +39,50 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @author lax
 	 */
 	constructor(questionTime, r, arranged, follow = 0, options) {
+		console.debug("**** start to generate ****");
 		// TODO options and r/arranged/follow...
 		super(options);
 
 		this.follow =
 			this.OPTIONS.follow === undefined ? follow : this.OPTIONS.follow;
 
+		console.debug("**** step 1 ****");
 		// step1: 根据日期转化干支历
 		this.#generateCalendar(questionTime);
 
+		console.debug("**** step 2 ****");
 		// step2: 根据节气和上中下三元获取用局
 		this.round = this.#generateRound(r);
 
+		console.debug("**** step 3 ****");
 		// step3: 根据时干支获取其旬首隐旗
 		this.#generateHourConcealFlag();
 
+		console.debug("**** step 4 ****");
 		// step4: 根据用局布地盘三奇六仪
 		this.#overEarths();
 
+		console.debug("**** step 5 ****");
 		// step5: 根据时干支获取值使和值符
 		this.#getMandateAndSymbol();
 
+		console.debug("**** step 6 ****");
 		// step6: 根据值符布天盘三奇六仪和星
 		this.#overHeavens();
 
+		console.debug("**** step 7 ****");
 		// step7: 根据值使布八门
 		this.#overPeoples();
 
+		console.debug("**** step 8 ****");
 		// step8: 根据值符布八神
 		this.#overDivinity();
+
+		console.debug("**** generate end ****");
 	}
 
 	/**
-	 * @description 生成日历
+	 * @description 生成干支历
 	 * @check FALSE
 	 * @param {Date/String} questionTime
 	 * @version 1.0.0
@@ -411,32 +422,6 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	getMandate(is = false) {
 		return is ? Door.STAR_ARR[this.mandate] : this.mandate;
-	}
-
-	getCanvas() {
-		return this.box.map((row) => {
-			return row.map((palace) => {
-				return palace.toCanvas();
-			});
-		});
-	}
-
-	getArray() {
-		return this.box
-			.map((row) => {
-				return row.reduce(
-					(acc, next) => {
-						const canvas = next.toCanvas();
-						return acc.map((each, i) => {
-							return each.concat(canvas[i]);
-						});
-					},
-					[[], [], []]
-				);
-			})
-			.reduce((acc, next) => {
-				return acc.concat(next);
-			}, []);
 	}
 }
 

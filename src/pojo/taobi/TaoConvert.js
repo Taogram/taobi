@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-08-16 23:27:53
  * @LastEditors: lax
- * @LastEditTime: 2024-07-20 15:55:31
+ * @LastEditTime: 2024-09-14 23:53:16
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
@@ -18,182 +18,216 @@ require("@/pojo/cstb/SexagenaryCycle.js");
  *
  */
 class TaoConvert {
-	constructor(options = {}) {
-		/**
-		 * 配置
-		 * @type {Object}
-		 */
-		this.OPTIONS = this.generateOptions(options);
+	/**
+	 * 配置
+	 * @type {Object}
+	 */
+	OPTIONS;
 
-		/**
-		 * 宫对象
-		 * @type {Palace}
-		 */
-		this.Palace =
+	/**
+	 * 宫对象
+	 * @type {Palace}
+	 */
+	#Palace;
+
+	/**
+	 * 干支历时
+	 * @type {Calendar}
+	 */
+	calendar;
+
+	/**
+	 * 年天干
+	 * @type {SexagenaryCycle}
+	 */
+	year;
+
+	/**
+	 * 月天干
+	 * @type {SexagenaryCycle}
+	 */
+	month;
+
+	/**
+	 * 日天干
+	 * @type {SexagenaryCycle}
+	 */
+	date;
+
+	/**
+	 * 时天干
+	 * @type {SexagenaryCycle}
+	 */
+	hour;
+
+	/**
+	 * 时间
+	 * @type {Date}
+	 */
+	time;
+
+	/**
+	 * 二十四节气
+	 * @type {Array[Date]}
+	 */
+	during;
+
+	/**
+	 * 一宫
+	 * @type {Palace}
+	 */
+	one;
+
+	/**
+	 * 二宫
+	 * @type {Palace}
+	 */
+	two;
+
+	/**
+	 * 三宫
+	 * @type {Palace}
+	 */
+	three;
+
+	/**
+	 * 四宫
+	 * @type {Palace}
+	 */
+	four;
+
+	/**
+	 * 五宫
+	 * @type {Palace}
+	 */
+	five;
+
+	/**
+	 * 六宫
+	 * @type {Palace}
+	 */
+	six;
+
+	/**
+	 * 七宫
+	 * @type {Palace}
+	 */
+	seven;
+
+	/**
+	 * 八宫
+	 * @type {Palace}
+	 */
+	eight;
+
+	/**
+	 * 九宫
+	 * @type {Palace}
+	 */
+	nine;
+
+	/**
+	 * 先天八卦
+	 * 乾一、兑二、离三、震四、巽五、坎六、艮七、坤八
+	 * @type {Array<Palace>}
+	 */
+	priori;
+
+	/**
+	 * 后天八卦
+	 * 坎一、坤二、震三、巽四、中五、乾六、兑七、艮八、离九
+	 * @type {Array<Palace>}
+	 */
+	acquired;
+
+	/**
+	 * 九宫格
+	 * [
+	 * 	[4,9,2]
+	 * 	[3,5,7]
+	 * 	[8,1,6]
+	 * ]
+	 * @type {Array<Palace>}
+	 */
+	box;
+
+	/**
+	 * 环宫
+	 * [4,9,2,7,6,1,8,3]
+	 * @type {Array<Palace>}
+	 */
+	circle;
+
+	/**
+	 * -9~9对应阴遁九局、阳遁九局
+	 * @type {Number}
+	 */
+	round;
+
+	/**
+	 * 中宫随法
+	 * * 中宫寄二宫
+	 * * 中宫二八宫
+	 * * 中宫寄四维宫
+	 * * 中宫寄八节
+	 * @type {Number}
+	 */
+	follow;
+
+	/**
+	 * 地盘
+	 * @type {Map<String,Palace>}
+	 */
+	earths;
+
+	/**
+	 * 天盘
+	 * @type {Map<String,Palace>}
+	 */
+	heavens;
+
+	/**
+	 * 星盘
+	 * @type {Map<String,Palace>}
+	 */
+	stars;
+
+	/**
+	 * 人盘
+	 * @type {Map<String,Palace>}
+	 */
+	peoples;
+
+	/**
+	 * 神盘
+	 * @type {Map<String,Palace>}
+	 */
+	divinity;
+
+	/**
+	 * 十天干
+	 * @type {Map<String,Palace>}
+	 */
+	cs;
+
+	/**
+	 * 十二地支
+	 * @type {Map<String,Palace>}
+	 */
+	tb;
+
+	/**
+	 * 用神集
+	 * @type {Map<name,Palace>}
+	 */
+	_;
+
+	constructor(options = {}) {
+		this.OPTIONS = this.generateOptions(options);
+		this.#Palace =
 			this.OPTIONS.Palace.prototype instanceof Palace
 				? this.OPTIONS.Palace
 				: Palace;
-		/**
-		 * 干支历时
-		 * @type {Calendar}
-		 */
-		this.calendar;
-		/**
-		 * 年天干
-		 * @type {SexagenaryCycle}
-		 */
-		this.year;
-		/**
-		 * 月天干
-		 * @type {SexagenaryCycle}
-		 */
-		this.month;
-		/**
-		 * 日天干
-		 * @type {SexagenaryCycle}
-		 */
-		this.date;
-		/**
-		 * 时天干
-		 * @type {SexagenaryCycle}
-		 */
-		this.hour;
-		/**
-		 * 时间
-		 * @type {Date}
-		 */
-		this.time;
-		/**
-		 * 二十四节气
-		 * @type {Array[Date]}
-		 */
-		this.during;
-		/**
-		 * 一宫
-		 * @type {Palace}
-		 */
-		this.one;
-		/**
-		 * 二宫
-		 * @type {Palace}
-		 */
-		this.two;
-		/**
-		 * 三宫
-		 * @type {Palace}
-		 */
-		this.three;
-		/**
-		 * 四宫
-		 * @type {Palace}
-		 */
-		this.four;
-		/**
-		 * 五宫
-		 * @type {Palace}
-		 */
-		this.five;
-		/**
-		 * 六宫
-		 * @type {Palace}
-		 */
-		this.six;
-		/**
-		 * 七宫
-		 * @type {Palace}
-		 */
-		this.seven;
-		/**
-		 * 八宫
-		 * @type {Palace}
-		 */
-		this.eight;
-		/**
-		 * 九宫
-		 * @type {Palace}
-		 */
-		this.nine;
-		/**
-		 * 先天八卦
-		 * 乾一、兑二、离三、震四、巽五、坎六、艮七、坤八
-		 * @type {Array<Palace>}
-		 */
-		this.priori;
-		/**
-		 * 后天八卦
-		 * 坎一、坤二、震三、巽四、中五、乾六、兑七、艮八、离九
-		 * @type {Array<Palace>}
-		 */
-		this.acquired;
-		/**
-		 * 九宫格
-		 * [
-		 * 	[4,9,2]
-		 * 	[3,5,7]
-		 * 	[8,1,6]
-		 * ]
-		 * @type {Array<Palace>}
-		 */
-		this.box;
-		/**
-		 * 环宫
-		 * [4,9,2,7,6,1,8,3]
-		 * @type {Array<Palace>}
-		 */
-		this.circle;
-		/**
-		 * -9~9对应阴遁九局、阳遁九局
-		 * @type {Number}
-		 */
-		this.round;
-		/**
-		 * 中宫随法
-		 * * 中宫寄二宫
-		 * * 中宫二八宫
-		 * * 中宫寄四维宫
-		 * * 中宫寄八节
-		 * @type {Number}
-		 */
-		this.follow;
-		/**
-		 * 地盘
-		 * @type {Map<String,Palace>}
-		 */
-		this.earths;
-		/**
-		 * 天盘
-		 * @type {Map<String,Palace>}
-		 */
-		this.heavens;
-		/**
-		 * 星盘
-		 * @type {Map<String,Palace>}
-		 */
-		this.stars;
-		/**
-		 * 人盘
-		 * @type {Map<String,Palace>}
-		 */
-		this.peoples;
-		/**
-		 * 神盘
-		 * @type {Map<String,Palace>}
-		 */
-		this.divinity;
-		/**
-		 * 十天干
-		 * @type {Map<String,Palace>}
-		 */
-		this.cs;
-		/**
-		 * 十二地支
-		 * @type {Map<String,Palace>}
-		 */
-		this.tb;
-		/**
-		 * 用神集
-		 * @type {Map<name,Palace>}
-		 */
 		this._ = new Map();
 
 		this.#generatePalace();
@@ -220,15 +254,15 @@ class TaoConvert {
 	 * 生成九宫
 	 */
 	#generatePalace() {
-		this.one = new this.Palace(0);
-		this.two = new this.Palace(1);
-		this.three = new this.Palace(2);
-		this.four = new this.Palace(3);
-		this.five = new this.Palace(4);
-		this.six = new this.Palace(5);
-		this.seven = new this.Palace(6);
-		this.eight = new this.Palace(7);
-		this.nine = new this.Palace(8);
+		this.one = new this.#Palace(0);
+		this.two = new this.#Palace(1);
+		this.three = new this.#Palace(2);
+		this.four = new this.#Palace(3);
+		this.five = new this.#Palace(4);
+		this.six = new this.#Palace(5);
+		this.seven = new this.#Palace(6);
+		this.eight = new this.#Palace(7);
+		this.nine = new this.#Palace(8);
 	}
 
 	/**
@@ -328,8 +362,8 @@ class TaoConvert {
 
 	#generateFlag() {
 		this.acquired.map((palace, index) => {
-			this._.set(this.Palace.ACQUIRED[index], palace);
-			this._.set(this.Palace.INDEX[index], palace);
+			this._.set(this.#Palace.ACQUIRED[index], palace);
+			this._.set(this.#Palace.INDEX[index], palace);
 		});
 		this.cs.map((palace, index) => {
 			const title = CELESTIAL_STEMS_ARR[index];
@@ -345,6 +379,32 @@ class TaoConvert {
 
 	select(deities) {
 		return this._.get(deities);
+	}
+
+	getCanvas() {
+		return this.box.map((row) => {
+			return row.map((palace) => {
+				return palace.toCanvas();
+			});
+		});
+	}
+
+	getArray() {
+		return this.box
+			.map((row) => {
+				return row.reduce(
+					(acc, next) => {
+						const canvas = next.toCanvas();
+						return acc.map((each, i) => {
+							return each.concat(canvas[i]);
+						});
+					},
+					[[], [], []]
+				);
+			})
+			.reduce((acc, next) => {
+				return acc.concat(next);
+			}, []);
 	}
 }
 
