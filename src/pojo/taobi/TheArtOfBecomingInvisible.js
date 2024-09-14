@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2024-06-21 20:09:04
+ * @LastEditTime: 2024-09-14 21:32:12
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -175,7 +175,7 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 			 * 辰戌丑未为下元
 			 */
 			case 1:
-				return ~~(this.hour.index / 5) % 3;
+				return ~~(this.date.index / 5) % 3;
 			/**
 			 * 茅山法
 			 * 根据当前时间与节气所差计算
