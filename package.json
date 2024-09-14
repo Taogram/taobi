@@ -17,7 +17,7 @@
   "dependencies": {
     "julian.js": "^2.0.0",
     "solar_terms.js": "^0.1.0",
-    "tao_calendar": "^0.4.0",
+    "tao_calendar": "^0.4.3",
     "tao_name": "^0.1.1",
     "tao_taichi.js": "^0.1.0"
   },

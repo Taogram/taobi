@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2024-09-14 23:53:52
+ * @LastEditTime: 2024-09-15 00:16:50
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -90,21 +90,15 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 */
 	#generateCalendar(questionTime) {
 		const t = Date.parse(questionTime);
-		// todo longitude 重新计算可优化
-		if (t) {
-			const jd = new Julian(questionTime).getJD();
-			let l = new Ecliptic(jd).getSunEclipticLongitude();
-			l = ((l % 360) + 360) % 360;
-			this.#longitude = l;
-		}
 		this.calendar = new Calendar(questionTime);
-		const { year, month, date, hour, time, during } = this.calendar;
+		const { year, month, date, hour, time, during, l } = this.calendar;
 		this.year = year;
 		this.month = month;
 		this.date = date;
 		this.hour = hour;
 		this.time = time;
 		this.during = during;
+		if (t) this.#longitude = ((l % 360) + 360) % 360;
 	}
 
 	/**
