@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-08-15 23:23:47
  * @LastEditors: lax
- * @LastEditTime: 2024-05-17 19:32:00
+ * @LastEditTime: 2024-09-16 13:12:05
  */
 const moment = require("moment");
 const { SolarTerms } = require("solar_terms.js");
@@ -55,17 +55,35 @@ describe("用局表", () => {
 });
 
 // TODO  均分法 可不测试
-// TODO  拆补法 可不测试
+
+/**
+ * 子午卯酉为上元
+ * 寅申巳亥为中元
+ * 辰戌丑未为下元
+ */
+describe("拆补法", () => {
+	const ANS = [
+		0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
+		2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0,
+		1, 1, 1, 1, 1, 2, 2, 2, 2, 2,
+	];
+	for (let i = 0; i < 60; i++) {
+		const taobi = new Taobi(
+			moment(new Date()).add(i, "d").toDate(),
+			null,
+			null,
+			null,
+			{
+				elements: 1,
+			}
+		);
+		const DATE = taobi.date.cstb(true);
+		const ELE = taobi.ELEMENTS[1];
+		const palace = ["上", "中", "下"];
+		it(`${DATE}日-${palace[ELE]}元`, () => {
+			expect(ELE).toBe(ANS[taobi.date.index]);
+		});
+	}
+});
+
 // TODO  茅山法待测试
-// describe("拆补法", () => {
-// 	const time = "2024-01-19 11:31:38";
-// 	describe(`时间:${time}`, () => {
-// 		const r = new Taobi(new Date(time), null, null, null, {
-// 			element: 1,
-// 		}).generateElement();
-// 		const element = ["上", "中", "下"];
-// 		it(`${element[r]}元`, () => {
-// 			expect(r).toBe(0);
-// 		});
-// 	});
-// });
