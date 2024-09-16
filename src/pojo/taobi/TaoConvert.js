@@ -165,6 +165,12 @@ class TaoConvert {
 	round;
 
 	/**
+	 * 三元定法列表 顺序：均分、拆补、茅山、置润
+	 * @type {Array<Number>}
+	 */
+	ELEMENTS;
+
+	/**
 	 * 中宫随法
 	 * * 中宫寄二宫
 	 * * 中宫二八宫

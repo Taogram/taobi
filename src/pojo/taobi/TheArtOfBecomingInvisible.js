@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2024-09-15 00:16:50
+ * @LastEditTime: 2024-09-16 12:39:50
  */
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
@@ -14,8 +14,6 @@ const Divinity = require("@/pojo/taobi/Divinity");
 const { CEREMONY_ARR, SURPRISE_ARR } = require("tao_name");
 const Arr = require("@/tools/index.js");
 const surpriseCeremony = CEREMONY_ARR.concat(SURPRISE_ARR);
-const { Ecliptic } = require("solar_terms.js");
-const Julian = require("julian.js");
 class TheArtOfBecomingInvisible extends TaoConvert {
 	/**
 	 * 时旬首隐旗
@@ -163,40 +161,36 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @author lax
 	 */
 	#generateElement(e) {
+		/**
+		 * 均分法
+		 * 按节气时长完全均分计算
+		 */
+		const AVERAGE = ~~(this.#longitude / 5) % 3;
+		/**
+		 * 拆补法
+		 * 遵循六十甲子循环
+		 * 子午卯酉为上元
+		 * 寅申巳亥为中元
+		 * 辰戌丑未为下元
+		 */
+		const SPLIT = ~~(this.date.index / 5) % 3;
+		/**
+		 * 茅山法
+		 * 根据当前时间与节气所差计算
+		 */
+		// todo test
+		const MAO = ~~(
+			(this.time - this.during[(~~(this.#longitude / 15) + 5) % 24]) /
+			(24 * 60 * 60 * 1000) /
+			5
+		);
+		// 置润法 暂不使用，也不建议用
+		const LEAP = 0;
+		this.ELEMENTS = [AVERAGE, SPLIT, MAO, LEAP];
+
 		if (this.OPTIONS.element) return this.OPTIONS.element % 3;
 		let use = e || this.OPTIONS.elements;
-		switch (use) {
-			/**
-			 * 均分法
-			 * 按节气时长完全均分计算
-			 */
-			default:
-				return ~~(this.#longitude / 5) % 3;
-			/**
-			 * 拆补法
-			 * 遵循六十甲子循环
-			 * 子午卯酉为上元
-			 * 寅申巳亥为中元
-			 * 辰戌丑未为下元
-			 */
-			case 1:
-				return ~~(this.date.index / 5) % 3;
-			/**
-			 * 茅山法
-			 * 根据当前时间与节气所差计算
-			 */
-			// todo test
-			case 2:
-				return ~~(
-					(this.time - this.during[(~~(this.#longitude / 15) + 5) % 24]) /
-					(24 * 60 * 60 * 1000) /
-					5
-				);
-			// 置润法 暂不使用，也不建议用
-			// TODO will be delete
-			case 3:
-				return 0;
-		}
+		return this.ELEMENTS[use % 4];
 	}
 
 	/**
