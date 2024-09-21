@@ -4,8 +4,9 @@
  * @Author: lax
  * @Date: 2020-10-27 17:14:22
  * @LastEditors: lax
- * @LastEditTime: 2024-09-16 12:39:50
+ * @LastEditTime: 2024-09-21 10:23:22
  */
+const SOLAR_TERMS = require("@/pojo/taobi/solarTerms");
 const { Calendar } = require("tao_calendar");
 const TaoConvert = require("@/pojo/taobi/TaoConvert.js");
 const Star = require("@/pojo/taobi/Star");
@@ -44,11 +45,11 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		this.follow =
 			this.OPTIONS.follow === undefined ? follow : this.OPTIONS.follow;
 
-		console.debug("**** step 1 ****");
+		console.debug("**** step 1 generate calendar  ****");
 		// step1: 根据日期转化干支历
 		this.#generateCalendar(questionTime);
 
-		console.debug("**** step 2 ****");
+		console.debug("**** step 2 generate round ****");
 		// step2: 根据节气和上中下三元获取用局
 		this.round = this.#generateRound(r);
 
@@ -87,16 +88,20 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @author lax
 	 */
 	#generateCalendar(questionTime) {
+		console.debug(`get questionTime: ${questionTime}`);
 		const t = Date.parse(questionTime);
 		this.calendar = new Calendar(questionTime);
-		const { year, month, date, hour, time, during, l } = this.calendar;
+		const { year, month, date, hour, during, l } = this.calendar;
 		this.year = year;
 		this.month = month;
 		this.date = date;
 		this.hour = hour;
-		this.time = time;
+		this.time = new Date(questionTime);
 		this.during = during;
-		if (t) this.#longitude = ((l % 360) + 360) % 360;
+		if (t) {
+			this.#longitude = ((l % 360) + 360) % 360;
+			this.solarTerms = (~~(this.#longitude / 15) + 5) % 24;
+		}
 	}
 
 	/**
@@ -151,7 +156,9 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		// 同节气三元每元差值为6，按阴负阳正计算
 		round = (round + yy * 6 * element + 17) % 9;
 		round += 1;
-		return round * yy;
+		round *= yy;
+		console.debug(`用局：${round}`);
+		return round;
 	}
 
 	/**
@@ -161,6 +168,10 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 	 * @author lax
 	 */
 	#generateElement(e) {
+		/**
+		 * 若传入为干支历，则无需计算三元
+		 */
+		if (!this.#longitude) return 0;
 		/**
 		 * 均分法
 		 * 按节气时长完全均分计算
@@ -179,17 +190,19 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 		 * 根据当前时间与节气所差计算
 		 */
 		// todo test
-		const MAO = ~~(
-			(this.time - this.during[(~~(this.#longitude / 15) + 5) % 24]) /
+		let MAO = ~~(
+			(this.time.getTime() - this.during[this.solarTerms].getTime()) /
 			(24 * 60 * 60 * 1000) /
 			5
 		);
+		MAO = MAO > 2 ? 2 : MAO;
 		// 置润法 暂不使用，也不建议用
 		const LEAP = 0;
 		this.ELEMENTS = [AVERAGE, SPLIT, MAO, LEAP];
 
 		if (this.OPTIONS.element) return this.OPTIONS.element % 3;
 		let use = e || this.OPTIONS.elements;
+		console.debug(`三元取法：${use % 4}`);
 		return this.ELEMENTS[use % 4];
 	}
 
@@ -410,6 +423,10 @@ class TheArtOfBecomingInvisible extends TaoConvert {
 
 	getMandate(is = false) {
 		return is ? Door.STAR_ARR[this.mandate] : this.mandate;
+	}
+
+	getSolarTerms(is = false) {
+		return is ? SOLAR_TERMS[this.solarTerms] : this.solarTerms;
 	}
 }
 

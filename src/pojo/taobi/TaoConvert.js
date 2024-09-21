@@ -4,7 +4,7 @@
  * @Author: lax
  * @Date: 2023-08-16 23:27:53
  * @LastEditors: lax
- * @LastEditTime: 2024-09-14 23:53:16
+ * @LastEditTime: 2024-09-21 09:33:24
  */
 
 const Palace = require("@/pojo/taobi/Palace.js");
@@ -71,6 +71,12 @@ class TaoConvert {
 	 * @type {Array[Date]}
 	 */
 	during;
+
+	/**
+	 * 当前节气
+	 * @type {Number}
+	 */
+	solarTerms;
 
 	/**
 	 * 一宫
