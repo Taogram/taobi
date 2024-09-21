@@ -6,6 +6,7 @@
         "@": "./src",
         "@root": "./"
       }
-    }]
+    }],
+    ["transform-remove-console"]
   ]
 }
